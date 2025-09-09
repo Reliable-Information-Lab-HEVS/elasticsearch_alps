@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """
-FineWeb Dataset Indexer for Elasticsearch - MEMORY LEAK FIXED VERSION
-Uses streaming parquet processing to prevent memory accumulation
-MODIFIED: Supports file range indexing for parallel processing
+Dataset Indexer for Elasticsearch
 """
 
 import os
@@ -106,13 +104,71 @@ def get_elasticsearch_client(host: str = "localhost", port: int = 9200) -> Elast
                 raise
 
 
-def create_index_config() -> Dict[str, Any]:
-    """Create index configuration optimized for ES 7.17.12"""
+def calculate_optimal_shards_by_size(data_size_gb: float, 
+                                   min_shard_size_gb: float = 10, 
+                                   max_shard_size_gb: float = 50,
+                                   es_expansion_factor: float = 3.0) -> int:
+    """
+    Calculate optimal number of shards based only on data size constraints.
+    
+    Args:
+        data_size_gb: Raw data size in GB (parquet files)
+        min_shard_size_gb: Minimum shard size in GB (default 10GB)
+        max_shard_size_gb: Maximum shard size in GB (default 50GB)  
+        es_expansion_factor: Factor for ES indexed size vs raw size (default 3x)
+        
+    Returns:
+        Optimal number of shards
+    """
+    logger = logging.getLogger(__name__)
+    
+    # Estimate indexed size (ES typically 2-4x larger than compressed parquet)
+    estimated_indexed_size_gb = data_size_gb * es_expansion_factor
+    
+    logger.info(f"=== SHARD CALCULATION (SIZE-BASED ONLY) ===")
+    logger.info(f"Raw data size: {data_size_gb:.2f} GB")
+    logger.info(f"Estimated ES indexed size: {estimated_indexed_size_gb:.2f} GB (factor: {es_expansion_factor}x)")
+    logger.info(f"Target shard size range: {min_shard_size_gb}-{max_shard_size_gb} GB")
+    
+    # Use target of 30GB per shard (middle of 10-50GB range)
+    target_shard_size_gb = (min_shard_size_gb + max_shard_size_gb) / 2
+    
+    # Calculate shards needed - ensure at least 1 shard
+    optimal_shards = max(1, int(estimated_indexed_size_gb / target_shard_size_gb))
+    
+    # Validate the result doesn't create shards too large
+    size_per_shard_gb = estimated_indexed_size_gb / optimal_shards
+    
+    # If shards would be too large, increase shard count
+    if size_per_shard_gb > max_shard_size_gb:
+        optimal_shards = max(1, int(estimated_indexed_size_gb / max_shard_size_gb)) + 1
+        size_per_shard_gb = estimated_indexed_size_gb / optimal_shards
+        logger.info(f"Adjusted shard count to prevent oversized shards")
+    
+    logger.info(f"Calculation results:")
+    logger.info(f"  Target shard size: {target_shard_size_gb:.1f} GB")
+    logger.info(f"  Calculated shards: {optimal_shards}")
+    logger.info(f"  Actual size per shard: {size_per_shard_gb:.1f} GB")
+    
+    # Validation warnings
+    if size_per_shard_gb > max_shard_size_gb:
+        logger.warning(f"WARNING: Size per shard ({size_per_shard_gb:.1f}GB) exceeds max ({max_shard_size_gb}GB)")
+    
+    if size_per_shard_gb < min_shard_size_gb:
+        logger.warning(f"INFO: Size per shard ({size_per_shard_gb:.1f}GB) below min ({min_shard_size_gb}GB) - this is OK for smaller datasets")
+    
+    logger.info("=" * 45)
+    
+    return optimal_shards
+
+def create_index_config(num_shards: int = 5, num_replicas: int = 0) -> Dict[str, Any]:
+    """Create index configuration with dynamic shard count"""
+
     return {
         "settings": {
-            "number_of_shards": 5,
-            "number_of_replicas": 0,
-            "refresh_interval": "-1", # LOOK HOW TO RE SET LATER
+            "number_of_shards": num_shards,
+                "number_of_replicas": num_replicas,
+                "refresh_interval": "-1",  # Disable refresh during bulk indexing
             "index": {
                 "codec": "best_compression",
                 "max_result_window": 50000
@@ -127,20 +183,23 @@ def create_index_config() -> Dict[str, Any]:
                         "tokenizer": "standard",
                         "filter": [
                             "lowercase",
-                            "asciifolding",
-                            "english_stop",
-                            "english_stemmer"
+                            "asciifolding"
+                        ]
+                    },
+                    "url_analyzer": {
+                        "type": "custom",
+                        "tokenizer": "uax_url_email",
+                        "filter": [
+                            "lowercase",
+                            "url_path_tokenizer"
                         ]
                     }
                 },
                 "filter": {
-                    "english_stop": {
-                        "type": "stop",
-                        "stopwords": "_english_"
-                    },
-                    "english_stemmer": {
-                        "type": "stemmer",
-                        "language": "english"
+                    "url_path_tokenizer": {
+                        "type": "pattern_replace",
+                        "pattern": "[/\\-_.]",
+                        "replacement": " "
                     }
                 }
             }
@@ -148,7 +207,7 @@ def create_index_config() -> Dict[str, Any]:
         "mappings": {
             "dynamic": "false",
             "_source": {
-                "includes": ["text"],
+                "includes": ["text", "url"],
                 "excludes": []
             },
             "properties": {
@@ -157,33 +216,59 @@ def create_index_config() -> Dict[str, Any]:
                     "analyzer": "web_content_analyzer",
                     "index_options": "positions",
                     "norms": True,
+                    "store": False
+                },
+                "url": {
+                    "type": "text",
+                    "analyzer": "url_analyzer",
+                    "index_options": "docs",
+                    "norms": False,
                     "store": False,
                     "fields": {
                         "keyword": {
                             "type": "keyword",
-                            "ignore_above": 512
+                            "ignore_above": 2048
                         }
                     }
                 }
             }
         }
     }
+  
 
-
-def create_index(es: Elasticsearch, index_name: str, config_file: str = None) -> bool:
-    """Create Elasticsearch index with configuration from file or default"""
+def create_index_with_size_based_shards(es: Elasticsearch, index_name: str, 
+                                       total_data_size_gb: float, config_file: str = None,
+                                       min_shard_size_gb: float = 10, max_shard_size_gb: float = 50,
+                                       es_expansion_factor: float = 3.0) -> bool:
+    """Create Elasticsearch index with size-based dynamic shard count"""
     try:
         if es.indices.exists(index=index_name):
             logging.warning(f"Index '{index_name}' already exists. Deleting...")
             es.indices.delete(index=index_name)
+
+        # Calculate optimal shard count based on size only
+        optimal_shards = calculate_optimal_shards_by_size(
+            total_data_size_gb, min_shard_size_gb, max_shard_size_gb, es_expansion_factor
+        )
         
         if config_file and os.path.exists(config_file):
             logging.info(f"Loading index configuration from: {config_file}")
             with open(config_file, 'r') as f:
                 config = json.load(f)
+            # Override shard count in loaded config
+            config["settings"]["number_of_shards"] = optimal_shards
+            logging.info(f"Overrode shard count in config file to: {optimal_shards}")
+        
         else:
             logging.info("Using default index configuration")
-            config = create_index_config()
+            config = create_index_config(num_shards=optimal_shards)
+        
+        
+        # Log final configuration
+        logging.info(f"Creating index '{index_name}' with:")
+        logging.info(f"  Shards: {config['settings']['number_of_shards']}")
+        logging.info(f"  Replicas: {config['settings']['number_of_replicas']}")
+        logging.info(f"  Refresh interval: {config['settings']['refresh_interval']}")
         
         es.indices.create(index=index_name, body=config)
         logging.info(f"Created index '{index_name}' with configuration")
@@ -529,10 +614,17 @@ def main():
     parser = argparse.ArgumentParser(description="Index FineWeb dataset into Elasticsearch - Memory Leak Fixed with File Range Support")
     parser.add_argument("--data-dir", required=True, help="Directory containing parquet files")
     
-    # MODIFIED: Add file range arguments
+    # File range arguments
     parser.add_argument("--file-range-start", type=int, help="Starting file index (0-based, inclusive)")
     parser.add_argument("--file-range-end", type=int, help="Ending file index (exclusive, like Python slicing)")
     
+    # Size-based shard calculation parameters
+    parser.add_argument("--min-shard-size", type=float, default=10.0, 
+                       help="Minimum shard size in GB (default: 10)")
+    parser.add_argument("--max-shard-size", type=float, default=50.0,
+                       help="Maximum shard size in GB (default: 50)")
+    parser.add_argument("--es-expansion-factor", type=float, default=3.0,
+                       help="ES size expansion factor vs parquet (default: 3.0)")
     
     parser.add_argument("--batch-size", type=int, default=12500, help="Batch size for bulk indexing")
     parser.add_argument("--chunk-size", type=int, default=5000, help="Chunk size for reading parquet files (reduced)")
@@ -569,16 +661,21 @@ def main():
             logger.error(f"File range error: {e}")
             sys.exit(1)
     else:
-        # Backward compatibility: use max_files or all files
+        # Use max_files or all files
         all_parquet_files = sorted(list(data_dir.glob("*.parquet")))
         if not all_parquet_files:
             logger.error(f"No parquet files found in {data_dir}")
             sys.exit(1)
 
         files_to_process = all_parquet_files
+        # Calculate total size
+        total_size_bytes = sum(f.stat().st_size for f in files_to_process)
+        total_data_size_gb = total_size_bytes / (1024**3)   # Includes 3 compression factor of parquet file
         logger.info(f"Processing all {len(files_to_process)} files")
     
-    logger.info("=== FineWeb Dataset Indexing Started with FILE RANGE SUPPORT ===")
+    logger.info(f"Total raw data size: {total_data_size_gb:.2f} GB")
+
+    logger.info("=== FineWeb Dataset Indexing Started with SIZE-BASED Dynamic Sharding ===")
     logger.info(f"Data directory: {data_dir}")
     logger.info(f"Files to process: {len(files_to_process)}")
     logger.info(f"Batch size: {args.batch_size}")
@@ -588,6 +685,9 @@ def main():
     logger.info(f"Index name: {args.index_name}")
     logger.info(f"Thread counts: {args.thread_count}")
     logger.info(f"Queue size: {args.queue_size}")
+    logger.info(f"Shard size range: {args.min_shard_size}-{args.max_shard_size} GB")
+    logger.info(f"ES expansion factor: {args.es_expansion_factor}x")
+    
     
     total_start_time = time.time()
     
@@ -596,9 +696,12 @@ def main():
         es = get_elasticsearch_client(args.es_host, args.es_port)
         log_memory_usage(logger, "AFTER ES CONNECTION")
 
-        # Create index
-        logger.info("Creating Elasticsearch index...")
-        if not create_index(es, args.index_name, args.index_config):
+        # Create index with size-based dynamic sharding
+        logger.info("Creating Elasticsearch index with size-based dynamic sharding...")
+        if not create_index_with_size_based_shards(
+            es, args.index_name, total_data_size_gb, args.index_config,
+            args.min_shard_size, args.max_shard_size, args.es_expansion_factor
+        ):
             sys.exit(1)
         
         log_memory_usage(logger, "AFTER INDEX CREATION")
@@ -638,10 +741,31 @@ def main():
             tracemalloc.stop()
         except Exception as e:
             logger.warning(f"Could not get tracemalloc info: {e}")
+
+        # After indexing finishes, set refresh interval to 1s
+        try:
+            logger.info("Re-enabling index refresh for search queries...")
+            es.indices.put_settings(
+                index=args.index_name,
+                body={
+                    "index": {
+                        "refresh_interval": "1s"  # or "30s" for less frequent
+                    }
+                }
+            )
+            logger.info("Index refresh interval set to 1s - ready for search queries")
+            
+            # Force an immediate refresh
+            es.indices.refresh(index=args.index_name)
+            logger.info("Index refreshed - all documents are now searchable")
+            
+        except Exception as e:
+            logger.error(f"Failed to re-enable refresh: {e}")
+            logger.info("You may need to manually set refresh_interval before searching")
         
         # Force index refresh
-        logger.info("Refreshing index...")
-        es.indices.refresh(index=args.index_name)
+        # logger.info("Refreshing index...")
+        # es.indices.refresh(index=args.index_name)
         
         # Get final index stats
         try:

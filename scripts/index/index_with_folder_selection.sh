@@ -17,7 +17,7 @@ set -e  # Exit on any error
 
 INDEX_CONFIG_FILE="${INDEX_CONFIG_FILE:-/capstor/scratch/cscs/inesaltemir/index_config/index_config_with_url.json}"
 
-
+# ONLY DIFFERENCE COMPARED TO INDEX.SH IS FOLDER SELECTION PARAMETER
 # Folder selection parameter
 N="${N:-95}"  # Default to folder 1 if not set, can be overridden with N=X
 
@@ -302,7 +302,7 @@ run_indexing() {
         
       
     # Base Python command
-    base_cmd="python3 /capstor/scratch/cscs/inesaltemir/scripts/indexing/index_no_leak_with_file_range.py \
+    base_cmd="python3 /capstor/scratch/cscs/inesaltemir/scripts/indexing/index.py \
         --data-dir \"$DATA_DIR\" \
         --batch-size \"$BATCH_SIZE\" \
         --chunk-size 12000 \

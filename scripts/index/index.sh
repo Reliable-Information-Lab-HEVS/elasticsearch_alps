@@ -1,61 +1,31 @@
 #!/bin/bash
-#SBATCH --job-name=index-file-range
+#SBATCH --job-name=index
 #SBATCH --partition=normal
-#SBATCH --account=a-a145
-#SBATCH --time=11:00:00
+#SBATCH --account=a145
+#SBATCH --time=08:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=256G
 
-#SBATCH --output=/capstor/scratch/cscs/inesaltemir/INDEXING_swissai-fineweb-edu-score-2-filterrobots/output/indexing_folder_sel_%j.out
-#SBATCH --error=/capstor/scratch/cscs/inesaltemir/INDEXING_swissai-fineweb-edu-score-2-filterrobots/err/indexing_folder_sel_%j.err
+#SBATCH --output=/capstor/scratch/cscs/inesaltemir/INDEXING_swissai_fineweb_2_quality_33_filterrobots/output/indexing_%j.out
+#SBATCH --error=/capstor/scratch/cscs/inesaltemir/INDEXING_swissai_fineweb_2_quality_33_filterrobots/err/indexing_%j.err
 #SBATCH --environment=es-python
 
 # FineWeb Dataset Indexing Script for Containerized Elasticsearch on SLURM
 set -e  # Exit on any error
 
-INDEX_CONFIG_FILE="${INDEX_CONFIG_FILE:-/capstor/scratch/cscs/inesaltemir/index_config/index_config_with_url.json}"
+INDEX_CONFIG_FILE="${INDEX_CONFIG_FILE:-/capstor/scratch/cscs/inesaltemir/index_config/index_config_language_agnostic.json}"
 
 
-# Folder selection parameter
-N="${N:-95}"  # Default to folder 1 if not set, can be overridden with N=X
-
-# Base directory containing all 95 folders
-BASE_DATA_DIR="/capstor/store/cscs/swissai/a06/datasets_swissai/swissai-fineweb-edu-score-2-filterrobots/data/output"
-
-# Create deterministic list of folders and select the N-th one
-FOLDER_ARRAY=($(ls -1d ${BASE_DATA_DIR}/*/ | sort))
-TOTAL_FOLDERS=${#FOLDER_ARRAY[@]}
-
-# Validate N parameter
-if [ "$N" -lt 1 ] || [ "$N" -gt "$TOTAL_FOLDERS" ]; then
-    log_error "Invalid folder number N=$N. Must be between 1 and $TOTAL_FOLDERS"
-    exit 1
-fi
-
-# Select the N-th folder (array is 0-indexed, so N-1)
-SELECTED_FOLDER=${FOLDER_ARRAY[$((N-1))]}
-FOLDER_NAME=$(basename "$SELECTED_FOLDER")
-
-# Validate selected folder exists
-if [ ! -d "$SELECTED_FOLDER" ]; then
-    log_error "Selected folder not found: $SELECTED_FOLDER"
-    exit 1
-fi
-
-# Update configuration to use selected folder
-DATA_DIR="$SELECTED_FOLDER"
-
-FOLDER_NAME_LOWERCASE=$(echo "$FOLDER_NAME" | tr '[:upper:]' '[:lower:]')
-INDEX_NAME="fineweb_folder_edu_score_2_filterrobots_$(printf "%02d" $N)_${FOLDER_NAME_LOWERCASE}"
-# INDEX_NAME="fineweb_folder_edu_score_2_filterrobots_$(printf "%02d" $N)_${FOLDER_NAME}"
-
-
+# Default parameters (modify as needed)
+# DATA_DIR="${DATA_DIR:-/capstor/store/cscs/swissai/a06/datasets_swissai/swissai-fineweb-2-quality_33-filterrobots/data/output/fra_Latn}"
+DATA_DIR="${DATA_DIR:-/capstor/store/cscs/swissai/a06/datasets_swissai/swissai-fineweb-2-quality_33-filterrobots/data/output/ita_Latn}"
 BATCH_SIZE="${BATCH_SIZE:-12500}"        # Bulk indexing batch size, prev 2500
 ES_HOST="${ES_HOST:-localhost}"         # Elasticsearch host (container internal)
 ES_PORT="${ES_PORT:-9200}"             # Elasticsearch port
-
+# INDEX_NAME="${INDEX_NAME:-fineweb_test_speed}"     # Index name
+INDEX_NAME="${INDEX_NAME:-fineweb2_ita}"     # Index name
 LOG_LEVEL="${LOG_LEVEL:-INFO}"         # Logging level
 
 # ADDED: File range support for parallel processing
@@ -125,8 +95,8 @@ start_elasticsearch() {
     
     # 3. Set proper heap size based on available memory
     if [ "${SLURM_MEM_PER_NODE:-0}" -ge 32768 ]; then
-        # 32GB+ available, use 20GB heap
-        CUSTOM_HEAP="-Xms40g -Xmx40g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+        # 32GB+ available, use 30GB heap
+        CUSTOM_HEAP="-Xms30g -Xmx30g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
     else
         # Less than 32GB, use conservative 8GB heap  
         CUSTOM_HEAP="-Xms8g -Xmx8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
@@ -141,10 +111,19 @@ start_elasticsearch() {
     # Extract the part number from index name (e.g., fineweb_deu_part1 -> part1)
     
 
-    # Replace the existing job_data_dir and job_logs_dir lines with:
-    local job_data_dir="/iopsstor/scratch/cscs/inesaltemir/es-data-${SLURM_JOB_ID}-swissai-fineweb-edu-score-2_filterrobots-folder-$(printf "%02d" $N)-${FOLDER_NAME}"
-    local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-logs-${SLURM_JOB_ID}-swissai-fineweb-edu-score-2_filterrobots-folder-$(printf "%02d" $N)-${FOLDER_NAME}"
-
+    #if [[ "$INDEX_NAME" =~ _([a-z]+_part[0-9]+)$ ]]; then
+    #    LANG_PART="${BASH_REMATCH[1]}"
+        # Create job-specific directories outside the standard mount points
+    #    local job_data_dir="/iopsstor/scratch/cscs/inesaltemir/es-data-${SLURM_JOB_ID}-swissai-fineweb-2-quality_33-filterrobots-${LANG_PART}"
+    #    local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-logs-${SLURM_JOB_ID}-swissai-fineweb-2-quality_33-filterrobots-${LANG_PART}"
+    #else
+        # Fallback for non-standard index names - use the full index name
+    #    local job_data_dir="/iopsstor/scratch/cscs/inesaltemir/es-data-${SLURM_JOB_ID}-swissai-fineweb-2-quality_33-filterrobots-${INDEX_NAME}"
+    #    local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-logs-${SLURM_JOB_ID}-swissai-fineweb-2-quality_33-filterrobots-${INDEX_NAME}"
+    #fi
+    local job_data_dir="/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-${INDEX_NAME}-${SLURM_JOB_ID}"
+    local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-logs-septemberv1-${INDEX_NAME}-${SLURM_JOB_ID}"
+    
     mkdir -p "$job_data_dir"
     mkdir -p "$job_logs_dir"
     
@@ -259,9 +238,6 @@ show_configuration() {
     echo "Log Level: $LOG_LEVEL" 
     echo "ES Java Opts: $ES_JAVA_OPTS"
     echo "ES Java Opts: $INDEX_CONFIG_FILE"
-    echo "Folder Number (N): $N"
-    echo "Selected Folder: $FOLDER_NAME"
-    echo "Total Available Folders: $TOTAL_FOLDERS"
     echo "ES Data Path: /usr/share/elasticsearch/data" 
     echo "ES Logs Path: /usr/share/elasticsearch/logs" 
     echo "============================"
@@ -281,25 +257,7 @@ run_indexing() {
     log_info "Starting FineWeb dataset indexing..."
     
     start_time=$(date +%s)
-    # /capstor/scratch/cscs/inesaltemir/index_fineweb_memory_saving.py
-    # Run the Python indexing script
     
-    # python3 "/capstor/scratch/cscs/inesaltemir/scripts/indexing/indexing.py" \
-    #python3 "/capstor/scratch/cscs/inesaltemir/scripts/indexing/index_no_leak_with_file_range.py" \
-    #    --data-dir "$DATA_DIR" \
-    #    --batch-size "$BATCH_SIZE" \
-    #    --chunk-size 12000 \
-    #    --es-host "$ES_HOST" \
-    #    --es-port "$ES_PORT" \
-    #    --index-name "$INDEX_NAME" \
-    #    --log-level "$LOG_LEVEL" \
-    #    --index-config "$INDEX_CONFIG_FILE" \
-    #    --max-chunk-bytes "$MAX_CHUNK_BYTES" \
-    #    --thread-count "$THREAD_COUNT" \
-    #    --queue-size "$QUEUE_SIZE" \
-    #    --file-range-start "$FILE_RANGE_START" \
-    #    --file-range-end "$FILE_RANGE_END" 2>&1 
-        
       
     # Base Python command
     base_cmd="python3 /capstor/scratch/cscs/inesaltemir/scripts/indexing/index_no_leak_with_file_range.py \
