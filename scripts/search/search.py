@@ -284,12 +284,12 @@ class ElasticsearchQueryBenchmark:
             query_text = " ".join(words)
             print(f"    SKIPPING fuzzy_query for multi-word text: '{text[:50]}...'")
             print(f"    Using multi_match with fuzziness fallback instead")
-            if word_count <= 2:
-                min_should_match = "100%"    # Short queries: all words
-            elif word_count <= 4: 
-                min_should_match = "75%"     # Medium queries: most words
-            else:
-                min_should_match = "60%"     # Long queries: majority of words
+            #if word_count <= 2:
+            #    min_should_match = "100%"    # Short queries: all words
+            #elif word_count <= 4: 
+            #    min_should_match = "75%"     # Medium queries: most words
+            #else:
+            min_should_match = "60%"     # Long queries: majority of words
             
            
             query = {
@@ -473,7 +473,7 @@ class ElasticsearchQueryBenchmark:
             "hit_snippets": self.extract_hit_snippets(hits_data)
         }
     
-    def run_all_queries(self, segment_text: str, row_id: str, segment_id: str) -> List[dict]:
+    def run_all_queries(self, segment_text: str) -> List[dict]:
         """Run all enabled query types for a given segment text"""
         query_results = []
         
@@ -519,8 +519,6 @@ class ElasticsearchQueryBenchmark:
                 
                 result = {
                     'timestamp': datetime.now().isoformat(),
-                    'row_id': row_id,
-                    'segment_id': segment_id,
                     'segment_text': segment_text,
                     'query_type': query_type,
                     'query_time_ms': round(query_time, 2),
@@ -539,8 +537,6 @@ class ElasticsearchQueryBenchmark:
                 print(f"    Error in {query_type}: {e}")
                 error_result = {
                     'timestamp': datetime.now().isoformat(),
-                    'row_id': row_id,
-                    'segment_id': segment_id,
                     'segment_text': segment_text,
                     'query_type': query_type,
                     'query_time_ms': 0,
@@ -562,35 +558,33 @@ class ElasticsearchQueryBenchmark:
         
         try:
             with open(csv_file, 'r', encoding='utf-8') as file:
-                reader = csv.DictReader(file)
+                reader = csv.reader(file)
                 
                 total_rows = 0
                 processed_rows = 0
                 
                 # Count total rows first
                 for row in reader:
-                    total_rows += 1
+                    if row and row[0].strip():
+                        total_rows += 1
                 
                 # Reset file pointer
                 file.seek(0)
-                reader = csv.DictReader(file)
+                reader = csv.reader(file)
                 
                 print(f"Found {total_rows} segments to process")
                 print("=" * 50)
                 
                 for row in reader:
-                    processed_rows += 1
-                    segment_text = row.get('segment_text', '').strip()
-                    row_id = row.get('row_id', '')
-                    segment_id = row.get('segment_id', '')
-                    
-                    if not segment_text:
-                        print(f"Skipping empty segment at row {processed_rows}")
+                    if not row or not row[0].strip():
                         continue
+                        
+                    processed_rows += 1
+                    segment_text = row[0].strip()
                     
                     print(f"Processing segment {processed_rows}/{total_rows}: '{segment_text[:50]}{'...' if len(segment_text) > 50 else ''}'")
                     
-                    self.run_all_queries(segment_text, row_id, segment_id)
+                    self.run_all_queries(segment_text)
                     
                     # Progress indicator
                     if processed_rows % 10 == 0:
@@ -608,7 +602,7 @@ class ElasticsearchQueryBenchmark:
         print(f"Saving detailed results to {filename}...")
         
         fieldnames = [
-            'timestamp', 'row_id', 'segment_id', 'segment_text', 'query_type',
+            'timestamp', 'segment_text', 'query_type',
             'query_time_ms', 'es_took_ms', 'total_hits', 'max_score', 
             'timed_out', 'error', 'top_5_hits'
         ]
@@ -621,17 +615,17 @@ class ElasticsearchQueryBenchmark:
             current_segment = None
             for result in self.results:
                 # Add separator row between different segments
-                if current_segment != result['segment_id'] and current_segment is not None:
+                if current_segment != result['segment_text'] and current_segment is not None:
                     separator_row = {field: '---' if field != 'top_5_hits' else '' for field in fieldnames}
                     separator_row['segment_text'] = f"--- END SEGMENT {current_segment} ---"
                     writer.writerow(separator_row)
                 
                 writer.writerow(result)
-                current_segment = result['segment_id']
+                current_segment = result['segment_text']
         
         print(f"Detailed results saved to {filename}")
         print(f"Results include top 5 hit snippets with scores and highlighting")
-    
+        
     def generate_summary_stats(self, filename: str = 'search_results_summary.csv'):
         """Generate and save summary statistics"""
         print(f"Generating summary statistics...")

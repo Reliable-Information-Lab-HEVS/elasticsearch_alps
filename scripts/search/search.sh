@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=es-search-pipeline
 #SBATCH --partition=normal
-#SBATCH --account=a-a145
-#SBATCH --time=02:00:00
+#SBATCH --account=a145
+#SBATCH --time=01:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
@@ -30,8 +30,8 @@ set -e
 # QUERY CONFIGURATION PARAMETERS
 # =============================================================================
 # Query execution configuration - set to true/false to enable/disable query types
-EXECUTE_MATCH_QUERY="${EXECUTE_MATCH_QUERY:-false}"
-EXECUTE_MATCH_PHRASE_QUERY="${EXECUTE_MATCH_PHRASE_QUERY:-true}"
+EXECUTE_MATCH_QUERY="${EXECUTE_MATCH_QUERY:-true}"
+EXECUTE_MATCH_PHRASE_QUERY="${EXECUTE_MATCH_PHRASE_QUERY:-false}"
 EXECUTE_TERM_QUERY_EXACT="${EXECUTE_TERM_QUERY_EXACT:-false}"
 EXECUTE_WILDCARD_QUERY="${EXECUTE_WILDCARD_QUERY:-false}"
 EXECUTE_FUZZY_QUERY="${EXECUTE_FUZZY_QUERY:-false}"
@@ -59,17 +59,18 @@ ES_PORT="${ES_PORT:-9200}"
 
 # The path directory to the ElasticSearch index you're querying (EXPLAIN HOW DIR WORK MOUNTS)
 # in our case, one path dir equals one and only one index
-PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/<username>/es-data-<index_name>}"
+# PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-target-fineweb_deu_merged-516788}"
+# PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-sft-sft-data-792354}"
 
+PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-sft-data-795231}"
 # The path to the .csv file containing the queries (terms / phrases)
-CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/<username>/search_queries/<dataset>.csv}"
+CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_WORDS/random.csv}"
 
 # Name of your index
-INDEX_NAME="${INDEX_NAME:-<index_name>}"
-
+INDEX_NAME="${INDEX_NAME:-sft-data}"
 
 CSV_BASENAME=$(basename "$CSV_FILE" .txt)
-OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/<username>/search_results/${INDEX_NAME}_${CSV_BASENAME}_${SLURM_JOB_ID}/}"
+OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/inesaltemir/search_results/${INDEX_NAME}_${CSV_BASENAME}_${SLURM_JOB_ID}}"
 
 # Build Elasticsearch URL
 ES_URL="http://${ES_HOST}:${ES_PORT}"
@@ -489,7 +490,7 @@ main() {
     
     # Run Python search script with configuration
     log_info "Starting search queries execution with configurable parameters..."
-    if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search_v2.py "$CSV_FILE" "$INDEX_NAME" "$ES_URL" "$OUTPUT_DIR" "$CONFIG_JSON"; then
+    if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search.py "$CSV_FILE" "$INDEX_NAME" "$ES_URL" "$OUTPUT_DIR" "$CONFIG_JSON"; then
         log_success ""
         log_success "Search pipeline completed successfully!"
         log_info "Output files saved to: $OUTPUT_DIR"
