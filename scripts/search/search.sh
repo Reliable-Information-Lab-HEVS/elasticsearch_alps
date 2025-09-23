@@ -57,14 +57,16 @@ BOOL_MUST_MINIMUM_SHOULD_MATCH="${BOOL_MUST_MINIMUM_SHOULD_MATCH:-50%}"  # For "
 ES_HOST="${ES_HOST:-127.0.0.1}"
 ES_PORT="${ES_PORT:-9200}"
 
+
+# Dataset type for field extraction
+DATASET="${DATASET:-sft}"  # Can be 'fineweb' or 'sft'
+
 # The path directory to the ElasticSearch index you're querying (EXPLAIN HOW DIR WORK MOUNTS)
 # in our case, one path dir equals one and only one index
-# PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-target-fineweb_deu_merged-516788}"
-# PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-sft-sft-data-792354}"
-
 PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-sft-data-795231}"
+
 # The path to the .csv file containing the queries (terms / phrases)
-CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_WORDS/random.csv}"
+CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_WORDS/chemicals/chemicals_deu.csv}"
 
 # Name of your index
 INDEX_NAME="${INDEX_NAME:-sft-data}"
@@ -257,6 +259,7 @@ log_info "  Index name: $INDEX_NAME"
 log_info "  Elasticsearch: $ES_URL"
 log_info "  Java heap: $JAVA_OPTS"
 log_info "  Output directory: $OUTPUT_DIR"
+log_info "  Dataset chosen: $DATASET"
 log_info ""
 log_info "Query Configuration:"
 log_info "  Match Query: $EXECUTE_MATCH_QUERY"
@@ -486,11 +489,17 @@ main() {
         log_error "Failed to build configuration JSON"
         exit 1
     fi
-    
-    
+
+
     # Run Python search script with configuration
     log_info "Starting search queries execution with configurable parameters..."
-    if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search.py "$CSV_FILE" "$INDEX_NAME" "$ES_URL" "$OUTPUT_DIR" "$CONFIG_JSON"; then
+    if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search.py \
+        --csv-file "$CSV_FILE" \
+        --index-name "$INDEX_NAME" \
+        --es-url "$ES_URL" \
+        --output-dir "$OUTPUT_DIR" \
+        --dataset "$DATASET" \
+        --config "$CONFIG_JSON"; then
         log_success ""
         log_success "Search pipeline completed successfully!"
         log_info "Output files saved to: $OUTPUT_DIR"
@@ -502,6 +511,7 @@ main() {
         log_error "Search pipeline failed!"
         exit 1
     fi
+
 }
 
 # Run main function

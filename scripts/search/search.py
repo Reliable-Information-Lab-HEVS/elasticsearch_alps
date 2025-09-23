@@ -16,14 +16,17 @@ import statistics
 from datetime import datetime
 from typing import Dict, List, Tuple, Any, Union
 import ast
+import argparse
+import os
 
 # TO DO:
 # REMOVE WILDCARD QUERY?
 
 class ElasticsearchQueryBenchmark:
-    def __init__(self, es_url: str, index_name: str, config: Dict[str, Any] = None):
+    def __init__(self, es_url: str, index_name: str, dataset: str ,  config: Dict[str, Any] = None):
         self.es_url = es_url.rstrip('/')
         self.index_name = index_name
+        self.dataset = dataset.lower()  
         self.results = []
 
         # Optimizations for large index (large timemout)
@@ -152,7 +155,7 @@ class ElasticsearchQueryBenchmark:
                 }
             },
             "size": 50,
-            "_source": ["url"],  # Don't return full text source, just highlights, and yes url
+            "_source": True,  # Don't return full text source, just highlights, and yes url
             "highlight": {
                 "fields": {
                     "text": {
@@ -185,7 +188,7 @@ class ElasticsearchQueryBenchmark:
                 }
             },
             "size": 50,
-            "_source": ["url"],
+            "_source": True,
             "highlight": {
                 "fields": {
                     "text": {
@@ -222,7 +225,7 @@ class ElasticsearchQueryBenchmark:
                     }
                 },
                 "size": 100,
-                "_source": ["url"],
+                "_source": True,
                 "highlight": {
                     "fields": {
                         "text": {
@@ -304,7 +307,7 @@ class ElasticsearchQueryBenchmark:
                     }
                 },
                 "size": 50,
-                "_source": ["url"],
+                "_source": True,
                 "highlight": {
                     "fields": {
                         "text": {
@@ -330,7 +333,7 @@ class ElasticsearchQueryBenchmark:
                     }
                 },
                 "size": 50,
-                "_source": ["url"],
+                "_source": True,
                 "highlight": {
                     "fields": {
                         "text": {
@@ -364,7 +367,7 @@ class ElasticsearchQueryBenchmark:
                     }
                 },
                 "size": 50,
-                "_source": ["url"],
+                "_source": True,
                 "highlight": {
                     "fields": {
                         "text": {
@@ -398,7 +401,7 @@ class ElasticsearchQueryBenchmark:
                     "bool": bool_query
                 },
                 "size": 50,
-                "_source": ["url"],
+                "_source": True,
                 "highlight": {
                     "fields": {
                         "text": {
@@ -449,6 +452,76 @@ class ElasticsearchQueryBenchmark:
         
         return '\n'.join(snippets)
     
+    def extract_hit_snippets_fineweb(self, hits_data: list, max_hits: int = 5) -> str:
+        """Extract top N hit snippets with scores and highlighting for Fineweb dataset"""
+        if not hits_data:
+            return ""
+        
+        snippets = []
+        for i, hit in enumerate(hits_data[:max_hits]):
+            score = hit.get('_score', 0)
+
+            # Extract URL and document_id from source
+            url = hit.get('_source', {}).get('url', 'No URL available')
+            document_id = hit.get('_source', {}).get('document_id', 'No document_id available')
+        
+            # Get highlighted text if available (this contains the matching terms)
+            if 'highlight' in hit and 'text' in hit['highlight']:
+                # Use highlighted fragments that contain the query terms
+                highlighted_fragments = hit['highlight']['text']
+                text_snippet = ' | '.join(highlighted_fragments)
+                snippet_source = "HIGHLIGHTED"
+            else:
+                # Fallback to source text if highlighting failed
+                source_text = hit.get('_source', {}).get('text', '')
+                # For fallback, try to find query terms in the text
+                text_snippet = source_text[:300] + ('...' if len(source_text) > 300 else '')
+                snippet_source = "SOURCE_TEXT"
+            
+            # Clean up the snippet (remove extra whitespace and newlines)
+            text_snippet = ' '.join(text_snippet.split())
+            
+            # Include URL and document_id in snippet info
+            snippet_info = f"Hit {i+1} (Score: {score:.3f}, URL: {url}, Document_ID: {document_id}, Type: {snippet_source}): {text_snippet}"
+            snippets.append(snippet_info)
+        
+        return '\n'.join(snippets)
+
+    def extract_hit_snippets_sft(self, hits_data: list, max_hits: int = 5) -> str:
+        """Extract top N hit snippets with scores and highlighting for SFT dataset"""
+        if not hits_data:
+            return ""
+        
+        snippets = []
+        for i, hit in enumerate(hits_data[:max_hits]):
+            score = hit.get('_score', 0)
+
+            # Extract conversation_id and original_metadata from source
+            conversation_id = hit.get('_source', {}).get('conversation_id', 'No conversation_id available')
+            original_metadata = hit.get('_source', {}).get('original_metadata', 'No original_metadata available')
+        
+            # Get highlighted text if available (this contains the matching terms)
+            if 'highlight' in hit and 'text' in hit['highlight']:
+                # Use highlighted fragments that contain the query terms
+                highlighted_fragments = hit['highlight']['text']
+                text_snippet = ' | '.join(highlighted_fragments)
+                snippet_source = "HIGHLIGHTED"
+            else:
+                # Fallback to source text if highlighting failed
+                source_text = hit.get('_source', {}).get('text', '')
+                # For fallback, try to find query terms in the text
+                text_snippet = source_text[:300] + ('...' if len(source_text) > 300 else '')
+                snippet_source = "SOURCE_TEXT"
+            
+            # Clean up the snippet (remove extra whitespace and newlines)
+            text_snippet = ' '.join(text_snippet.split())
+            
+            # Include conversation_id and original_metadata in snippet info
+            snippet_info = f"Hit {i+1} (Score: {score:.3f}, Conversation_ID: {conversation_id}, Original_Metadata: {original_metadata}, Type: {snippet_source}): {text_snippet}"
+            snippets.append(snippet_info)
+        
+        return '\n'.join(snippets)
+
     def extract_response_stats(self, response: dict) -> dict:
         """Extract relevant statistics from ES response"""
         if "error" in response:
@@ -463,6 +536,14 @@ class ElasticsearchQueryBenchmark:
         
         hits = response.get("hits", {})
         hits_data = hits.get("hits", [])
+
+        # Use dataset parameter to determine which extract function to call
+        if hasattr(self, 'dataset') and self.dataset.lower() == 'sft':
+            hit_snippets = self.extract_hit_snippets_sft(hits_data)
+        else:
+            # Default to Fineweb (covers both explicit 'fineweb' and any other values)
+            hit_snippets = self.extract_hit_snippets_fineweb(hits_data)
+        
         
         return {
             "total_hits": hits.get("total", {}).get("value", 0) if isinstance(hits.get("total"), dict) else hits.get("total", 0),
@@ -470,7 +551,7 @@ class ElasticsearchQueryBenchmark:
             "took_ms": response.get("took", 0),
             "timed_out": response.get("timed_out", False),
             "error": None,
-            "hit_snippets": self.extract_hit_snippets(hits_data)
+            "hit_snippets": hit_snippets
         }
     
     def run_all_queries(self, segment_text: str) -> List[dict]:
@@ -597,7 +678,7 @@ class ElasticsearchQueryBenchmark:
             print(f"Error processing CSV file: {e}")
             sys.exit(1)
     
-    def save_detailed_results(self, filename: str = 'search_results_detailed.csv'):
+    def save_detailed_results_csv(self, filename: str = 'search_results_detailed.csv'):
         """Save detailed results to CSV file with enhanced formatting"""
         print(f"Saving detailed results to {filename}...")
         
@@ -626,7 +707,7 @@ class ElasticsearchQueryBenchmark:
         print(f"Detailed results saved to {filename}")
         print(f"Results include top 5 hit snippets with scores and highlighting")
         
-    def generate_summary_stats(self, filename: str = 'search_results_summary.csv'):
+    def generate_summary_stats_csv(self, filename: str = 'search_results_summary.csv'):
         """Generate and save summary statistics"""
         print(f"Generating summary statistics...")
         
@@ -708,6 +789,98 @@ class ElasticsearchQueryBenchmark:
         
         print(f"Summary statistics saved to {filename}")
 
+
+    def save_detailed_results(self, filename: str = 'search_results_detailed.json'):
+        """Save detailed results to JSON file with enhanced formatting"""
+        print(f"Saving detailed results to {filename}...")
+        
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(self.results, file, indent=2, ensure_ascii=False)
+        
+        print(f"Detailed results saved to {filename}")
+        print(f"Results include top 5 hit snippets with scores and highlighting")
+
+    def generate_summary_stats(self, filename: str = 'search_results_summary.json'):
+        """Generate and save summary statistics"""
+        print(f"Generating summary statistics...")
+        
+        if not self.results:
+            print("No results to analyze")
+            return
+        
+        # Group results by query type
+        stats_by_type = {}
+        total_queries = len(self.results)
+        successful_queries = len([r for r in self.results if r['error'] is None])
+        
+        for query_type in self.query_types:
+            type_results = [r for r in self.results if r['query_type'] == query_type and r['error'] is None]
+            
+            if type_results:
+                query_times = [r['query_time_ms'] for r in type_results]
+                es_times = [r['es_took_ms'] for r in type_results]
+                hit_counts = [r['total_hits'] for r in type_results]
+                
+                stats_by_type[query_type] = {
+                    'total_queries': len(type_results),
+                    'avg_query_time_ms': round(statistics.mean(query_times), 2),
+                    'median_query_time_ms': round(statistics.median(query_times), 2),
+                    'min_query_time_ms': round(min(query_times), 2),
+                    'max_query_time_ms': round(max(query_times), 2),
+                    'avg_es_time_ms': round(statistics.mean(es_times), 2),
+                    'avg_hits': round(statistics.mean(hit_counts), 2),
+                    'total_hits': sum(hit_counts),
+                    'errors': len([r for r in self.results if r['query_type'] == query_type and r['error'] is not None])
+                }
+            else:
+                stats_by_type[query_type] = {
+                    'total_queries': 0,
+                    'avg_query_time_ms': 0,
+                    'median_query_time_ms': 0,
+                    'min_query_time_ms': 0,
+                    'max_query_time_ms': 0,
+                    'avg_es_time_ms': 0,
+                    'avg_hits': 0,
+                    'total_hits': 0,
+                    'errors': len([r for r in self.results if r['query_type'] == query_type])
+                }
+        
+        # Create summary structure
+        summary = {
+            'overview': {
+                'total_queries': total_queries,
+                'successful_queries': successful_queries,
+                'failed_queries': total_queries - successful_queries
+            },
+            'query_type_stats': stats_by_type
+        }
+        
+        # Save summary statistics as JSON
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(summary, file, indent=2, ensure_ascii=False)
+        
+        # Print summary to console (unchanged)
+        print("\n" + "=" * 60)
+        print("SEARCH PIPELINE SUMMARY")
+        print("=" * 60)
+        print(f"Total queries executed: {total_queries}")
+        print(f"Successful queries: {successful_queries}")
+        print(f"Failed queries: {total_queries - successful_queries}")
+        print()
+        
+        print("Performance by Query Type:")
+        print("-" * 40)
+        for query_type, stats in stats_by_type.items():
+            print(f"{query_type}:")
+            print(f"  Queries: {stats['total_queries']}")
+            print(f"  Avg Time: {stats['avg_query_time_ms']}ms")
+            print(f"  Avg Hits: {stats['avg_hits']}")
+            print(f"  Errors: {stats['errors']}")
+            print()
+        
+        print(f"Summary statistics saved to {filename}")
+
+
 def parse_config_value(value_str: str) -> Union[bool, int, str, List]:
     """Parse configuration values from string"""
     if not value_str:
@@ -734,39 +907,55 @@ def parse_config_value(value_str: str) -> Union[bool, int, str, List]:
     return value_str
 
 def main():
-    if len(sys.argv) < 5:
-        print("Usage: python3 search_with_highlight.py <csv_file> <index_name> <es_url> <output_dir> [config_json]")
-        sys.exit(1)
     
-    csv_file = sys.argv[1]
-    index_name = sys.argv[2]
-    es_url = sys.argv[3]
-    output_dir = sys.argv[4]
+    parser = argparse.ArgumentParser(description="Elasticsearch Search Queries Pipeline ")
+        
+    # Required arguments
+    parser.add_argument("--csv-file", required=True, 
+                       help="CSV file containing search queries (one query per line)")
+    parser.add_argument("--index-name", required=True,
+                       help="Elasticsearch index name to search")
+    parser.add_argument("--es-url", required=True,
+                       help="Elasticsearch URL (e.g., http://localhost:9200)")
+    parser.add_argument("--output-dir", required=True,
+                       help="Directory to save result files")
     
-    # Parse configuration if provided
+    # Optional configuration
+    parser.add_argument("--config", type=str,
+                       help="JSON configuration string for query execution parameters")
+    
+    parser.add_argument("--dataset", choices=['fineweb', 'sft'], default='fineweb',
+                   help="Dataset type: 'fineweb' or 'sft' (default: fineweb)")
+
+    args = parser.parse_args()
+    # Parse configuration
     config = {}
-    if len(sys.argv) > 5:
+
+    if args.config:
         try:
-            config = json.loads(sys.argv[5])
+            cli_config = json.loads(args.config)
+            config.update(cli_config)
+            print(f"Applied command line configuration")
         except json.JSONDecodeError as e:
             print(f"Error parsing configuration JSON: {e}")
             sys.exit(1)
+
     
     print("Elasticsearch Search Pipeline Starting...")
-    print(f"CSV File: {csv_file}")
-    print(f"Index: {index_name}")
-    print(f"ES URL: {es_url}")
-    print(f"Output Directory: {output_dir}")
+    print(f"CSV File: {args.csv_file}")
+    print(f"Index: {args.index_name}")
+    print(f"ES URL: {args.es_url}")
+    print(f"Output Directory: {args.output_dir}")
     print(f"Configuration: {config}")
     print("=" * 50)
     
     # Create output directory if it doesn't exist
-    import os
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(args.output_dir, exist_ok=True)
     
     # Initialize benchmark with configuration
-    benchmark = ElasticsearchQueryBenchmark(es_url, index_name, config)
+    benchmark = ElasticsearchQueryBenchmark(args.es_url, args.index_name, args.dataset, config)
     
+ 
     # Test ES connection
     try:
         response, _ = benchmark._make_request('GET', '')
@@ -777,25 +966,31 @@ def main():
     
     # Process CSV and run queries
     start_time = time.time()
-    benchmark.process_csv(csv_file)
+    benchmark.process_csv(args.csv_file)
     end_time = time.time()
     
     total_time = end_time - start_time
     print(f"\nTotal execution time: {total_time:.2f} seconds")
     
     # Save results with timestamps for uniqueness
-    from datetime import datetime
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # job_id = args.job_id or os.environ.get('SLURM_JOB_ID', 'local')
     job_id = os.environ.get('SLURM_JOB_ID', 'local')
+
     
-    detailed_filename = os.path.join(output_dir, f"search_results_detailed_{job_id}_{timestamp}.csv")
-    summary_filename = os.path.join(output_dir, f"search_results_summary_{job_id}_{timestamp}.csv")
+    # Also update the filename generation in main():
+    detailed_filename = os.path.join(args.output_dir, f"search_results_detailed_{job_id}_{timestamp}.json")
+    summary_filename = os.path.join(args.output_dir, f"search_results_summary_{job_id}_{timestamp}.json")
+        
+    #detailed_filename = os.path.join(args.output_dir, f"search_results_detailed_{job_id}_{timestamp}.csv")
+    #summary_filename = os.path.join(args.output_dir, f"search_results_summary_{job_id}_{timestamp}.csv")
     
     benchmark.save_detailed_results(detailed_filename)
     benchmark.generate_summary_stats(summary_filename)
     
     print("\nPipeline completed successfully!")
     print(f"Enhanced results with hit snippets saved to: {detailed_filename}")
+    print(f"Summary statistics saved to: {summary_filename}")
 
 if __name__ == "__main__":
     main()
