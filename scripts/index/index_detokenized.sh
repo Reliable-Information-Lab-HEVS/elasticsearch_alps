@@ -15,21 +15,6 @@
 # FineWeb Dataset Indexing Script for Containerized Elasticsearch on SLURM
 set -e  # Exit on any error
 
-# Phase 1
-# DATASETS=(
-#         $DATAROOT/finemath-3plus-merge 47GB: 1 JOB (917362)FAIL ( 917962) con diff memory logs 917987(pq no ha funcionado escribir a common folder) (918256)
-#         $DATAROOT/starcoder-extras-merge 50GB: 1 JOB (917363) FAIL (917621) REDO
-#         $DATAROOT/starcoder-threshold-0-merge (756G) ONGOING (4 jobs): Total: 229.092GB: 1 JOB (917377)
-#         $DATAROOT/swissai-fineweb-edu-score-2-filterrobots-merge DOING (19T) : Total: 12736.9GB 40 JOBS (917433-917472)
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/euro-high (9.1T) (50 jobs) : Total: 2660.02GB 9 JOBS (917423-917431)
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/euro-mid (88G) (1 job): 21GB: 1 JOB (917364) FAIL (917622) REDO
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/other-high  (3.9T) (25 jobs): Total: 991.787GB 4 JOBS (917415-917418)
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/rest (356G) (2 jobs): Total: 76.6389GB: 1 JOB (917380)
-#         $DATAROOT/poison DONE: 622MB: 1 JOB
-#         $DATAROOT/gutenberg DONE: 3.2GB: 1 JOB
-# )
-# ERRORS:
-# /capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/swissai-fineweb-2-quality_33-filterrobots-merge_euro-high/output/indexing_917426.out ---> 917623
 # Default parameters (modify as needed)
 
 DATA_DIR="${DATA_DIR:-/capstor/scratch/cscs/inesaltemir/detokenized_output/finemath-3plus-merge}"
