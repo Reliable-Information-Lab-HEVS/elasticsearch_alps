@@ -1,0 +1,4431 @@
+{
+    "api": "lexicons",
+    "version": "1.0",
+    "datetime": "2025-06-10 11:58:05",
+    "important": "Your use of this API acknowledges your consent with The Weaponized Word's Terms of Service, available online at weaponizedword.org, and prevents unauthorized sharing of proprietary data transitting this API, which may be protected by data watermarking and other means. Note that research access generally does not include additional stemming lexicography like pluralization, Romanization and word variants.",
+    "query": {
+        "api_key": "zCMRRJFmoCWAGDnbzfenkBReTwbhziKo",
+        "token": "uERWTARYJVFvhjctHomAYrGuZMgDtcJE",
+        "language_id": "eng"
+    },
+    "number_of_results": 592,
+    "number_of_pages": 6,
+    "page": 1,
+    "result": [
+        {
+            "term": "booger queen",
+            "term_id": "DEqxC72Ac",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "An unattractive drag queen",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": null,
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "chicks with dicks",
+            "term_id": "cKCrdtEeV",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] Transvestite [2] Transitioning female [3] A genre of pornography which features either",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "dragzilla",
+            "term_id": "ETNcgCKgJ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "An unattractive drag queen",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "troon",
+            "term_id": "ckpuZ4euK",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A masculine-looking trans female",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "poonbro",
+            "term_id": "PHx8VtaVY",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A male trans person with a vagina",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "ladyboy",
+            "term_id": "2TDZHnTyy",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A transgender woman, perhaps derived from the Thai word kathoey",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "brick",
+            "term_id": "meqhpGema",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Pejorative term for one who can't pass as female",
+            "benign_meaning": "A building material",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "trancel",
+            "term_id": "poscXNWtz",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "An incel who masks attraction to trans people with disparagement",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "trap",
+            "term_id": "HJBe7dMUG",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Pejorative term for an attractive trans person",
+            "benign_meaning": "A snare or deception",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Moderately offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "toilet goblin",
+            "term_id": "hAtnqRiMH",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] A gay man who seeks sex in a public bathroom [2] Similarly, a trans person",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "newhalf",
+            "term_id": "MRKCYDBYL",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A trans woman, derived from the Japanese word ny\u016bh\u0101fu",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "Adam and Steve",
+            "term_id": "qpuLiCfna",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Corruption of Adam and Eve, used pejoratively to depict homosexuality as against the will of God",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "transtrender",
+            "term_id": "ZrmEdxpLU",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Implies a trans person is motivated not by biology but by fashion or caprice",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "poon",
+            "term_id": "AGTQZTeCZ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] Vagina [2] Woman",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "female"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "guys in disguise",
+            "term_id": "vQnDBbYGz",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "One who appears masculine despite feminine clothing",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "cunty",
+            "term_id": "qYMVMFQHL",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Used when a trans person resembles a woman",
+            "benign_meaning": "Reappropriated as an in-group term, but still considered by many offensive",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "biogirl",
+            "term_id": "GktRqhGEQ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Refers to non-trans female, but implies by exclusion that to be trans is unsupported by biology",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "aunt TIF",
+            "term_id": "gQKpMLVrc",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A conservative trans man",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Moderately offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "chick",
+            "term_id": "RPqeeAbsU",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Female",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "Y",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "Gayrole",
+            "term_id": "hQcJuygVy",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "English-language slur used in Russia to suggest widespread homosexuality in Europe",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "N",
+            "athnicities": null,
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2025-03-02 05:00:00",
+            "updated_on": "2025-03-02 05:00:00"
+        },
+        {
+            "term": "whipletener",
+            "term_id": "UFdxTFWwM",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "This is a watermark term, and can therefore be ignored. It is not a real or plausible word, and will not generate false positives in automated text analyses.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": null,
+            "is_about_ethnicity": "Y",
+            "athnicities": null,
+            "is_about_religion": "Y",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "Y",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2024-03-19 14:52:08",
+            "updated_on": "2024-03-19 14:52:08"
+        },
+        {
+            "term": "dune nigger",
+            "term_id": "xHfvkTwGd",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of Arab descent.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2014-01-24 15:00:33",
+            "updated_on": "2022-04-05 20:06:22"
+        },
+        {
+            "term": "dune coon",
+            "term_id": "YYeAJrsFB",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of Arab descent.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": null,
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-06-17 22:13:30",
+            "updated_on": "2022-04-05 20:06:03"
+        },
+        {
+            "term": "Canigger",
+            "term_id": "KP4Zcyjsk",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Canadian of African descent",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-04-12 15:10:48",
+            "updated_on": "2022-04-05 20:04:55"
+        },
+        {
+            "term": "Cairo coon",
+            "term_id": "hHpJrwFrD",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of Middle Eastern descent",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "EG"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-04-12 15:08:44",
+            "updated_on": "2022-04-05 20:04:04"
+        },
+        {
+            "term": "border nigger",
+            "term_id": "hFLWWmbso",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of Latino descent, particularly a Mexican migrant laborer.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "MX"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Hispanic"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2014-03-23 09:01:35",
+            "updated_on": "2022-04-05 20:02:15"
+        },
+        {
+            "term": "white nigger",
+            "term_id": "UmgCNRBsK",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] Used in 19th-century United States to refer to the Irish. [2] Sometimes used today in reference to white people in a manner similar to white trash or redneck. [3] Also refers to white youth that imitate urban black youth by means of clothing style, mannerisms, and slang speech. The 'w' at the start of wigger refers to the white person and the 'igger' refers to nigger, which is a racial slur for black people. [4] Also used by radical Quebecois in self-reference, as in the seminal 1968 book White Niggers of America.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "European",
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "Y",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-06-21 15:09:18",
+            "updated_on": "2022-04-05 20:00:03"
+        },
+        {
+            "term": "timber nigger",
+            "term_id": "eszCTzMgc",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Native American.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Aboriginal"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-05-02 15:20:54",
+            "updated_on": "2022-04-05 19:57:47"
+        },
+        {
+            "term": "sand nigger",
+            "term_id": "DFWFLwrHH",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Derogatory term for a person from the Middle East, Arab, South Asian world",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-05-11 21:43:24",
+            "updated_on": "2022-04-05 19:55:29"
+        },
+        {
+            "term": "prairie nigger",
+            "term_id": "ugHh4TkfX",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Native American.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Aboriginal"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-06-19 19:53:18",
+            "updated_on": "2022-04-05 19:53:41"
+        },
+        {
+            "term": "niggerville",
+            "term_id": "PtZyeozd8",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A town or part of town containing majority black population",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-01-07 18:34:12",
+            "updated_on": "2022-04-05 19:50:39"
+        },
+        {
+            "term": "niggertown",
+            "term_id": "B9DifbXys",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A town or part of town containing majority black population",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-01-07 18:31:52",
+            "updated_on": "2022-04-05 19:49:57"
+        },
+        {
+            "term": "niggerize",
+            "term_id": "wzNCnuNYT",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "To increase African American \/ African influence",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:28",
+            "updated_on": "2022-04-05 19:49:39"
+        },
+        {
+            "term": "niggerfag",
+            "term_id": "fLUpDkJrq",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A homosexual of African descent",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:28",
+            "updated_on": "2022-04-05 19:49:12"
+        },
+        {
+            "term": "niggerette",
+            "term_id": "JmQk4dvjh",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Female diminuitive of 'nigger'",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:28",
+            "updated_on": "2022-04-05 19:48:28"
+        },
+        {
+            "term": "nigger-rig",
+            "term_id": "ksLwaYryM",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "To poorly repair or assemble something",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:27",
+            "updated_on": "2022-04-05 19:47:51"
+        },
+        {
+            "term": "niggerdick",
+            "term_id": "d3xNw1CRs",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "The penis of a man of African descent, or a person with a large penis; likely popularized online for shock value",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African American"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-01-07 18:16:05",
+            "updated_on": "2022-04-05 19:47:29"
+        },
+        {
+            "term": "niggerton",
+            "term_id": "ZQYJbnoQa",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A town or part of town containing majority black population",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-01-07 18:32:36",
+            "updated_on": "2022-04-05 19:47:16"
+        },
+        {
+            "term": "nigger-knock",
+            "term_id": "oNku1TPeX",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Intimidation of black families by anonymous knocking on their front doors",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:27",
+            "updated_on": "2022-04-05 19:46:27"
+        },
+        {
+            "term": "nigger",
+            "term_id": "ZwnJksDoT",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black person.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-04-02 04:00:00",
+            "updated_on": "2022-04-05 19:46:15"
+        },
+        {
+            "term": "island nigger",
+            "term_id": "aLimyrwrk",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Polynesian.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "PF"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Pacific Islander"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-04-28 04:12:22",
+            "updated_on": "2022-04-05 19:43:30"
+        },
+        {
+            "term": "bushnigger",
+            "term_id": "HoaMDEUNY",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of North American Indigenous heritage",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PF"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Aboriginal"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-04-12 15:04:07",
+            "updated_on": "2022-04-05 19:41:24"
+        },
+        {
+            "term": "cab nigger",
+            "term_id": "9zoRjLURJ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of Indian or Middle Eastern descent, based on the perceived surfeit of immigrants driving cabs in the United States.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PF"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Arabs",
+                "India"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-10-08 18:26:34",
+            "updated_on": "2022-04-05 19:39:05"
+        },
+        {
+            "term": "cave nigger",
+            "term_id": "QxtcgaAyw",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of Middle Eastern descent",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PF"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2014-02-24 21:01:20",
+            "updated_on": "2022-04-05 19:37:18"
+        },
+        {
+            "term": "darky",
+            "term_id": "dpobaNtLV",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black person. The term may cause offense. though Randall Kennedy's Nigger: The Strange Career of a Troublesome Word notes that some judges have considered 'darky' a 'term of endearment.' In South Africa, it can be considered offensive (depending on the context), but is commonly used among black people to refer to other black people in a non-derogatory way.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PF"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-05-02 05:29:52",
+            "updated_on": "2022-04-05 19:36:36"
+        },
+        {
+            "term": "fog nigger",
+            "term_id": "shTzwyLqw",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black person of British nationality.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "GB"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-12-06 00:20:45",
+            "updated_on": "2022-04-05 19:34:49"
+        },
+        {
+            "term": "house nigger",
+            "term_id": "7eYqKWPYW",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "As with Uncle Tom, a reference to a black person who is subservient to whites.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "GB"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-06-21 23:37:27",
+            "updated_on": "2022-04-05 19:34:20"
+        },
+        {
+            "term": "ice nigger",
+            "term_id": "wsgWWUecr",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black Canadian.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-07-17 18:50:09",
+            "updated_on": "2022-04-05 19:33:58"
+        },
+        {
+            "term": "heshe",
+            "term_id": "wHePYPMAY",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A transsexual, transgendered or sexually ambiguous person",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "Y",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2022-04-05 17:15:09",
+            "updated_on": "2022-04-05 17:15:09"
+        },
+        {
+            "term": "assfucker",
+            "term_id": "LgTQWVEWF",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "One who engages in anal sex",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "Y",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2022-04-04 17:22:32",
+            "updated_on": "2022-04-04 17:22:32"
+        },
+        {
+            "term": "shitskin",
+            "term_id": "MeRXunZse",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A non-Caucasian, or person with dark skin",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African",
+                "African American",
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2022-02-26 17:03:07",
+            "updated_on": "2022-02-26 17:03:07"
+        },
+        {
+            "term": "mongrel",
+            "term_id": "JDNgerRRg",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "One of mixed heritage",
+            "benign_meaning": "A dog of mixed breed",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African",
+                "African American",
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": null,
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2022-02-26 17:01:26",
+            "updated_on": "2022-02-26 17:01:26"
+        },
+        {
+            "term": "goatfucker",
+            "term_id": "j3mcd3iDg",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Used to disparage Muslims and\/or those of Middle Eastern heritage",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2022-02-26 17:00:18",
+            "updated_on": "2022-02-26 17:00:18"
+        },
+        {
+            "term": "turkroach",
+            "term_id": "FWcseFxAY",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Disparaging term for one of Turkish nationality, used as a 4chan meme, specifically \/int\/ and \/pol\/",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Moderately offensive",
+            "created_on": "2022-02-26 16:56:36",
+            "updated_on": "2022-02-26 16:56:36"
+        },
+        {
+            "term": "Saracen",
+            "term_id": "oGEQehZmb",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Currently used as disparaging term for Muslim",
+            "benign_meaning": "Archaic term for Muslim dating from the Middle Ages",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Moderately offensive",
+            "created_on": "2022-02-26 16:54:46",
+            "updated_on": "2022-02-26 16:54:46"
+        },
+        {
+            "term": "dimepiece",
+            "term_id": "Arcccgske",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "An attractive woman",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-07-17 19:19:44",
+            "updated_on": "2021-07-17 19:19:44"
+        },
+        {
+            "term": "ratchet",
+            "term_id": "YYEofhHmA",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "An obnoxious woman",
+            "benign_meaning": "A tool used for turning bolts",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-07-17 19:16:44",
+            "updated_on": "2021-07-17 19:17:31"
+        },
+        {
+            "term": "cyattie",
+            "term_id": "tJYZDkKEB",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Obnoxious woman",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Arabs"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-07-17 19:15:45",
+            "updated_on": "2021-07-17 19:15:45"
+        },
+        {
+            "term": "blue eyed devil",
+            "term_id": "QDzmWgvCb",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Initially a slur against Europeans, has been reclaimed by white supremacists",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2021-04-18 21:38:05",
+            "updated_on": "2021-04-18 21:38:19"
+        },
+        {
+            "term": "Bin Laden",
+            "term_id": "dBAhoTNMm",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Muslim",
+            "benign_meaning": "al-Qaeda founder, Osama Bin Laden",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2021-04-16 18:59:05",
+            "updated_on": "2021-04-18 21:31:57"
+        },
+        {
+            "term": "peckerwood",
+            "term_id": "tgGbEbava",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] Used by southern African-Americans and upper class whites to denote poor rural whites. It is still used mostly by African-Americans in reference to white people. [2] Reclaimed by white supremacists to refer to white prison gang members.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-04-18 14:10:44",
+            "updated_on": "2021-04-18 14:46:01"
+        },
+        {
+            "term": "newfie",
+            "term_id": "ZyLrZYgDu",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person from Newfoundland, often used to denote lack of intelligence.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2013-06-25 02:10:56",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "abo",
+            "term_id": "WHPDWamCM",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Australian Aboriginal person. Originally, this was simply an informal term for Aborigine, and was in fact used by Aboriginal people themselves until it started to be considered offensive in the 1950s. In remoter areas, Aboriginal people still often refer to themselves (quite neutrally) as Blackfellas (and whites as Whitefellas). Although Abo is still considered quite offensive by many, the pejorative boong is now more commonly used when the intent is to deliberately offend, as that word's status as an insult is unequivocal.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-25 01:46:40",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "rube",
+            "term_id": "NzbPacpHX",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A rural person.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "TR"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2013-06-24 04:50:22",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "sawney",
+            "term_id": "8wpjpHerh",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Scottish person, local variant of Sandy, short for 'Alasdair'.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "GB"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "Y",
+            "offensiveness": "Moderately offensive",
+            "created_on": "2013-06-23 22:30:14",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "shade",
+            "term_id": "Q7Wxd9wzz",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black person, or one attempting to be perceived as black.",
+            "benign_meaning": "Shelter, particularly from the sun",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "GB"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-23 13:40:29",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Gerudo",
+            "term_id": "JBQTLru4c",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Muslim female. Probably formed from the name of the Gerudo people, a fantasy race created in the Legend of Zelda series.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "GB"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "European"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-06-23 11:30:27",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "gew",
+            "term_id": "EJTZuLvkz",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A German Jew.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "DE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "German",
+                "Jews"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-23 11:10:26",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "sheeny",
+            "term_id": "NczGFKfLC",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A 19th-century derogatory term for an 'untrustworthy Jew.'",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "DE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "German",
+                "Jews"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "Y",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-23 09:40:13",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Shelta",
+            "term_id": "cvBktFVXg",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "An Irish Traveller.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-23 07:40:26",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "shant",
+            "term_id": "GdNUHdVeA",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A disenfranchised Irish peson, from 'shanty'.",
+            "benign_meaning": "Contraction of \"shall not\"",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-23 11:20:23",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Christ killer",
+            "term_id": "txFimzoYC",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Jew, an allusion to Jewish deicide. On occasion it can also be used as an anti-Italian slur on the basis the Romans, as ancestors of the present-day Italians, executed Jesus.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Italian",
+                "Jews"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-06-23 12:00:35",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "dot head",
+            "term_id": "n6Mezkvis",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of Indian descent, from the caste-mark (dot) on an Indian's forehead.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IN"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Italian",
+                "Jews"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-23 19:40:11",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "sambo",
+            "term_id": "gpeufcaDt",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black person.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IN"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Italian",
+                "Jews"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-06-24 00:05:55",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "buffie",
+            "term_id": "DMqKQLKso",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] A black person. [2] a young, brown-skinned person 1940s-1950s",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IN"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Italian",
+                "Jews"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "Y",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-06-24 06:10:11",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "culchie",
+            "term_id": "RbimaDHDD",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A rural Irish person",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2019-01-24 15:47:38",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "red nigger",
+            "term_id": "HRs2p4zgL",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Native American person",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Aboriginal"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:36",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "pavement ape",
+            "term_id": "TYdufUgxw",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black person",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:30",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "niggera",
+            "term_id": "YGqo9guhn",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Alternative use of the term 'nigger'",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:28",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "jackeen",
+            "term_id": "REQHXEGAH",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Rural slur for a person from Dublin",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Judaism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-01-24 15:50:13",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "carrot snapper",
+            "term_id": "cZbwxuuGP",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Mormon, presumably inspired by agriculture in Utah",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2014-02-24 20:55:13",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Caublasian",
+            "term_id": "FebTRVA4u",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person of mixed Caucasian, African and Asian heritage",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2014-02-24 20:58:24",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "JAFA",
+            "term_id": "QoJdoFCgc",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Acronym for \"Just Another Fucking Australian\"",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "AU"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2019-01-24 15:52:31",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "picaninny",
+            "term_id": "ZkPdLedfP",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black child",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "AU"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African American"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2019-01-09 18:50:43",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Palestinkian",
+            "term_id": "TwvvgTCMs",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Childish slur for Palestinians",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "PS"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "African American"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Moderately offensive",
+            "created_on": "2018-11-01 19:42:29",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "niggerwool",
+            "term_id": "Wvu4YscsM",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Describing the texture of African American hair",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PS"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:28",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "nitchie",
+            "term_id": "BTb4WFiAE",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A North American Indian (from the Algonquian word for 'friend').",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PS"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-04-14 01:15:00",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "cracker",
+            "term_id": "vCnqVhFdT",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A poor Appalachian or poor Southerner, a white person, first used in the 19th century.",
+            "benign_meaning": "[1] Snack [2] Hacker [3] American musical group [4] British television show",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PS"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "Y",
+            "is_archaic": "N",
+            "offensiveness": "Moderately offensive",
+            "created_on": "2013-04-18 17:34:47",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "spook",
+            "term_id": "vCakaktdd",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A black person, originating from the 1940s.",
+            "benign_meaning": "[1] To scare [2] A spy",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "PS"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "African"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "Y",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2013-04-19 00:22:15",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "pikey",
+            "term_id": "BTP9cEADP",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Derived from 'turnpike'. [1] An Irish person. [2] A gypsy. [3] An itinerant or vagrant lower-class or poor person.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-04-19 00:25:38",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Pepper",
+            "term_id": "CyDvarYFa",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A French Canadian or Quebecois, derived from the Anglo-Canadian jibe that their stereotypically bad dental hygiene was due to drinking Pepsi or Dr Pepper for breakfast.",
+            "benign_meaning": "A plant",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "French"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-04-19 01:11:19",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "quadroon",
+            "term_id": "APMnPDoXF",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person who is 1\/4 Black. Coined during the Civil War, referring to how White you had to be in order to serve in the army.",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "French"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Mormonism"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2013-04-19 04:01:56",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "mudslime",
+            "term_id": "FwUiwpQeQ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] Used as a racist and Islamophobic trope against Muslims (especailly ones from non Europe-North American countries)",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "CA"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "French"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2021-03-30 18:30:45",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Madrasi",
+            "term_id": "HREJEXueU",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "[1] A person from the Indian city of Chennai [2] A person from southern India.",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IN"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "French"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2019-01-24 15:55:28",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "croweater",
+            "term_id": "JPcgRhYLQ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A person from the state of South Australia",
+            "benign_meaning": "",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "AU"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "French"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2019-01-24 15:45:16",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "Fenian",
+            "term_id": "8WUAuegut",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "In Northern Ireland, denotes a Catholic or Irish nationalist",
+            "benign_meaning": "A member of one or more fraternal organisations committed to an independent Ireland in the 19th and early 20th centuries",
+            "is_about_nationality": "Y",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Irish"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Christianity"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2019-01-24 14:59:52",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "the goyim know",
+            "term_id": "VwgjUqPyn",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Meme implying a supposed global Jewish conspiracy",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Jews"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Christianity"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2019-01-14 20:50:16",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "good goy",
+            "term_id": "erEWTbRnF",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A non-Jewish person who disbelieves in a global Jewish conspiracy",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Jews"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Christianity"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2019-01-14 20:44:52",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "mussie",
+            "term_id": "PiDooTevr",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "A Muslim",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "N",
+            "athnicities": [
+                "Jews"
+            ],
+            "is_about_religion": "Y",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2019-01-24 15:02:44",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "reffo",
+            "term_id": "iyeXmMNcP",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Derogatory term for refugees",
+            "benign_meaning": "",
+            "is_about_nationality": "N",
+            "nationalities": [
+                "IE"
+            ],
+            "is_about_ethnicity": "Y",
+            "athnicities": [
+                "Jews"
+            ],
+            "is_about_religion": "N",
+            "religions": [
+                "Islam"
+            ],
+            "is_about_gender": "N",
+            "genders": [
+                "transgender"
+            ],
+            "is_about_orientation": "N",
+            "orientations": [
+                "homosexual"
+            ],
+            "is_about_disability": "N",
+            "is_about_class": "N",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2018-11-01 19:42:37",
+            "updated_on": "-0001-11-30 05:17:32"
+        }, 
+{
+            "term": "Holy war",
+            "term_id": "qXuyLjwbY",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Holy war",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-19 17:53:21",
+            "updated_on": "2021-05-19 17:53:21"
+        },
+        {
+            "term": "Infidel",
+            "term_id": "VM7AQwtKk",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Infidel; nonbeliever",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-19 17:52:56",
+            "updated_on": "2021-05-19 17:52:56"
+        },
+        {
+            "term": "72 virgins",
+            "term_id": "RmftvZMEU",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Women who will accompany Muslims after death",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-17 19:54:48",
+            "updated_on": "2021-05-17 19:54:48"
+        },
+        {
+            "term": "martyr",
+            "term_id": "eo4eLyfcb",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Martyr",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-17 19:52:32",
+            "updated_on": "2021-05-17 19:52:32"
+        },
+        {
+            "term": "weapon",
+            "term_id": "zKXjPgBcj",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Weapon",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-17 19:31:29",
+            "updated_on": "2021-05-17 19:31:29"
+        },
+        {
+            "term": "slaughter",
+            "term_id": "3uyCwQtjT",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Slaughter",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-17 19:30:15",
+            "updated_on": "2021-05-17 19:30:15"
+        },
+        {
+            "term": "pogrom",
+            "term_id": "iepjysywp",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Program of extermination",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2021-05-17 19:29:41",
+            "updated_on": "2021-05-17 19:29:41"
+        },
+        {
+            "term": "massacre",
+            "term_id": "iRmzcZkpy",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Massacre",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2021-05-17 19:28:56",
+            "updated_on": "2021-05-17 19:28:56"
+        },
+        {
+            "term": "mass atrocity",
+            "term_id": "kfoLUUWpo",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Mass atrocity",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2021-05-17 19:24:52",
+            "updated_on": "2021-05-17 19:28:35"
+        },
+        {
+            "term": "genocide",
+            "term_id": "knRvHZNWQ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Genocide",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2021-05-17 19:27:36",
+            "updated_on": "2021-05-17 19:27:36"
+        },
+        {
+            "term": "Holocaust",
+            "term_id": "fChLzMgP4",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Holocaust",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Extremely offensive",
+            "created_on": "2021-05-17 19:27:07",
+            "updated_on": "2021-05-17 19:27:07"
+        },
+        {
+            "term": "crime",
+            "term_id": "oJvYcJLXR",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Crime",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-17 19:25:38",
+            "updated_on": "2021-05-17 19:25:38"
+        },
+        {
+            "term": "atrocity",
+            "term_id": "LqThHNPeR",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Atrocity",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-17 19:24:32",
+            "updated_on": "2021-05-17 19:24:32"
+        },
+        {
+            "term": "knife",
+            "term_id": "Jv6AsjpU1",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Knife",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-17 19:09:13",
+            "updated_on": "2021-05-17 19:09:13"
+        },
+        {
+            "term": "die",
+            "term_id": "rZAVnZszc",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Die",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-04-16 18:59:05",
+            "updated_on": "2021-05-17 19:07:43"
+        },
+        {
+            "term": "slay",
+            "term_id": "FfQKEbeMR",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:38:21",
+            "updated_on": "2021-05-14 23:38:21"
+        },
+        {
+            "term": "extermination",
+            "term_id": "eAZGMWrbk",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "Pest control",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:37:46",
+            "updated_on": "2021-05-14 23:37:46"
+        },
+        {
+            "term": "exterminating",
+            "term_id": "scYjfEHh4",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "Pest control",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:37:38",
+            "updated_on": "2021-05-14 23:37:38"
+        },
+        {
+            "term": "exterminated",
+            "term_id": "HM4JCxLDz",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "Pest control",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:37:29",
+            "updated_on": "2021-05-14 23:37:29"
+        },
+        {
+            "term": "exterminate",
+            "term_id": "Z6D1yknDg",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:36:08",
+            "updated_on": "2021-05-14 23:36:08"
+        },
+        {
+            "term": "liquidate",
+            "term_id": "FWVenFHFq",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "[1] Financially dissolve [2] Sell [3] Turn to liquid",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:34:01",
+            "updated_on": "2021-05-14 23:34:01"
+        },
+        {
+            "term": "executioner",
+            "term_id": "ZdpgJzuKN",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Killer",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:30:12",
+            "updated_on": "2021-05-14 23:30:12"
+        },
+        {
+            "term": "execution",
+            "term_id": "wrLdosfMc",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:29:35",
+            "updated_on": "2021-05-14 23:29:35"
+        },
+        {
+            "term": "execute",
+            "term_id": "WeoTryxcm",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Kill",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-05-14 23:29:09",
+            "updated_on": "2021-05-14 23:29:09"
+        },
+        {
+            "term": "assassin",
+            "term_id": "dVDuavrFP",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "Killer",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-04-16 18:59:05",
+            "updated_on": "2021-04-21 13:55:09"
+        },
+        {
+            "term": "gun",
+            "term_id": "anfh4tjoT",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-04-16 18:59:04",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "kill",
+            "term_id": "RTicpeTvA",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": null,
+            "created_on": "2021-04-16 18:59:05",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "lynch",
+            "term_id": "mYYQWVxHf",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Very offensive",
+            "created_on": "2021-04-16 18:59:05",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "noose",
+            "term_id": "xcVzKrEQb",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Significantly offensive",
+            "created_on": "2021-04-16 18:59:05",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "blood",
+            "term_id": "WXawHYQZV",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-04-16 18:59:05",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "murder",
+            "term_id": "mMRyNA4FZ",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-04-16 18:59:04",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "butcher",
+            "term_id": "TqzbCwxxa",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-04-16 18:59:04",
+            "updated_on": "-0001-11-30 05:17:32"
+        },
+        {
+            "term": "stab",
+            "term_id": "WsNWQkvms",
+            "variant_of": null,
+            "variant_of_id": null,
+            "plural_of": null,
+            "plural_of_id": null,
+            "romanization_of": null,
+            "romanization_of_id": null,
+            "language_id": "eng",
+            "language": "English",
+            "malignant_meaning": "",
+            "benign_meaning": "",
+            "is_archaic": "N",
+            "offensiveness": "Mildly offensive or inoffensive",
+            "created_on": "2021-04-16 18:59:04",
+            "updated_on": "-0001-11-30 05:17:32"
+        }
+    ],
+    "warnings": {
+        "2201": "An input parameter is invalid, and was therefore ignored"
+    }
+}

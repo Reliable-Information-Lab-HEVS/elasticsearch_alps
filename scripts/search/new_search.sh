@@ -6,30 +6,40 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=128G
+#SBATCH --mem=256G
 
 #SBATCH --output=/capstor/scratch/cscs/inesaltemir/SEARCH_LOGS/output/search_%j.out
 #SBATCH --error=/capstor/scratch/cscs/inesaltemir/SEARCH_LOGS/err/search_%j.err
 #SBATCH --environment=es-python
 
-# fw-edu-score /capstor/scratch/cscs/inesaltemir/scripts/indexing/job_status_logs/edu-score-2/list_dir/list_dir_edu-score-2_920282_920316.txt
-# with chemicals_en.csv ( 922048-922082)
-
-# 925081, 925090, 925112 (check if okay coming from job gen)
-# /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479 chemicals en
-
-# /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479 (around 981GB size index) + /capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2-september_brouillon1.csv 
-#  925944 (error), try again 927662 (GRAN ERROR), 927719, 927724
-
-# 928066 /iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-edu-score-2-filterrobots-merge_part_001-920282 + /capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv
 set -e
 
-# CONDITION SEARCH INVALID IF NOT ALL SHARDS ACTIVE
+# 929070 929113
+# 929402: /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479 + /capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282_100samples.csv
+
+# SEARCHES
+
+# CHEMICALS
+
+# CHEMICALS EN (fw-edu-score-2 35 indexes):929600-929635 (no 929623)
+
+# CHEMICALS DEU:
+
+# CHEMICALS FR:
+
+# CHEMICALS ITA:
+
+
+
+
+
+
+
+
 
 # =============================================================================
 # QUERY CONFIGURATION PARAMETERS
 # =============================================================================
-# Query execution configuration - set to true/false to enable/disable query types
 EXECUTE_MATCH_QUERY="${EXECUTE_MATCH_QUERY:-false}"
 EXECUTE_MATCH_PHRASE_QUERY="${EXECUTE_MATCH_PHRASE_QUERY:-true}"
 EXECUTE_TERM_QUERY_EXACT="${EXECUTE_TERM_QUERY_EXACT:-false}"
@@ -37,19 +47,12 @@ EXECUTE_WILDCARD_QUERY="${EXECUTE_WILDCARD_QUERY:-false}"
 EXECUTE_FUZZY_QUERY="${EXECUTE_FUZZY_QUERY:-false}"
 EXECUTE_BOOL_MUST_QUERY="${EXECUTE_BOOL_MUST_QUERY:-false}"
 
-# Match query operator parameter
-# Can be ["or"], ["and"], or ["and","or"] for both queries
 MATCH_QUERY_OPERATOR="${MATCH_QUERY_OPERATOR:-[\"or\"]}"
-
-# Match phrase query slop parameter
-# Can be a single value like "0" or multiple values like "[0,1,2]"
-# Multiple values will create separate queries with different slop values
 MATCH_PHRASE_SLOP="${MATCH_PHRASE_SLOP:-[0]}"
 
-# Boolean must query parameters
-BOOL_MUST_OPERATOR="${BOOL_MUST_OPERATOR:-or}"  # "and" or "or", should leave by default to "or" (otherwise query becomes match phrase)
-BOOL_MUST_MAX_WORDS="${BOOL_MUST_MAX_WORDS:-3}"  # Maximum words to use in bool "and" query
-BOOL_MUST_MINIMUM_SHOULD_MATCH="${BOOL_MUST_MINIMUM_SHOULD_MATCH:-50%}"  # For "or" operator (e.g., "2" or "50%")
+BOOL_MUST_OPERATOR="${BOOL_MUST_OPERATOR:-or}"
+BOOL_MUST_MAX_WORDS="${BOOL_MUST_MAX_WORDS:-3}"
+BOOL_MUST_MINIMUM_SHOULD_MATCH="${BOOL_MUST_MINIMUM_SHOULD_MATCH:-50%}"
 
 # =============================================================================
 # ELASTICSEARCH CONFIGURATION
@@ -57,35 +60,36 @@ BOOL_MUST_MINIMUM_SHOULD_MATCH="${BOOL_MUST_MINIMUM_SHOULD_MATCH:-50%}"  # For "
 ES_HOST="${ES_HOST:-127.0.0.1}"
 ES_PORT="${ES_PORT:-9200}"
 
+DATASET="${DATASET:-pure_text}"
 
-# Dataset type for field extraction
-DATASET="${DATASET:-pure_text}"  # Can be 'fineweb' or 'sft' or 'pure_text'
-
-# The path directory to the ElasticSearch index you're querying (EXPLAIN HOW DIR WORK MOUNTS)
-# in our case, one path dir equals one and only one index
-# PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-sft-data-795231}"
-
-PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-edu-score-2-filterrobots-merge_part_001-920282}"
+PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479}"
 # /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479
+# /iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-edu-score-2-filterrobots-merge_part_001-920282
 
-# The path to the .csv file containing the queries (terms / phrases)
-CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv}"
-# /capstor/scratch/cscs/inesaltemir/scripts/search_queries/chemicals/chemicals_en.csv
-# Name of your index september_brouillon1
-INDEX_NAME="${INDEX_NAME:-swissai-fineweb-edu-score-2-filterrobots-merge_part_001}" # IS JOB ID PART OF INDEX NAME: no
+CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282_100samples.csv}"
+
+INDEX_NAME="${INDEX_NAME:-september_brouillon1}" 
+
+# swissai-fineweb-edu-score-2-filterrobots-merge_part_001
 
 CSV_BASENAME=$(basename "$CSV_FILE" .txt)
 OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/${INDEX_NAME}_${CSV_BASENAME}_${SLURM_JOB_ID}}"
 
-# JOB_GROUP_ID=$(date +%Y%m%d_%H%M%S)
-
-# Output directories for logs - now includes job group ID
-# OUTPUT_DIR_BASE="${OUTPUT_DIR_BASE:-/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/${JOB_GROUP_ID}}"
-
-
-# Build Elasticsearch URL
 ES_URL="http://${ES_HOST}:${ES_PORT}"
 
+# Calculate heap based on available memory - UPDATED FOR LARGE INDEX
+#if [ "${SLURM_MEM_PER_NODE:-0}" -ge 131072 ]; then
+    # 128GB+ available, use 64GB heap (50% of total RAM)
+#    JAVA_HEAP="-Xms64g -Xmx64g"
+#elif [ "${SLURM_MEM_PER_NODE:-0}" -ge 65536 ]; then
+    # 64GB+ available, use 50GB heap
+#    JAVA_HEAP="-Xms50g -Xmx50g"
+#elif [ "${SLURM_MEM_PER_NODE:-0}" -ge 32768 ]; then
+    # 32GB+ available, use 30GB heap
+#    JAVA_HEAP="-Xms30g -Xmx30g"
+#else
+#    JAVA_HEAP="-Xms16g -Xmx16g"
+#fi
 
 # Calculate heap based on available memory, but be conservative FIXXXXX
 if [ "${SLURM_MEM_PER_NODE:-0}" -ge 32768 ]; then
@@ -96,18 +100,17 @@ else
     JAVA_HEAP="-Xms8g -Xmx8g"
 fi
 
-# explain other settings
-JAVA_OPTS="$JAVA_HEAP -XX:MaxGCPauseMillis=200"
-
+# Improved GC settings for large heap
+JAVA_OPTS="$JAVA_HEAP -XX:MaxGCPauseMillis=500 -XX:G1HeapRegionSize=32m"
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' 
+NC='\033[0m'
 
-# Parse command line arguments (override environment variables if provided)
+# Parse command line arguments
 if [ $# -ge 1 ] && [ -n "$1" ]; then
     PATH_DATA="$1"
 fi
@@ -121,9 +124,9 @@ if [ $# -ge 3 ] && [ -n "$3" ]; then
 fi
 
 # Trim whitespace from critical variables
-    PATH_DATA=$(echo "$PATH_DATA" | xargs)
-    CSV_FILE=$(echo "$CSV_FILE" | xargs)
-    INDEX_NAME=$(echo "$INDEX_NAME" | xargs)
+PATH_DATA=$(echo "$PATH_DATA" | xargs)
+CSV_FILE=$(echo "$CSV_FILE" | xargs)
+INDEX_NAME=$(echo "$INDEX_NAME" | xargs)
 
 # Logging functions
 log_info() {
@@ -142,13 +145,10 @@ log_success() {
     echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
-
-# Function to build configuration JSON for search function
+# Function to build configuration JSON
 build_config_json() {
-    # Create temporary file for JSON construction
     local temp_json=$(mktemp)
     
-    # Build JSON using proper escaping and formatting
     cat > "$temp_json" << EOF
 {
     "execute_match_query": $EXECUTE_MATCH_QUERY,
@@ -163,9 +163,7 @@ build_config_json() {
     "bool_must_max_words": $BOOL_MUST_MAX_WORDS
 EOF
 
-    # Add minimum_should_match only if not empty
     if [ -n "$BOOL_MUST_MINIMUM_SHOULD_MATCH" ]; then
-        # Check if it's a number or percentage
         if [[ "$BOOL_MUST_MINIMUM_SHOULD_MATCH" =~ ^[0-9]+%?$ ]]; then
             if [[ "$BOOL_MUST_MINIMUM_SHOULD_MATCH" =~ % ]]; then
                 echo "    ,\"bool_must_minimum_should_match\": \"$BOOL_MUST_MINIMUM_SHOULD_MATCH\"" >> "$temp_json"
@@ -179,33 +177,26 @@ EOF
     
     echo "}" >> "$temp_json"
     
-    # Validate JSON and output
     if command -v python3 >/dev/null 2>&1; then
-        # Validate and minify JSON using Python
         local json_content=$(python3 -c "import json, sys; print(json.dumps(json.load(open('$temp_json'))))" 2>/dev/null)
         if [ $? -eq 0 ]; then
             echo "$json_content"
         else
-            # Fallback: output raw content if Python validation fails
             cat "$temp_json"
         fi
     else
-        # Fallback: output raw content if Python not available
         cat "$temp_json"
     fi
     
-    # Cleanup
     rm -f "$temp_json"
 }
 
 configure_proxy_bypass() {
     log_info "Configuring proxy bypass for localhost connections..."
     
-    # Save original proxy settings
     ORIGINAL_HTTP_PROXY="${http_proxy:-}"
     ORIGINAL_NO_PROXY="${no_proxy:-}"
     
-    # Extend no_proxy to include all localhost variants
     export no_proxy="${no_proxy},127.0.0.1,localhost,0.0.0.0,::1"
     
     log_info "Original no_proxy: $ORIGINAL_NO_PROXY"
@@ -216,48 +207,29 @@ configure_proxy_bypass() {
 # Validate required parameters
 if [ -z "$PATH_DATA" ]; then
     log_error "PATH_DATA is required"
-    log_info ""
-    log_info "Usage: $0 [path_to_data] [csv_file] [index_name]"
-    log_info ""
-    log_info "You can provide parameters via:"
-    log_info "1. Command line: $0 /path/to/es-data segments.csv my_index"
-    log_info "2. Environment variables: PATH_DATA=/path/to/es-data CSV_FILE=segments.csv $0"
-    log_info "3. Mix: PATH_DATA=/path/to/es-data $0 '' segments.csv my_index"
-    log_info ""
-    log_info "Environment variables (with defaults):"
-    log_info "  PATH_DATA=<required>                    # Path to Elasticsearch data directory"
-    log_info "  CSV_FILE=<required>                     # Path to CSV file with segments"
-    log_info "  INDEX_NAME=default_index                # Elasticsearch index name"
-    log_info "  ES_HOST=127.0.0.1                       # Elasticsearch host"
-    log_info "  ES_PORT=9200                            # Elasticsearch port"
-    log_info "  JAVA_HEAP_SIZE=nog                       # Java heap size for Elasticsearch"
-    log_info ""
     exit 1
 fi
 
 if [ -z "$CSV_FILE" ]; then
     log_error "CSV_FILE is required"
-    log_info "See usage above for details"
     exit 1
 fi
 
-# Check if CSV file exists
 if [ ! -f "$CSV_FILE" ]; then
     log_error "CSV file '$CSV_FILE' not found"
     exit 1
 fi
 
-# Check if data path exists
 if [ ! -d "$PATH_DATA" ]; then
     log_error "Data path '$PATH_DATA' not found"
     exit 1
 fi
 
-log_info "Starting Elasticsearch Search Pipeline with Configurable Queries... (SEARCH.SH)"
+log_info "Starting Elasticsearch Search Pipeline with Configurable Queries...(PUTO_SEARCH.SH)"
 log_info "========================================================================="
 log_info "Configuration:"
 log_info "  Data path: $PATH_DATA"
-log_info "  CSV file: $CSV_FILE" 
+log_info "  CSV file: $CSV_FILE"
 log_info "  Index name: $INDEX_NAME"
 log_info "  Elasticsearch: $ES_URL"
 log_info "  Java heap: $JAVA_OPTS"
@@ -278,15 +250,20 @@ log_info "  Bool Must Max Words: $BOOL_MUST_MAX_WORDS"
 log_info "  Bool Must Min Should Match: ${BOOL_MUST_MINIMUM_SHOULD_MATCH:-'(not set)'}"
 log_info "========================================================================="
 
+# Check disk space before starting
+log_info "=== Disk Space Check ==="
+df -h "$PATH_DATA" | tail -1
+log_info "Index size on disk:"
+du -sh "$PATH_DATA" 2>/dev/null || echo "Cannot calculate"
+log_info ""
+
 # Elasticsearch optimizations for large index
 start_elasticsearch() {
     log_info "Starting Elasticsearch with large index optimizations..."
-     
-    # Set environment variables
+    
     unset JAVA_HOME
     export ES_JAVA_HOME="/usr/share/elasticsearch/jdk"
 
-    # Test Java first
     log_info "Testing Java installation..."
     if $ES_JAVA_HOME/bin/java -version; then
         log_success "Java test successful"
@@ -297,16 +274,14 @@ start_elasticsearch() {
     
     log_info "Using heap settings: $JAVA_OPTS"
 
-    # Create a job logs directory
     local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-search-logs-${SLURM_JOB_ID:-$$}"
     mkdir -p "$job_logs_dir"
 
-    # Set the data directory to your indexed data directory (to be able to access it)
-    local job_data_dir="$PATH_DATA" 
+    local job_data_dir="$PATH_DATA"
 
     log_info "=== Starting Elasticsearch ==="
 
-   ES_JAVA_OPTS="$JAVA_OPTS" \
+    ES_JAVA_OPTS="$JAVA_OPTS" \
     /usr/share/elasticsearch/bin/elasticsearch \
         -E path.data="$job_data_dir" \
         -E path.logs="$job_logs_dir" \
@@ -322,17 +297,21 @@ start_elasticsearch() {
         -E cluster.routing.allocation.disk.watermark.low=98% \
         -E cluster.routing.allocation.disk.watermark.high=99% \
         -E cluster.routing.allocation.disk.watermark.flood_stage=99.5% \
+        -E cluster.routing.allocation.disk.threshold_enabled=true \
+        -E cluster.routing.allocation.node_concurrent_recoveries=8 \
+        -E cluster.routing.allocation.node_initial_primaries_recoveries=16 \
+        -E indices.recovery.max_bytes_per_sec=500mb \
+        -E cluster.routing.allocation.enable=all \
         -E bootstrap.memory_lock=false \
         -E logger.root=INFO \
         -E http.max_content_length=200mb \
         > "$job_logs_dir/elasticsearch.out" 2>&1 &
     
     ES_PID=$!
-    log_info "Elasticsearch started with PID: $ES_PID (optimized for 400GB index)"
+    log_info "Elasticsearch started with PID: $ES_PID (optimized for large 600GB+ index)"
     
-    # Extended wait time for large index startup
-    log_info "Waiting for large index to load (this may take several minutes)..."
-    max_retries=900  # was 120
+    log_info "Waiting for large index to load (this may take 30-60 minutes)..."
+    max_retries=600
     retry_count=0
     
     while [ $retry_count -lt $max_retries ]; do
@@ -344,12 +323,58 @@ start_elasticsearch() {
         if curl --noproxy "127.0.0.1" -s "http://127.0.0.1:9200/_cluster/health" > /dev/null 2>&1; then
             log_success "Elasticsearch is ready!"
             
-            # Show memory and performance stats
-            log_info "=== Cluster Health ==="
-            curl --noproxy "127.0.0.1" -s "http://127.0.0.1:9200/_cluster/health?pretty" 2>/dev/null
+            #log_info "=== Cluster Health ==="
+            #curl --noproxy "127.0.0.1" -s "http://127.0.0.1:9200/_cluster/health?pretty" 2>/dev/null
             
             log_info "=== Node Stats (Memory) ==="
             curl --noproxy "127.0.0.1" -s "http://127.0.0.1:9200/_nodes/stats/jvm,indices?pretty" 2>/dev/null | head -50
+            
+            
+            log_info "=== Cluster Health ==="
+            HEALTH_RESPONSE=$(curl --noproxy "127.0.0.1" -s "http://127.0.0.1:9200/_cluster/health?pretty" 2>/dev/null)
+            echo "$HEALTH_RESPONSE"
+
+            # Validate cluster health
+            log_info "=== Validating Cluster Health ==="
+            STATUS=$(echo "$HEALTH_RESPONSE" | grep -oP '(?<="status" : ")[^"]*')
+            INITIALIZING=$(echo "$HEALTH_RESPONSE" | grep -oP '(?<="initializing_shards" : )[0-9]+')
+            UNASSIGNED=$(echo "$HEALTH_RESPONSE" | grep -oP '(?<="unassigned_shards" : )[0-9]+')
+            RELOCATING=$(echo "$HEALTH_RESPONSE" | grep -oP '(?<="relocating_shards" : )[0-9]+')
+
+            log_info "Status: $STATUS, Initializing: $INITIALIZING, Unassigned: $UNASSIGNED, Relocating: $RELOCATING"
+
+            if [ "$STATUS" != "green" ] || [ "$INITIALIZING" != "0" ] || [ "$UNASSIGNED" != "0" ] || [ "$RELOCATING" != "0" ]; then
+                log_error "Cluster health check FAILED:"
+                [ "$STATUS" != "green" ] && log_error "  - Status is '$STATUS' (expected: green)"
+                [ "$INITIALIZING" != "0" ] && log_error "  - Initializing shards: $INITIALIZING (expected: 0)"
+                [ "$UNASSIGNED" != "0" ] && log_error "  - Unassigned shards: $UNASSIGNED (expected: 0)"
+                [ "$RELOCATING" != "0" ] && log_error "  - Relocating shards: $RELOCATING (expected: 0)"
+                return 1
+            fi
+
+            log_success "Cluster health validation PASSED"
+
+            # Configure index recovery settings
+            sleep 5
+            log_info "=== Configuring Index Recovery Settings ==="
+            curl --noproxy "127.0.0.1" -s -X PUT "http://127.0.0.1:9200/$INDEX_NAME/_settings" \
+                -H 'Content-Type: application/json' -d'
+            {
+              "index": {
+                "refresh_interval": "-1",
+                "number_of_replicas": 0,
+                "translog.durability": "async",
+                "translog.sync_interval": "30s"
+              }
+            }' 2>/dev/null
+            log_info "Recovery settings applied"
+            
+            # Monitor shard allocation
+            log_info "=== Shard Recovery Status ==="
+            curl --noproxy "127.0.0.1" -s "http://127.0.0.1:9200/_cat/recovery?v&h=index,shard,stage,type,bytes_percent" 2>/dev/null | grep "$INDEX_NAME" | head -20
+            
+            log_info "=== Unassigned Shard Reasons ==="
+            curl --noproxy "127.0.0.1" -s "http://127.0.0.1:9200/_cat/shards/$INDEX_NAME?v&h=shard,prirep,state,unassigned.reason" 2>/dev/null | grep UNASSIGNED | head -20
             
             return 0
         else
@@ -366,7 +391,6 @@ start_elasticsearch() {
     return 1
 }
 
-# Function to check if index exists
 check_index_exists() {
     local index_name="$1"
     local http_code
@@ -393,23 +417,19 @@ check_index_exists() {
     esac
 }
 
-# Function to list available indices with better error handling
 list_indices() {
     log_info "Available indices:"
     
-    # Try simple format first (most reliable)
     local response
     response=$(curl -s "$ES_URL/_cat/indices?v" 2>&1)
     local curl_exit_code=$?
     
     if [ $curl_exit_code -eq 0 ] && [ -n "$response" ]; then
-        # Check if we got HTML instead of expected output
         if echo "$response" | grep -qi "<!DOCTYPE\|<html"; then
             log_warn "Received HTML response instead of indices list"
             log_warn "This usually means Elasticsearch returned an error page"
             log_info "Trying JSON format..."
             
-            # Try JSON format as fallback
             local json_response
             json_response=$(curl -s "$ES_URL/_cat/indices?format=json" 2>&1)
             if [ $? -eq 0 ] && echo "$json_response" | grep -q "^\["; then
@@ -420,7 +440,6 @@ list_indices() {
                 return 1
             fi
         else
-            # Normal response, show it
             echo "$response"
         fi
     else
@@ -432,7 +451,6 @@ list_indices() {
     fi
 }
 
-# Function to cleanup on exit
 cleanup() {
     if [ ! -z "$ES_PID" ] && kill -0 $ES_PID 2>/dev/null; then
         log_info "Stopping Elasticsearch (PID: $ES_PID)..."
@@ -441,33 +459,27 @@ cleanup() {
     fi
 }
 
-# Set trap to cleanup on exit
 trap cleanup EXIT
 
-# Main execution function
 main() {
     configure_proxy_bypass
 
-    # Start Elasticsearch
     if ! start_elasticsearch; then
         log_error "Failed to start Elasticsearch"
         exit 1
     fi
     
-    # Test connection after proxy fix
     log_info "=== Testing connection after proxy fix ==="
     log_info "Testing root endpoint without proxy:"
     curl -v "http://127.0.0.1:9200/" 2>&1 | head -10
     log_info "=== End connection test ==="
     
-    # List available indices with better error handling
     log_info "Checking available indices..."
     if ! list_indices; then
         log_error "Failed to list indices, but continuing anyway..."
         log_info "You may need to check the index name manually"
     fi
     
-    # Check if specified index exists
     log_info "Checking if index '$INDEX_NAME' exists..."
     if ! check_index_exists "$INDEX_NAME"; then
         log_warn ""
@@ -483,18 +495,14 @@ main() {
         log_success "Index '$INDEX_NAME' found. Proceeding with search pipeline..."
     fi
     
-    # Build configuration JSON 
     log_info "Building query configuration..."
     CONFIG_JSON=$(build_config_json)
     
-    # Validate the JSON was created properly
     if [ -z "$CONFIG_JSON" ]; then
         log_error "Failed to build configuration JSON"
         exit 1
     fi
 
-
-    # Run Python search script with configuration
     log_info "Starting search queries execution with configurable parameters..."
     if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search.py \
         --csv-file "$CSV_FILE" \
@@ -514,8 +522,6 @@ main() {
         log_error "Search pipeline failed!"
         exit 1
     fi
-
 }
 
-# Run main function
 main

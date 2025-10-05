@@ -32,15 +32,6 @@ class ElasticsearchQueryBenchmark:
         # Optimizations for large index (large timemout)
         self.request_timeout = 60  
         self.max_retries = 3
-
-        # MODIFICATION 2A: Add circuit breaker tracking
-        #self.consecutive_failures = 0
-        #self.max_consecutive_failures = 10
-        #self.query_delay = 0.05  # 50ms delay between queries to reduce load
-        
-        # MODIFICATION 2B: Add health check frequency
-        #self.health_check_interval = 100  # Check ES health every 100 segments
-        #self.last_health_check = 0
         
         # Default configuration
         default_config = {
@@ -109,81 +100,6 @@ class ElasticsearchQueryBenchmark:
         words = re.findall(r'\b\w+\b', text.strip())
         return len(words) == 1
          
-    def _check_elasticsearch_health(self) -> bool:
-        """Check if Elasticsearch is responsive and healthy"""
-        try:
-            response = requests.get(
-                f"{self.es_url}/_cluster/health",
-                timeout=5
-            )
-            if response.status_code == 200:
-                health = response.json()
-                if health.get('status') in ['green', 'yellow']:
-                    return True
-                else:
-                    print(f"    WARNING: Cluster status is {health.get('status')}")
-                    return False
-            else:
-                print(f"    WARNING: Health check returned status {response.status_code}")
-                return False
-        except Exception as e:
-            print(f"    ERROR: Health check failed: {e}")
-            return False
-
-    def _make_request_weird(self, method: str, endpoint: str, data: dict = None) -> Tuple[dict, float]:
-        """Make HTTP request to Elasticsearch and measure response time"""
-        url = f"{self.es_url}/{endpoint}"
-        headers = {
-            'Content-Type': 'application/json',
-            'Connection': 'keep-alive'  # Reuse connections
-        }
-        
-        for attempt in range(self.max_retries):
-            start_time = time.time()
-            try:
-                if method.upper() == 'GET':
-                    response = requests.get(url, headers=headers, timeout=self.request_timeout)
-                elif method.upper() == 'POST':
-                    response = requests.post(url, headers=headers, json=data, timeout=self.request_timeout)
-                
-                end_time = time.time()
-                query_time = (end_time - start_time) * 1000
-                
-                response.raise_for_status()
-                
-                # MODIFICATION 4A: Reset failure counter on success
-                self.consecutive_failures = 0
-                
-                return response.json(), query_time
-                
-            except requests.exceptions.Timeout:
-                # MODIFICATION 4B: Increment failure counter
-                self.consecutive_failures += 1
-                
-                if attempt < self.max_retries - 1:
-                    print(f"    Timeout on attempt {attempt + 1}, retrying...")
-                    time.sleep(2 ** attempt)  # Exponential backoff
-                    continue
-                else:
-                    end_time = time.time()
-                    query_time = (end_time - start_time) * 1000
-                    return {"error": "Timeout after retries"}, query_time
-                    
-            except requests.exceptions.RequestException as e:
-                # MODIFICATION 4C: Increment failure counter
-                self.consecutive_failures += 1
-                
-                end_time = time.time()
-                query_time = (end_time - start_time) * 1000
-                print(f"Request failed: {e}")
-                
-                # MODIFICATION 4D: Check for connection refused (ES crash)
-                if "Connection refused" in str(e) or "Connection aborted" in str(e):
-                    print(f"    CRITICAL: Elasticsearch appears to be down!")
-                    self.consecutive_failures = self.max_consecutive_failures  # Trigger circuit breaker
-                
-                return {"error": str(e)}, query_time
-
     def _make_request(self, method: str, endpoint: str, data: dict = None) -> Tuple[dict, float]:
         """Make HTTP request to Elasticsearch and measure response time"""
         url = f"{self.es_url}/{endpoint}"
@@ -284,7 +200,7 @@ class ElasticsearchQueryBenchmark:
                     }
                 }
             },
-            "timeout": "60s"  # Query timeout, increased from 30s
+            "timeout": "30s"  # Query timeout
         }
         return self._make_request('POST', f"{self.index_name}/_search", query)
         
@@ -605,38 +521,6 @@ class ElasticsearchQueryBenchmark:
             snippets.append(snippet_info)
         
         return '\n'.join(snippets)
-    
-
-    def extract_hit_snippets_pure_text(self, hits_data: list, max_hits: int = 5) -> str:
-        """Extract top N hit snippets with scores and highlighting for SFT dataset"""
-        if not hits_data:
-            return ""
-        
-        snippets = []
-        for i, hit in enumerate(hits_data[:max_hits]):
-            score = hit.get('_score', 0)
-
-            # Get highlighted text if available (this contains the matching terms)
-            if 'highlight' in hit and 'text' in hit['highlight']:
-                # Use highlighted fragments that contain the query terms
-                highlighted_fragments = hit['highlight']['text']
-                text_snippet = ' | '.join(highlighted_fragments)
-                snippet_source = "HIGHLIGHTED"
-            else:
-                # Fallback to source text if highlighting failed
-                source_text = hit.get('_source', {}).get('text', '')
-                # For fallback, try to find query terms in the text
-                text_snippet = source_text[:300] + ('...' if len(source_text) > 300 else '')
-                snippet_source = "SOURCE_TEXT"
-            
-            # Clean up the snippet (remove extra whitespace and newlines)
-            text_snippet = ' '.join(text_snippet.split())
-            
-            # Include conversation_id and original_metadata in snippet info
-            snippet_info = f"Hit {i+1} (Score: {score:.3f},Type: {snippet_source}): {text_snippet}"
-            snippets.append(snippet_info)
-        
-        return '\n'.join(snippets)
 
     def extract_response_stats(self, response: dict) -> dict:
         """Extract relevant statistics from ES response"""
@@ -656,12 +540,9 @@ class ElasticsearchQueryBenchmark:
         # Use dataset parameter to determine which extract function to call
         if hasattr(self, 'dataset') and self.dataset.lower() == 'sft':
             hit_snippets = self.extract_hit_snippets_sft(hits_data)
-        elif hasattr(self, 'dataset') and self.dataset.lower() == 'fineweb':
+        else:
             # Default to Fineweb (covers both explicit 'fineweb' and any other values)
             hit_snippets = self.extract_hit_snippets_fineweb(hits_data)
-        elif hasattr(self, 'dataset') and self.dataset.lower() == 'pure_text':
-            hit_snippets = self.extract_hit_snippets_pure_text(hits_data)
-
         
         
         return {
@@ -751,87 +632,7 @@ class ElasticsearchQueryBenchmark:
                 self.results.append(error_result)
         
         return query_results
-
-    def process_csv_weird(self, csv_file: str):
-        """Process the CSV file and run queries for each segment"""
-        print(f"Processing CSV file: {csv_file}")
-        
-        try:
-            with open(csv_file, 'r', encoding='utf-8') as file:
-                reader = csv.reader(file)
-                
-                total_rows = 0
-                processed_rows = 0
-                
-                # Count total rows first
-                for row in reader:
-                    if row and row[0].strip():
-                        total_rows += 1
-                
-                # Reset file pointer
-                file.seek(0)
-                reader = csv.reader(file)
-                
-                print(f"Found {total_rows} segments to process")
-                print("=" * 50)
-                
-                for row in reader:
-                    if not row or not row[0].strip():
-                        continue
-                    
-                    # MODIFICATION 5A: Circuit Breaker Check
-                    if self.consecutive_failures >= self.max_consecutive_failures:
-                        print("\n" + "=" * 70)
-                        print("CRITICAL ERROR: Circuit breaker triggered!")
-                        print(f"Elasticsearch has failed {self.consecutive_failures} consecutive times.")
-                        print("This indicates Elasticsearch has crashed or is unresponsive.")
-                        print(f"Processed {processed_rows}/{total_rows} segments before failure.")
-                        print("Stopping execution to prevent further resource waste.")
-                        print("=" * 70)
-                        
-                        # Save partial results before exiting
-                        if self.results:
-                            print("\nSaving partial results...")
-                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            job_id = os.environ.get('SLURM_JOB_ID', 'local')
-                            partial_filename = f"search_results_PARTIAL_{job_id}_{timestamp}.json"
-                            self.save_detailed_results(partial_filename)
-                            print(f"Partial results saved to: {partial_filename}")
-                        
-                        sys.exit(1)
-                        
-                    processed_rows += 1
-                    segment_text = row[0].strip()
-                    
-                    print(f"Processing segment {processed_rows}/{total_rows}: '{segment_text[:50]}{'...' if len(segment_text) > 50 else ''}'")
-                    
-                    # MODIFICATION 5B: Periodic Health Check
-                    if processed_rows - self.last_health_check >= self.health_check_interval:
-                        print(f"\n>>> Performing periodic health check at segment {processed_rows}...")
-                        if not self._check_elasticsearch_health():
-                            print(">>> WARNING: Elasticsearch health check failed!")
-                            print(">>> Continuing with caution...")
-                        else:
-                            print(">>> Elasticsearch health: OK")
-                        self.last_health_check = processed_rows
-                        print()
-                    
-                    self.run_all_queries(segment_text)
-                    
-                    # MODIFICATION 5C: Rate Limiting - Add delay between queries
-                    time.sleep(self.query_delay)
-                    
-                    # Progress indicator
-                    if processed_rows % 10 == 0:
-                        print(f"Progress: {processed_rows}/{total_rows} segments processed (failures: {self.consecutive_failures})")
-
-        except FileNotFoundError:
-            print(f"Error: CSV file '{csv_file}' not found")
-            sys.exit(1)
-        except Exception as e:
-            print(f"Error processing CSV file: {e}")
-            sys.exit(1)
-
+    
     def process_csv(self, csv_file: str):
         """Process the CSV file and run queries for each segment"""
         print(f"Processing CSV file: {csv_file}")
@@ -1123,8 +924,8 @@ def main():
     parser.add_argument("--config", type=str,
                        help="JSON configuration string for query execution parameters")
     
-    parser.add_argument("--dataset", choices=['fineweb', 'sft', 'pure_text'], default='fineweb',
-                   help="Dataset type: 'fineweb' or 'sft' or 'pure_text' (default: fineweb)")
+    parser.add_argument("--dataset", choices=['fineweb', 'sft'], default='fineweb',
+                   help="Dataset type: 'fineweb' or 'sft' (default: fineweb)")
 
     args = parser.parse_args()
     # Parse configuration
@@ -1153,23 +954,7 @@ def main():
     
     # Initialize benchmark with configuration
     benchmark = ElasticsearchQueryBenchmark(args.es_url, args.index_name, args.dataset, config)
-
-    #import signal
     
-    #def signal_handler(signum, frame):
-    #    print("\n\n" + "=" * 70)
-    #    print("RECEIVED TERMINATION SIGNAL - Saving results before exit...")
-    #    print("=" * 70)
-    #    if benchmark.results:
-    #        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    #        job_id = os.environ.get('SLURM_JOB_ID', 'local')
-    #        emergency_filename = os.path.join(args.output_dir, f"search_results_EMERGENCY_{job_id}_{timestamp}.json")
-    #        benchmark.save_detailed_results(emergency_filename)
-    #        print(f"Emergency results saved to: {emergency_filename}")
-    #    sys.exit(1)
-    
-    #signal.signal(signal.SIGTERM, signal_handler)
-    #signal.signal(signal.SIGINT, signal_handler)
  
     # Test ES connection
     try:

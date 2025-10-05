@@ -2,36 +2,36 @@
 #SBATCH --job-name=es-search-pipeline
 #SBATCH --partition=normal
 #SBATCH --account=a145
-#SBATCH --time=08:00:00
+#SBATCH --time=01:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=128G
 
-#SBATCH --output=/capstor/scratch/cscs/inesaltemir/SEARCH_LOGS/output/search_%j.out
-#SBATCH --error=/capstor/scratch/cscs/inesaltemir/SEARCH_LOGS/err/search_%j.err
+#SBATCH --output=/capstor/scratch/cscs/inesaltemir/swissai_search/output/es_search_%j.out
+#SBATCH --error=/capstor/scratch/cscs/inesaltemir/swissai_search/err/es_search_%j.err
 #SBATCH --environment=es-python
 
-# fw-edu-score /capstor/scratch/cscs/inesaltemir/scripts/indexing/job_status_logs/edu-score-2/list_dir/list_dir_edu-score-2_920282_920316.txt
-# with chemicals_en.csv ( 922048-922082)
+# Elasticsearch Search Pipeline Script with Configurable Query Parameters
+# Usage: ./search_pipeline.sh [path_to_data] [csv_file] [index_name]
+# All parameters can be provided via command line or environment variables
 
-# 925081, 925090, 925112 (check if okay coming from job gen)
-# /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479 chemicals en
+# TO DO:
+# EXPLAIN JAVA OPTS SETTINGS CONFIG (XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:G1HeapRegionSize=32m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
+# Improve adaptive heap based on memory available
+# EXPLAIN WHY NEEDED ON CLARIDEN configure proxy bypass
+# look into Disable swapping completely ( alternative to sudo swapoff -a 2>/dev/null || true SUDO NOT AVAILABLE)
+# check_index_exists
 
-# /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479 (around 981GB size index) + /capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2-september_brouillon1.csv 
-#  925944 (error), try again 927662 (GRAN ERROR), 927719, 927724
 
-# 928066 /iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-edu-score-2-filterrobots-merge_part_001-920282 + /capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv
 set -e
-
-# CONDITION SEARCH INVALID IF NOT ALL SHARDS ACTIVE
 
 # =============================================================================
 # QUERY CONFIGURATION PARAMETERS
 # =============================================================================
 # Query execution configuration - set to true/false to enable/disable query types
-EXECUTE_MATCH_QUERY="${EXECUTE_MATCH_QUERY:-false}"
-EXECUTE_MATCH_PHRASE_QUERY="${EXECUTE_MATCH_PHRASE_QUERY:-true}"
+EXECUTE_MATCH_QUERY="${EXECUTE_MATCH_QUERY:-true}"
+EXECUTE_MATCH_PHRASE_QUERY="${EXECUTE_MATCH_PHRASE_QUERY:-false}"
 EXECUTE_TERM_QUERY_EXACT="${EXECUTE_TERM_QUERY_EXACT:-false}"
 EXECUTE_WILDCARD_QUERY="${EXECUTE_WILDCARD_QUERY:-false}"
 EXECUTE_FUZZY_QUERY="${EXECUTE_FUZZY_QUERY:-false}"
@@ -59,29 +59,20 @@ ES_PORT="${ES_PORT:-9200}"
 
 
 # Dataset type for field extraction
-DATASET="${DATASET:-pure_text}"  # Can be 'fineweb' or 'sft' or 'pure_text'
+DATASET="${DATASET:-sft}"  # Can be 'fineweb' or 'sft'
 
 # The path directory to the ElasticSearch index you're querying (EXPLAIN HOW DIR WORK MOUNTS)
 # in our case, one path dir equals one and only one index
-# PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-sft-data-795231}"
-
-PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-edu-score-2-filterrobots-merge_part_001-920282}"
-# /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479
+PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-sft-data-795231}"
 
 # The path to the .csv file containing the queries (terms / phrases)
-CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv}"
-# /capstor/scratch/cscs/inesaltemir/scripts/search_queries/chemicals/chemicals_en.csv
-# Name of your index september_brouillon1
-INDEX_NAME="${INDEX_NAME:-swissai-fineweb-edu-score-2-filterrobots-merge_part_001}" # IS JOB ID PART OF INDEX NAME: no
+CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_WORDS/chemicals/chemicals_deu.csv}"
+
+# Name of your index
+INDEX_NAME="${INDEX_NAME:-sft-data}"
 
 CSV_BASENAME=$(basename "$CSV_FILE" .txt)
-OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/${INDEX_NAME}_${CSV_BASENAME}_${SLURM_JOB_ID}}"
-
-# JOB_GROUP_ID=$(date +%Y%m%d_%H%M%S)
-
-# Output directories for logs - now includes job group ID
-# OUTPUT_DIR_BASE="${OUTPUT_DIR_BASE:-/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/${JOB_GROUP_ID}}"
-
+OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/inesaltemir/search_results/${INDEX_NAME}_${CSV_BASENAME}_${SLURM_JOB_ID}}"
 
 # Build Elasticsearch URL
 ES_URL="http://${ES_HOST}:${ES_PORT}"
@@ -97,7 +88,7 @@ else
 fi
 
 # explain other settings
-JAVA_OPTS="$JAVA_HEAP -XX:MaxGCPauseMillis=200"
+JAVA_OPTS="$JAVA_HEAP -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
 
 # Colors for output
@@ -119,11 +110,6 @@ fi
 if [ $# -ge 3 ] && [ -n "$3" ]; then
     INDEX_NAME="$3"
 fi
-
-# Trim whitespace from critical variables
-    PATH_DATA=$(echo "$PATH_DATA" | xargs)
-    CSV_FILE=$(echo "$CSV_FILE" | xargs)
-    INDEX_NAME=$(echo "$INDEX_NAME" | xargs)
 
 # Logging functions
 log_info() {
@@ -232,6 +218,17 @@ if [ -z "$PATH_DATA" ]; then
     log_info "  ES_PORT=9200                            # Elasticsearch port"
     log_info "  JAVA_HEAP_SIZE=nog                       # Java heap size for Elasticsearch"
     log_info ""
+    log_info "Query Configuration (with defaults):"
+    log_info "  EXECUTE_MATCH_QUERY=true                # Enable match query"
+    log_info "  EXECUTE_MATCH_PHRASE_QUERY=true         # Enable match phrase query"
+    log_info "  EXECUTE_TERM_QUERY_EXACT=false          # Enable term query (single words only)"
+    log_info "  EXECUTE_WILDCARD_QUERY=false            # Enable wildcard query (single words only)"
+    log_info "  EXECUTE_FUZZY_QUERY=true                # Enable fuzzy query"
+    log_info "  EXECUTE_BOOL_MUST_QUERY=false           # Enable boolean must query"
+    log_info "  MATCH_PHRASE_SLOP=[0]                   # Slop values for match phrase (e.g., [0,1,2])"
+    log_info "  BOOL_MUST_OPERATOR=and                  # Boolean operator: 'and' or 'or'"
+    log_info "  BOOL_MUST_MAX_WORDS=3                   # Max words for boolean query"
+    log_info "  BOOL_MUST_MINIMUM_SHOULD_MATCH=         # Minimum should match (for 'or' operator)"
     exit 1
 fi
 
@@ -253,7 +250,7 @@ if [ ! -d "$PATH_DATA" ]; then
     exit 1
 fi
 
-log_info "Starting Elasticsearch Search Pipeline with Configurable Queries... (SEARCH.SH)"
+log_info "Starting Elasticsearch Search Pipeline with Configurable Queries..."
 log_info "========================================================================="
 log_info "Configuration:"
 log_info "  Data path: $PATH_DATA"
@@ -319,9 +316,9 @@ start_elasticsearch() {
         -E network.publish_host=127.0.0.1 \
         -E node.store.allow_mmap=false \
         -E xpack.security.enabled=false \
-        -E cluster.routing.allocation.disk.watermark.low=98% \
-        -E cluster.routing.allocation.disk.watermark.high=99% \
-        -E cluster.routing.allocation.disk.watermark.flood_stage=99.5% \
+        -E cluster.routing.allocation.disk.watermark.low=85% \
+        -E cluster.routing.allocation.disk.watermark.high=90% \
+        -E cluster.routing.allocation.disk.watermark.flood_stage=95% \
         -E bootstrap.memory_lock=false \
         -E logger.root=INFO \
         -E http.max_content_length=200mb \
@@ -332,7 +329,7 @@ start_elasticsearch() {
     
     # Extended wait time for large index startup
     log_info "Waiting for large index to load (this may take several minutes)..."
-    max_retries=900  # was 120
+    max_retries=120  
     retry_count=0
     
     while [ $retry_count -lt $max_retries ]; do
