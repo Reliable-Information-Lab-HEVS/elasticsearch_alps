@@ -4,7 +4,7 @@
 # Configuration
 ES_DATA_DIRS_FILE="${ES_DATA_DIRS_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/indexing/job_status_logs/list_dir_fw_2_33.txt}" 
 
-CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/chemicals/chemicals_ita.csv}"
+CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/WeaponizedWords/ww_ita.csv}"
 # /capstor/scratch/cscs/inesaltemir/scripts/search_queries/WeaponizedWords/ww_en.csv
 # obscene??
 
