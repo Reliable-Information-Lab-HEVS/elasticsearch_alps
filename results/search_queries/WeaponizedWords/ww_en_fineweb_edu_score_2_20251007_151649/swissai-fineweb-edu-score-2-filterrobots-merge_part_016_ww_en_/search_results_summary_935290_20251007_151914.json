@@ -1,0 +1,75 @@
+{
+  "overview": {
+    "total_queries": 133,
+    "successful_queries": 133,
+    "failed_queries": 0
+  },
+  "query_type_stats": {
+    "match_query": {
+      "total_queries": 0,
+      "avg_query_time_ms": 0,
+      "median_query_time_ms": 0,
+      "min_query_time_ms": 0,
+      "max_query_time_ms": 0,
+      "avg_es_time_ms": 0,
+      "avg_hits": 0,
+      "total_hits": 0,
+      "errors": 0
+    },
+    "match_phrase_query": {
+      "total_queries": 133,
+      "avg_query_time_ms": 526.79,
+      "median_query_time_ms": 320.08,
+      "min_query_time_ms": 40.79,
+      "max_query_time_ms": 5330.01,
+      "avg_es_time_ms": 516.12,
+      "avg_hits": 281503.66,
+      "total_hits": 37439987,
+      "errors": 0
+    },
+    "term_query_exact": {
+      "total_queries": 0,
+      "avg_query_time_ms": 0,
+      "median_query_time_ms": 0,
+      "min_query_time_ms": 0,
+      "max_query_time_ms": 0,
+      "avg_es_time_ms": 0,
+      "avg_hits": 0,
+      "total_hits": 0,
+      "errors": 0
+    },
+    "wildcard_query": {
+      "total_queries": 0,
+      "avg_query_time_ms": 0,
+      "median_query_time_ms": 0,
+      "min_query_time_ms": 0,
+      "max_query_time_ms": 0,
+      "avg_es_time_ms": 0,
+      "avg_hits": 0,
+      "total_hits": 0,
+      "errors": 0
+    },
+    "fuzzy_query": {
+      "total_queries": 0,
+      "avg_query_time_ms": 0,
+      "median_query_time_ms": 0,
+      "min_query_time_ms": 0,
+      "max_query_time_ms": 0,
+      "avg_es_time_ms": 0,
+      "avg_hits": 0,
+      "total_hits": 0,
+      "errors": 0
+    },
+    "bool_must_query": {
+      "total_queries": 0,
+      "avg_query_time_ms": 0,
+      "median_query_time_ms": 0,
+      "min_query_time_ms": 0,
+      "max_query_time_ms": 0,
+      "avg_es_time_ms": 0,
+      "avg_hits": 0,
+      "total_hits": 0,
+      "errors": 0
+    }
+  }
+}

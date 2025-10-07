@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2025-10-05T08:45:07.407253",
+    "generated_at": "2025-10-07T14:52:51.969889",
     "job_range": "921728-921762",
     "job_ids": [
       921729,
@@ -36,31 +36,33 @@
       921760,
       921761,
       921762,
+      923585,
+      923588,
       925025,
       925033
     ],
-    "total_jobs_analyzed": 35,
+    "total_jobs_analyzed": 37,
     "verification_enabled": true
   },
   "summary_statistics": {
-    "total_jobs": 35,
-    "successful": 35,
+    "total_jobs": 37,
+    "successful": 37,
     "failed": 0
   },
   "ground_truth_verification": {
-    "jobs_verified": 33,
-    "matches": 33,
+    "jobs_verified": 35,
+    "matches": 35,
     "mismatches": 0
   },
   "global_performance_metrics": {
-    "global_avg_rate_docs_per_sec": 1311.2138238086957,
-    "total_docs_all_jobs": 917483730,
-    "total_time_all_jobs_sec": 699720.9099999998,
-    "avg_peak_memory_gb": 2.4294285714285713,
-    "avg_index_to_raw_ratio": 2.7782669592383225
+    "global_avg_rate_docs_per_sec": 1307.339044983558,
+    "total_docs_all_jobs": 966374681,
+    "total_time_all_jobs_sec": 739192.0899999997,
+    "avg_peak_memory_gb": 2.429189189189189,
+    "avg_index_to_raw_ratio": 2.77152750196616
   },
   "per_job_statistics": {
-    "avg_rate_docs_per_sec": 1315.3714285714286,
+    "avg_rate_docs_per_sec": 1311.3243243243244,
     "min_rate_docs_per_sec": 1178.1,
     "max_rate_docs_per_sec": 1447.9
   },
@@ -1293,6 +1295,80 @@
       "error": null
     },
     {
+      "job_id": 923585,
+      "success": true,
+      "indexing_performance": {
+        "avg_rate_docs_per_sec": 1262.1,
+        "total_execution_time_sec": 18813.19,
+        "peak_memory_gb": 2.3
+      },
+      "document_counts": {
+        "total_docs": 23728197,
+        "final_index_count": 23728197,
+        "ground_truth_docs": 23728197,
+        "ground_truth_matches": true,
+        "failed_docs": 0
+      },
+      "storage_metrics": {
+        "index_size_mb": 67553.6,
+        "raw_data_size_gb": 24.21,
+        "index_to_raw_ratio": 2.724919971086328
+      },
+      "configuration": {
+        "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_001",
+        "file_start_range": 0,
+        "file_end_range": 2,
+        "max_chunk_bytes": 100,
+        "thread_count": 8,
+        "queue_size": 16,
+        "batch_size": 5000
+      },
+      "file_paths": {
+        "data_directory": "/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_*",
+        "es_data_directory": "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_001-923585",
+        "first_file": "/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_001/dump-0-merged.parquet",
+        "last_file": "/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_001/dump-1-merged.parquet"
+      },
+      "error": null
+    },
+    {
+      "job_id": 923588,
+      "success": true,
+      "indexing_performance": {
+        "avg_rate_docs_per_sec": 1218.9,
+        "total_execution_time_sec": 20657.99,
+        "peak_memory_gb": 2.55
+      },
+      "document_counts": {
+        "total_docs": 25162754,
+        "final_index_count": 25162754,
+        "ground_truth_docs": 25162754,
+        "ground_truth_matches": true,
+        "failed_docs": 0
+      },
+      "storage_metrics": {
+        "index_size_mb": 67692.24,
+        "raw_data_size_gb": 25.6,
+        "index_to_raw_ratio": 2.5822540283203126
+      },
+      "configuration": {
+        "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_008",
+        "file_start_range": 21,
+        "file_end_range": 23,
+        "max_chunk_bytes": 100,
+        "thread_count": 8,
+        "queue_size": 16,
+        "batch_size": 5000
+      },
+      "file_paths": {
+        "data_directory": "/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_*",
+        "es_data_directory": "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_008-923588",
+        "first_file": "/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_007/dump-28-merged.parquet",
+        "last_file": "/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_007/dump-29-merged.parquet"
+      },
+      "error": null
+    },
+    {
       "job_id": 925025,
       "success": true,
       "indexing_performance": {
@@ -1303,8 +1379,8 @@
       "document_counts": {
         "total_docs": 11492077,
         "final_index_count": 11492077,
-        "ground_truth_docs": 11492077,
-        "ground_truth_matches": true,
+        "ground_truth_docs": null,
+        "ground_truth_matches": null,
         "failed_docs": 0
       },
       "storage_metrics": {
@@ -1340,8 +1416,8 @@
       "document_counts": {
         "total_docs": 13119433,
         "final_index_count": 13119433,
-        "ground_truth_docs": 13119433,
-        "ground_truth_matches": true,
+        "ground_truth_docs": null,
+        "ground_truth_matches": null,
         "failed_docs": 0
       },
       "storage_metrics": {
@@ -1368,12 +1444,14 @@
     }
   ],
   "es_data_directories": [
+    "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_001-923585",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_002-921729",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_003-921730",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_004-921731",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_005-921732",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_006-921733",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_007-921734",
+    "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_008-923588",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_009-921736",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_010-921737",
     "/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-2-quality_33-filterrobots-merge_other-high_part_011-921738",
