@@ -2,12 +2,11 @@
 # Generate SLURM job submission commands for Elasticsearch search queries
 
 # Configuration
-ES_DATA_DIRS_FILE="${ES_DATA_DIRS_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/indexing/job_status_logs/edu-score-2/list_dir/list_dir_edu-score-2_920282_920316.txt}" 
+ES_DATA_DIRS_FILE="${ES_DATA_DIRS_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/indexing/job_status_logs/list_dir_fw_2_33.txt}" 
 
-CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/Obscene/obscene_en.csv}"
+CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/chemicals/chemicals_ita.csv}"
 # /capstor/scratch/cscs/inesaltemir/scripts/search_queries/WeaponizedWords/ww_en.csv
-# /capstor/scratch/cscs/inesaltemir/scripts/search_queries/Obscene/obscene_en.csv
-# /capstor/scratch/cscs/inesaltemir/scripts/search_queries/chemicals/chemicals_en.csv
+# obscene??
 
 SCRIPT_PATH="${SCRIPT_PATH:-/capstor/scratch/cscs/inesaltemir/scripts/search/new_search.sh}"
 

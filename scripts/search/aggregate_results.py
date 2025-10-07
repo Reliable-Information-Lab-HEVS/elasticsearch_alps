@@ -152,6 +152,8 @@ def main():
     
     # Normalize to list
     base_dirs = args.base_dir if isinstance(args.base_dir, list) else [args.base_dir]
+
+
     
     # Validate directories
     valid_dirs = []
@@ -165,6 +167,11 @@ def main():
         print("Error: No valid directories found!")
         return 1
     
+    # Determine output path: save in same directory as first base-dir
+    first_base_dir = os.path.abspath(valid_dirs[0])
+    output_filename = os.path.basename(args.output)
+    output_path = os.path.join(first_base_dir, output_filename)
+
     print(f"Searching for result files in {len(valid_dirs)} directories:")
     for d in valid_dirs:
         print(f"  - {d}")
@@ -187,7 +194,7 @@ def main():
     query_stats = aggregate_results(files)
     
     # Save results
-    rows = save_aggregated_results(query_stats, args.output)
+    rows = save_aggregated_results(query_stats, output_path)
     
     # Print summary
     print_summary(rows)
@@ -200,3 +207,6 @@ if __name__ == "__main__":
     exit(main())
 
 # python3 /capstor/scratch/cscs/inesaltemir/scripts/search/aggregate_results.py --base-dir /capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/ --output /capstor/scratch/cscs/inesaltemir/scripts/search/aggregated_results.json
+
+# srun -A a145 --environment=es-python --partition=normal --pty bash
+# python3 /capstor/scratch/cscs/inesaltemir/scripts/search/aggregate_results.py --base-dir /capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/20251007_151219

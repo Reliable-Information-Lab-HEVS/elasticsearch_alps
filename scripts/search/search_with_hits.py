@@ -238,7 +238,8 @@ class ElasticsearchQueryBenchmark:
                     "text": match_config
                 }
             },
-            "size": 50,
+            "track_total_hits": True,
+            "size": 10,
             "_source": True,  # Don't return full text source, just highlights, and yes url
             "highlight": {
                 "fields": {
@@ -272,7 +273,7 @@ class ElasticsearchQueryBenchmark:
                 }
             },
             "track_total_hits": True,
-            "size": 50,
+            "size": 10,
             "_source": True,
             "highlight": {
                 "fields": {
@@ -391,7 +392,8 @@ class ElasticsearchQueryBenchmark:
                         "max_expansions": 50,  # Limit term expansions (can be too much pressure)
                     }
                 },
-                "size": 50,
+                "track_total_hits": True,
+                "size": 10,
                 "_source": True,
                 "highlight": {
                     "fields": {
@@ -417,7 +419,8 @@ class ElasticsearchQueryBenchmark:
                         }
                     }
                 },
-                "size": 50,
+                "track_total_hits": True,
+                "size": 10,
                 "_source": True,
                 "highlight": {
                     "fields": {
@@ -639,6 +642,34 @@ class ElasticsearchQueryBenchmark:
         
         return '\n'.join(snippets)
 
+    
+    def extract_full_text_hits(self, hits_data: list, max_hits: int = 10) -> List[Dict[str, Any]]:
+        """Extract full text of top N hits with their scores and metadata"""
+        if not hits_data:
+            return []
+        
+        full_text_hits = []
+        for i, hit in enumerate(hits_data[:max_hits]):
+            hit_info = {
+                'rank': i + 1,
+                'score': hit.get('_score', 0),
+                'full_text': hit.get('_source', {}).get('text', '')
+            }
+            
+            # Add dataset-specific metadata
+            if self.dataset.lower() == 'sft':
+                hit_info['conversation_id'] = hit.get('_source', {}).get('conversation_id', '')
+                hit_info['original_metadata'] = hit.get('_source', {}).get('original_metadata', '')
+            elif self.dataset.lower() == 'fineweb':
+                hit_info['url'] = hit.get('_source', {}).get('url', '')
+                hit_info['document_id'] = hit.get('_source', {}).get('document_id', '')
+            elif self.dataset.lower() == 'pure_text':
+                pass  # No additional metadata for pure_text
+            
+            full_text_hits.append(hit_info)
+        
+        return full_text_hits
+
     def extract_response_stats(self, response: dict) -> dict:
         """Extract relevant statistics from ES response"""
         if "error" in response:
@@ -648,7 +679,8 @@ class ElasticsearchQueryBenchmark:
                 "took_ms": 0,
                 "timed_out": False,
                 "error": response["error"],
-                "hit_snippets": ""
+                "hit_snippets": "",
+                "full_text_hits": []
             }
         
         hits = response.get("hits", {})
@@ -663,7 +695,9 @@ class ElasticsearchQueryBenchmark:
         elif hasattr(self, 'dataset') and self.dataset.lower() == 'pure_text':
             hit_snippets = self.extract_hit_snippets_pure_text(hits_data)
 
-        
+        # Extract full text hits (top 10)
+        full_text_hits = self.extract_full_text_hits(hits_data, max_hits=10)
+    
         
         return {
             "total_hits": hits.get("total", {}).get("value", 0) if isinstance(hits.get("total"), dict) else hits.get("total", 0),
@@ -671,7 +705,8 @@ class ElasticsearchQueryBenchmark:
             "took_ms": response.get("took", 0),
             "timed_out": response.get("timed_out", False),
             "error": None,
-            "hit_snippets": hit_snippets
+            "hit_snippets": hit_snippets,
+            "full_text_hits": full_text_hits
         }
     
     def run_all_queries(self, segment_text: str) -> List[dict]:
@@ -728,7 +763,8 @@ class ElasticsearchQueryBenchmark:
                     'max_score': stats['max_score'],
                     'timed_out': stats['timed_out'],
                     'error': stats['error'],
-                    'top_5_hits': stats['hit_snippets']
+                    'top_5_hits': stats['hit_snippets'],
+                    'full_text_hits': stats['full_text_hits']
                 }
                 
                 query_results.append(result)
@@ -746,7 +782,8 @@ class ElasticsearchQueryBenchmark:
                     'max_score': 0,
                     'timed_out': False,
                     'error': str(e),
-                    'top_5_hits': ''
+                    'top_5_hits': '',
+                    'full_text_hits': []
                 }
                 query_results.append(error_result)
                 self.results.append(error_result)
@@ -1080,6 +1117,38 @@ class ElasticsearchQueryBenchmark:
         
         print(f"Summary statistics saved to {filename}")
 
+    
+    def save_full_text_results(self, filename: str = 'search_results_fulltext.json'):
+        """Save results with full text of top 10 hits for specified query types"""
+        print(f"Saving full text results to {filename}...")
+        
+        # Filter for match_query, match_phrase_query, and fuzzy_query
+        target_queries = ['match_query', 'match_phrase_query', 'fuzzy_query']
+        
+        full_text_results = []
+        for result in self.results:
+            # Check if query_type matches or starts with target query names
+            if any(result['query_type'].startswith(q) for q in target_queries):
+                full_text_results.append({
+                    'timestamp': result['timestamp'],
+                    'segment_text': result['segment_text'],
+                    'query_type': result['query_type'],
+                    'query_time_ms': result['query_time_ms'],
+                    'es_took_ms': result['es_took_ms'],
+                    'total_hits': result['total_hits'],
+                    'max_score': result['max_score'],
+                    'error': result['error'],
+                    'top_10_full_text_hits': result['full_text_hits']
+                })
+        
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(full_text_results, file, indent=2, ensure_ascii=False)
+        
+        print(f"Full text results saved to {filename}")
+        print(f"Includes top 10 full-text documents for match_query, match_phrase_query, and fuzzy_query")
+
+
+
 
 def parse_config_value(value_str: str) -> Union[bool, int, str, List]:
     """Parse configuration values from string"""
@@ -1155,23 +1224,6 @@ def main():
     # Initialize benchmark with configuration
     benchmark = ElasticsearchQueryBenchmark(args.es_url, args.index_name, args.dataset, config)
 
-    #import signal
-    
-    #def signal_handler(signum, frame):
-    #    print("\n\n" + "=" * 70)
-    #    print("RECEIVED TERMINATION SIGNAL - Saving results before exit...")
-    #    print("=" * 70)
-    #    if benchmark.results:
-    #        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    #        job_id = os.environ.get('SLURM_JOB_ID', 'local')
-    #        emergency_filename = os.path.join(args.output_dir, f"search_results_EMERGENCY_{job_id}_{timestamp}.json")
-    #        benchmark.save_detailed_results(emergency_filename)
-    #        print(f"Emergency results saved to: {emergency_filename}")
-    #    sys.exit(1)
-    
-    #signal.signal(signal.SIGTERM, signal_handler)
-    #signal.signal(signal.SIGINT, signal_handler)
- 
     # Test ES connection
     try:
         response, _ = benchmark._make_request('GET', '')
@@ -1190,7 +1242,6 @@ def main():
     
     # Save results with timestamps for uniqueness
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    # job_id = args.job_id or os.environ.get('SLURM_JOB_ID', 'local')
     job_id = os.environ.get('SLURM_JOB_ID', 'local')
 
     
@@ -1198,11 +1249,12 @@ def main():
     detailed_filename = os.path.join(args.output_dir, f"search_results_detailed_{job_id}_{timestamp}.json")
     summary_filename = os.path.join(args.output_dir, f"search_results_summary_{job_id}_{timestamp}.json")
         
-    #detailed_filename = os.path.join(args.output_dir, f"search_results_detailed_{job_id}_{timestamp}.csv")
-    #summary_filename = os.path.join(args.output_dir, f"search_results_summary_{job_id}_{timestamp}.csv")
-    
+
     benchmark.save_detailed_results(detailed_filename)
     benchmark.generate_summary_stats(summary_filename)
+
+    fulltext_filename = os.path.join(args.output_dir, f"search_results_fulltext_{job_id}_{timestamp}.json")
+    benchmark.save_full_text_results(fulltext_filename)
     
     print("\nPipeline completed successfully!")
     print(f"Enhanced results with hit snippets saved to: {detailed_filename}")

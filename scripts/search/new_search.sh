@@ -8,6 +8,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=256G
 
+#SBATCH --export=ALL,SCRATCH=/iopsstor/scratch/cscs/$USER
+
 #SBATCH --output=/capstor/scratch/cscs/inesaltemir/SEARCH_LOGS/output/search_%j.out
 #SBATCH --error=/capstor/scratch/cscs/inesaltemir/SEARCH_LOGS/err/search_%j.err
 #SBATCH --environment=es-python
@@ -19,22 +21,30 @@ set -e
 
 # SEARCHES
 
-# CHEMICALS
+#                                       CHEMICALS
 
-# CHEMICALS EN (fw-edu-score-2 35 indexes):929600-929635 (no 929623)
+# CHEMICALS EN (fw-edu-score-2 35 indexes): 935106 - 935140: 935106 failed so relaunched 935160
 
-# CHEMICALS DEU:
+# CHEMICALS DEU: (fw2-33 with euro mid and other high 38 total indexes): 935233 - 935270
 
-# CHEMICALS FR:
+# CHEMICALS FR: (fw2-33 with euro mid and other high 38 total indexes): 935428 - 935465
 
-# CHEMICALS ITA:
+# CHEMICALS ITA:(fw2-33 with euro mid and other high 38 total indexes): 935576-935613
+
+#                                   WeaponizedWords
+
+# WW_EN (fw-edu-score-2 35 indexes): 935275 - 935309
 
 
+#                                       OBSCENE
+
+# obscene_en  (fw-edu-score-2 35 indexes):  935351 - 935385 failed 923384 relaunched in 935421
 
 
+# VERBATIM
 
-
-
+# 935964 (failed container for merged index) -> relaunched 935973 ;  935965 15.000 samples was too big
+# 650 samples: 936292 936293
 
 
 # =============================================================================
@@ -66,14 +76,15 @@ PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-target-septem
 # /iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479
 # /iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-swissai-fineweb-edu-score-2-filterrobots-merge_part_001-920282
 
-CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282_100samples.csv}"
+CSV_FILE="${CSV_FILE:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv}"
 
 INDEX_NAME="${INDEX_NAME:-september_brouillon1}" 
 
 # swissai-fineweb-edu-score-2-filterrobots-merge_part_001
 
 CSV_BASENAME=$(basename "$CSV_FILE" .txt)
-OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/${INDEX_NAME}_${CSV_BASENAME}_${SLURM_JOB_ID}}"
+OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/20251007_184323/september_brouillon1_fw-edu-score-2_single_index-920282_}"
+#/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/${INDEX_NAME}_${CSV_BASENAME}_${SLURM_JOB_ID}
 
 ES_URL="http://${ES_HOST}:${ES_PORT}"
 
