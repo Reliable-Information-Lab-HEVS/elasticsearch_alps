@@ -515,7 +515,7 @@ main() {
     fi
 
     log_info "Starting search queries execution with configurable parameters..."
-    if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search.py \
+    if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search_with_hits.py \
         --csv-file "$CSV_FILE" \
         --index-name "$INDEX_NAME" \
         --es-url "$ES_URL" \
