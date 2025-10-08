@@ -2,11 +2,36 @@
 
 # Welcome
 
+## Repository structure :books:
+-- **scripts** \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- *detokenize* \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```megatron_detokenizer.py```: Helper functions. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```batch_detokenize.py```: Script to batch process Megatron datasets. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```detokenize.sh```: Megatron dataset detokenization script for SLURM. \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- *index* \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```generate_code.py```: The actual script to generate the code, based on the provided configuration file. \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- *stainless* \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```configs.py```: Configuration file for generating code with LLMs for the stainless framework. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```parse_code.py```: Script to parse the output of LLMs and extract the code for stainless. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```generate_code.py```: The actual script to generate the code for stainless, based on the provided configuration file. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```evaluate.py```: Script to automatically run the generated code using stainless. \
+-- **results** \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```Indexing_performance```: Results for the indexing operation on the Apertus pre-training data. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```Search```: Results for the search queries upon constructed indexes. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```Merge```: Results for the merging operation of source indexes into unified target indexes. \
+-- **container_image** \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- ```Dockerfile```: Dockerfile for the Container Image. \
+-- **search_queries** \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- ```chemicals```: Contains the test datasets for chemical queries. \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- ```ObsceneWords```: Contains the test dataset for Obscene Words. \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- ```WeaponizedWords```: Contains the test dataset for Weaponized Words. \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- ```Verbatim```: Contains the test dataset and code needed to reproduce verbatim samples. \
+
 ## Container Creation
 The container_image folder contains the Dockerfile for the Container Image. Exact instructions on how to proceed are:
 1. There is a created Dockerfile with desired packages, in “container_image/" folder 
 2. Ensure you're in the directory containing the `Dockerfile` and run:
-    podman build -t image:tag (⇒ you choose the desired image:tag)
+    podman build -t image:tag
 3. enroot import -x mount -o <image_name.sqsh> podman://image:tag
 4. Create .toml file in home directory /.edf path. 
     '''
@@ -22,18 +47,9 @@ The container_image folder contains the Dockerfile for the Container Image. Exac
     [annotations.com.hooks.ssh]
     enabled = "true"
     '''
-    Explain that environment variables do not seem to be ingested at this point.
     Mount every directory you wish to be able to work from with this container.
-    Absolutely need to connect to the elasticsearch data and logs folder
         
 5. Open the container with: srun -A a-<account_number> --environment=<image_name> --pty bash
-    1. Give instructions to verify versions
-
-link to cscs documentation
-
-## Index Configuration Settings for ElasticSearch
-
-In the <index_config> folder, we store the index configuration for our desired index mappings. These may or not include the <keyword> field (potentially for the "url" field), have a different number of shards (depending on the size of dataset we're indexing), and on the refresh interval. ((Can parametrize these values, to have a single index config))
 
 # Scripts
 
@@ -43,7 +59,7 @@ Explain code, how to run it, basic parameters to set (remove your specific names
 
 ## Search (provide examples?)
 
-We explain the different types of search queries implemented in thid Elasticsearch search queries pipeline. Each query type serves different search scenarios and has specific use cases, limitations, and performance characteristics.
+We explain the different types of search queries implemented in this Elasticsearch search queries pipeline. Each query type serves different search scenarios and has specific use cases, limitations, and performance characteristics.
 
 ### Query Types Overview
 
@@ -60,8 +76,6 @@ The pipeline implements **6 different query types** that can be selectively enab
 - Finding documents that contain most/all search terms (higher score - explain in detail how computed)
 - Handling synonyms and stemming through analyzers (depends on analyzer used - can parametrize this too to have +- harsh analyzer)
 
-talk about <minimum_should_match> (Minimum number of clauses that must match for a document to be returned)
-
 ### 2. Match Phrase Query (`match_phrase_query`)
 **Purpose**: Exact phrase matching with word order preservation
 
@@ -69,19 +83,9 @@ talk about <minimum_should_match> (Minimum number of clauses that must match for
 - Searches for the exact phrase where word order matters
 - Functions as an AND clause between all individual terms with positional information
 - Supports slop parameter for allowing word gaps
-- Uses the `text.exact` field for precise matching in our precise case
 
 
-### 3. Term Query Exact (`term_query_exact`)
-**Purpose**: Exact token (keyword) matching without analysis
-
-**How it works**:
-- Looks for exact matches in the inverted index
-- Searches for a single token that exactly matches the entire input string
-- **Limitation**: Only works with single words - automatically skips multi-word phrases (no fallback)
-- Uses lowercase conversion for matching
-
-### 4. Wildcard Query (`wildcard_query`) -- MAY DELETE, too costly timewise
+### 3. Wildcard Query (`wildcard_query`) 
 **Purpose**: Pattern matching with wildcards on single tokens
 
 **How it works**:
@@ -91,7 +95,7 @@ talk about <minimum_should_match> (Minimum number of clauses that must match for
 - More expensive than other query types - slower due to pattern matching complexity
 - Performs partial word matching, finding variations of a root word (same as match_phrase with stemmer?)
 
-### 5. Fuzzy Query (`fuzzy_query`)
+### 4. Fuzzy Query (`fuzzy_query`)
 **Purpose**: Handling typos and spelling variations
 
 **How it works**:
@@ -100,7 +104,7 @@ talk about <minimum_should_match> (Minimum number of clauses that must match for
 - **Fallback**: For multi-word phrases, uses `multi_match` with fuzziness and AND operator
 - Tries to match against single tokens
 
-### 6. Boolean Must Query (`bool_must_query`)
+### 5. Boolean Must Query (`bool_must_query`)
 **Purpose**: Complex boolean combinations with multiple conditions
 
 **How it works**:
@@ -124,7 +128,6 @@ Each query execution provides:
 # Query execution flags - set to False to skip query types
 execute_match_query = True
 execute_match_phrase_query = True
-execute_term_query_exact = True
 execute_wildcard_query = True
 execute_fuzzy_query = True
 execute_bool_must_query = False  
