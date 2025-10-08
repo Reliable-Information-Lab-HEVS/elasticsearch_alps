@@ -2,11 +2,7 @@
 """
 FineWeb Dataset Indexer for Elasticsearch with Multi-Process Support
 Multi-process architecture: N parser workers -> shared queue -> 1 ES consumer
-
-ENHANCEMENTS:
 - Content-based SHA256 document IDs for deduplication
-- Ground truth document counting from raw files
-- Strict validation: indexed count must match ground truth
 """
 
 import os
@@ -658,11 +654,6 @@ def parse_parquet_worker_batch(file_list, chunk_size, index_name, doc_queue,
                             if stop_event.is_set():
                                 break
                             
-                            # Backpressure handling
-                            #queue_size = doc_queue.qsize()
-                            #if queue_size > 400:
-                            #    logger.warning(f"Worker {worker_id}: Queue full ({queue_size}), throttling...")
-                            #    time.sleep(2)
                             
                             chunk_end = min(start_idx + chunk_size, row_group_size)
                             chunk = df.iloc[start_idx:chunk_end].copy()

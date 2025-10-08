@@ -804,17 +804,8 @@ def parse_parquet_worker_batch(file_list, chunk_size, index_name, doc_queue,
                                 batch_buffer.append(doc)
                                 docs_parsed += 1
                                 
-                                #if len(batch_buffer) >= batch_size:
-                                #    doc_queue.put(batch_buffer)
-                                #    batch_buffer = []
                                     
                                 if len(batch_buffer) >= batch_size:
-                                    # Check queue depth before blocking
-                                    #while doc_queue.qsize() > 400:  # 80% of maxsize
-                                    #    time.sleep(0.5)
-                                    #    if stop_event.is_set():
-                                    #        break
-
                                     doc_queue.put(batch_buffer)
                                     batch_buffer = []
 
@@ -834,19 +825,9 @@ def parse_parquet_worker_batch(file_list, chunk_size, index_name, doc_queue,
                         logger.error(f"Worker {worker_id} error processing row group {row_group_idx}: {e}")
                         continue
                 
-                # Send remaining batch for this file
-                #if batch_buffer:
-                #    doc_queue.put(batch_buffer)
-
+                
                 if batch_buffer:
-                    # Check queue before submitting remainder
-                    #while doc_queue.qsize() > 400:
-                    #    time.sleep(0.5)
-                    #    if stop_event.is_set():
-                    #        break
                     doc_queue.put(batch_buffer)
-                    #batch_buffer = []
-
                     with docs_parsed_counter.get_lock():
                         docs_parsed_counter.value += len(batch_buffer)
                     batch_buffer = []
@@ -929,7 +910,7 @@ def elasticsearch_consumer(doc_queue, es, batch_size, max_chunk_bytes,
             max_chunk_bytes=max_chunk_bytes * 1024 * 1024,
             thread_count=thread_count,
             queue_size=queue_size,
-            request_timeout=300, # was 120
+            request_timeout=300, 
         ):
             if success:
                 indexed += 1
@@ -1032,9 +1013,7 @@ def process_file_list(file_list, chunk_size, index_name, es, batch_size,
     logger.info(f"Actual workers: {actual_workers}")
     logger.info(f"Architecture: {actual_workers} parser workers -> shared queue -> 1 ES consumer")
     
-    
-    #doc_queue = Queue(maxsize=num_workers * 10)
-    doc_queue = Queue(maxsize=300) # 500, 80 17.16 viernes)
+    doc_queue = Queue(maxsize=300) 
     docs_parsed_counter = Value('i', 0)
     stop_event = Event()
     

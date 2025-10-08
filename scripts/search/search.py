@@ -34,7 +34,6 @@ class ElasticsearchQueryBenchmark:
         default_config = {
             'execute_match_query': True,
             'execute_match_phrase_query': True,
-            'execute_term_query_exact': False,
             'execute_wildcard_query': False,
             'execute_fuzzy_query': True,
             'execute_bool_must_query': False,
@@ -65,7 +64,6 @@ class ElasticsearchQueryBenchmark:
         self.query_types = [
             'match_query',
             'match_phrase_query', 
-            'term_query_exact',
             'wildcard_query',
             'fuzzy_query',
             'bool_must_query'
@@ -231,38 +229,6 @@ class ElasticsearchQueryBenchmark:
         }
         return self._make_request('POST', f"{self.index_name}/_search", query)
         
-    def term_query_exact(self, text: str) -> Tuple[dict, float]:
-        """Term query - ONLY executes on single words"""
-        if not self._is_single_word(text):
-            print(f"    SKIPPING term_query_exact for multi-word text: '{text[:50]}...'")
-            return {
-                "hits": {"total": {"value": 0}, "max_score": None, "hits": []},
-                "took": 0,
-                "timed_out": False
-            }, 0.0
-        else:
-            print(f"    Executing term_query_exact on single word: '{text}'")
-            query = {
-                "query": {
-                    "term": {
-                        "text.exact": text.lower()
-                    }
-                },
-                "size": 100,
-                "_source": True,
-                "highlight": {
-                    "fields": {
-                        "text": {
-                            "fragment_size": 200,
-                            "number_of_fragments": 5,
-                            "pre_tags": ["<MATCH>"],
-                            "post_tags": ["</MATCH>"],
-                            "require_field_match": True
-                        }
-                    }
-                }
-            }
-            return self._make_request('POST', f"{self.index_name}/_search", query)
       
     def wildcard_query(self, text: str) -> Tuple[dict, float]:
         """Wildcard query - ONLY executes on single words"""
@@ -589,8 +555,6 @@ class ElasticsearchQueryBenchmark:
                     query_name = f'match_phrase_query_slop_{slop}'
                 query_methods[query_name] = lambda text, s=slop: self.match_phrase_query(text, s)
                 
-        if self.execute_term_query_exact:
-            query_methods['term_query_exact'] = lambda text: self.term_query_exact(text)
             
         if self.execute_wildcard_query:
             query_methods['wildcard_query'] = lambda text: self.wildcard_query(text)

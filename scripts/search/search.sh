@@ -12,7 +12,6 @@ set -e
 # =============================================================================
 EXECUTE_MATCH_QUERY="${EXECUTE_MATCH_QUERY:-false}"
 EXECUTE_MATCH_PHRASE_QUERY="${EXECUTE_MATCH_PHRASE_QUERY:-true}"
-EXECUTE_TERM_QUERY_EXACT="${EXECUTE_TERM_QUERY_EXACT:-false}"
 EXECUTE_WILDCARD_QUERY="${EXECUTE_WILDCARD_QUERY:-false}"
 EXECUTE_FUZZY_QUERY="${EXECUTE_FUZZY_QUERY:-false}"
 EXECUTE_BOOL_MUST_QUERY="${EXECUTE_BOOL_MUST_QUERY:-false}"
@@ -93,7 +92,6 @@ build_config_json() {
 {
     "execute_match_query": $EXECUTE_MATCH_QUERY,
     "execute_match_phrase_query": $EXECUTE_MATCH_PHRASE_QUERY,
-    "execute_term_query_exact": $EXECUTE_TERM_QUERY_EXACT,
     "execute_wildcard_query": $EXECUTE_WILDCARD_QUERY,
     "execute_fuzzy_query": $EXECUTE_FUZZY_QUERY,
     "execute_bool_must_query": $EXECUTE_BOOL_MUST_QUERY,
@@ -206,7 +204,6 @@ log_info "  Match Query: $EXECUTE_MATCH_QUERY"
 log_info "  Match Query Operator: $MATCH_QUERY_OPERATOR"
 log_info "  Match Phrase Query: $EXECUTE_MATCH_PHRASE_QUERY"
 log_info "  Match Phrase Slop: $MATCH_PHRASE_SLOP"
-log_info "  Term Query Exact: $EXECUTE_TERM_QUERY_EXACT"
 log_info "  Wildcard Query: $EXECUTE_WILDCARD_QUERY"
 log_info "  Fuzzy Query: $EXECUTE_FUZZY_QUERY"
 log_info "  Bool Must Query: $EXECUTE_BOOL_MUST_QUERY"
@@ -589,7 +586,7 @@ main() {
         fi
     done
 
-    if python3 /capstor/scratch/cscs/inesaltemir/scripts/search/search_with_hits_multi_csv.py \
+    if python3 search.py \
         --csv-files $CSV_FILES_ARRAY \
         --index-name "$INDEX_NAME" \
         --es-url "$ES_URL" \

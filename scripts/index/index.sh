@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=index-id
+#SBATCH --job-name=index-mp
 #SBATCH --partition=normal
 #SBATCH --account=a145
 #SBATCH --time=08:00:00
@@ -8,8 +8,8 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=256G
 
-#SBATCH --output=/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/swissai-fineweb-2-quality_33-filterrobots-merge_rest/output/indexing_%j.out
-#SBATCH --error=/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/swissai-fineweb-2-quality_33-filterrobots-merge_rest/err/indexing_%j.err
+#SBATCH --output=/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/swissai-fineweb-2-quality_33-filterrobots-merge_euro-mid/output/indexing_%j.out
+#SBATCH --error=/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/swissai-fineweb-2-quality_33-filterrobots-merge_euro-mid/err/indexing_%j.err
 #SBATCH --environment=es-python
 
 # FineWeb Dataset Indexing Script with Multi-Process Support
@@ -19,55 +19,12 @@ set -e
 # CONFIGURATION PARAMETERS
 # ============================================================================
 
-#Phase 1
-# DATASETS=(
-#         $DATAROOT/finemath-3plus-merge 47GB: 1 JOB DONE W/O DATASET ID OK
-#         $DATAROOT/starcoder-extras-merge 50GB: 1 JOB DONE W/O DATASET ID OK
-#         $DATAROOT/starcoder-threshold-0-merge (756G) (4 jobs): Total: 229.092GB: 1 JOB ONGOING OK
-#         $DATAROOT/swissai-fineweb-edu-score-2-filterrobots-merge DOING (19T) : Total: 12736.9GB 35 JOBS --> 363.8 GB / job
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/euro-high (9.1T) (50 jobs) : Total: 2660.02GB 8 JOBS --> 332.5GB / job
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/euro-mid (88G) (1 job): 21GB: 1 JOB ONGOING
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/other-high  (3.9T) (25 jobs): Total: 991.787GB 4 JOBS ONGOING
-#         $DATAROOT/swissai-fineweb-2-quality_33-filterrobots-merge/rest (356G) (2 jobs): Total: 76.6389GB: 1 JOB ONGOING
-#         $DATAROOT/poison DONE: 622MB: 1 JOB
-#         $DATAROOT/gutenberg DONE: 3.2GB: 1 JOB
-# ) 512  final size target index
-# exact matches y count para weaponized
-# verbatim diff lengths histogram (min 300.600 size) . look at scaling in size
+DATA_DIR="${DATA_DIR:-}"
 
-# sft data chemicals search
-
-# serbo croatian, netherlands, spanish , portuguese
-# translate chemicals into low resource (dictionary translate)
-
-
-# INDEX JOBS WITH ID
-
-# fw-edu-score-2 (35 jobs) : 1. (10k-8-16)(921924- 921958)
-#                            2. (10k,16,32)(921959-921993) NO LOS HAS MIRADO
-
-# fw euro high: 1. (8 jobs) (10k, 8, 16) (921995-922002)
-#               2. (12 jobs) (10k,8,16) (922096- 922107) (NONE HAVE FINISHED FOR BOTH JOBS)
-# ONGOING!!
-# 3. 62 jobs, 15k,6,12::: 926875 - 926936
-# 4. 62 jobs, 15k,8,16:: 926937-927001 --exclude 926985  926973 926968
-
-# fw euro mid: (10k,8,16)::  927010
-
-# swissai-fineweb-2-quality_33-filterrobots-merge_rest:: 
-# 1. 2 jobs, 15k-8-16: 927024-927025
-# 2. 2 jobs, 10k-16-32: 927098-927099
-# 3. 2 jobs, 20k-8-16: 927100-927101
-# none of these jobs rendered a deduplicated index
-
-# Data and indexing parameters
-# DATA_DIR="${DATA_DIR:-/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_euro-mid}"
-
-DATA_DIR="${DATA_DIR:-/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_rest_part_*}"
-BATCH_SIZE="${BATCH_SIZE:-10000}"           # Decreased from 25000, 10 000
+BATCH_SIZE="${BATCH_SIZE:-5000}"           
 ES_HOST="${ES_HOST:-localhost}"
 ES_PORT="${ES_PORT:-9200}"
-INDEX_NAME="${INDEX_NAME:-swissai-fineweb-2-quality_33-filterrobots-merge_rest}"
+INDEX_NAME="${INDEX_NAME:-}"
 LOG_LEVEL="${LOG_LEVEL:-INFO}"
 
 
@@ -75,11 +32,11 @@ LOG_LEVEL="${LOG_LEVEL:-INFO}"
 FILE_RANGE_START="${FILE_RANGE_START:-}"
 FILE_RANGE_END="${FILE_RANGE_END:-}"
 
-# NEW: Multi-process parameters (optimized for your hardware)
-NUM_WORKERS="${NUM_WORKERS:-8}"             # 8 workers for 10 CPUs
-MAX_CHUNK_BYTES="${MAX_CHUNK_BYTES:-100}"   # Increased from 75
-THREAD_COUNT="${THREAD_COUNT:-8}"          # decreased from 32, 16
-QUEUE_SIZE="${QUEUE_SIZE:-16}"              # DEcresed from 64
+
+NUM_WORKERS="${NUM_WORKERS:-8}"             
+MAX_CHUNK_BYTES="${MAX_CHUNK_BYTES:-100}"  
+THREAD_COUNT="${THREAD_COUNT:-6}"          
+QUEUE_SIZE="${QUEUE_SIZE:-12}"              
 
 # Colors for output
 RED='\033[0;31m'
@@ -151,14 +108,10 @@ start_elasticsearch() {
     log_info "Using heap settings: $CUSTOM_HEAP"
     log_info "Workers will use remaining memory (~8GB per worker for $NUM_WORKERS workers)"
     
-    # 4. Create ES data and logs directories
-    #if [ -n "$JOB_PART_NUM" ]; then
-    #    local job_data_dir="/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-${INDEX_NAME}-part_${JOB_PART_NUM}-${SLURM_JOB_ID}"
-    #    local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-logs-septemberv1-${INDEX_NAME}-part_${JOB_PART_NUM}-${SLURM_JOB_ID}"
-    #else
+    
     local job_data_dir="/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-${INDEX_NAME}-${SLURM_JOB_ID}"
     local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-logs-septemberv1-${INDEX_NAME}-${SLURM_JOB_ID}"
-    #fi
+   
 
     mkdir -p "$job_data_dir"
     mkdir -p "$job_logs_dir"
@@ -261,28 +214,45 @@ validate_data_directory() {
         
         log_success "Found ${#matching_dirs[@]} directories matching pattern"
         
+        # Update DATA_DIR to space-separated list of matched directories
+        # DATA_DIR="${matching_dirs[*]}"
+        
         # Check for parquet files across all matching directories
         parquet_count=0
         for dir in "${matching_dirs[@]}"; do
             count=$(find "$dir" -name "*.parquet" 2>/dev/null | wc -l)
             parquet_count=$((parquet_count + count))
         done
-    else
-        # Single directory - original logic
-        if [ ! -d "$DATA_DIR" ]; then
-            log_error "Data directory does not exist: $DATA_DIR"
+        
+        if [ $parquet_count -eq 0 ]; then
+            log_error "No parquet files found in matched directories"
             exit 1
         fi
+        log_success "Found $parquet_count parquet files across all directories"
         
+    # Check if DATA_DIR is a file or directory (only if NOT a glob pattern)
+    elif [ -f "$DATA_DIR" ]; then
+        # Single parquet file
+        if [[ ! "$DATA_DIR" == *.parquet ]]; then
+            log_error "File is not a parquet file: $DATA_DIR"
+            exit 1
+        fi
+        parquet_count=1
+        log_success "Using single parquet file: $DATA_DIR"
+        
+    elif [ -d "$DATA_DIR" ]; then
+        # Directory containing parquet files
         parquet_count=$(find "$DATA_DIR" -name "*.parquet" | wc -l)
-    fi
-    
-    if [ $parquet_count -eq 0 ]; then
-        log_error "No parquet files found in $DATA_DIR"
+        if [ $parquet_count -eq 0 ]; then
+            log_error "No parquet files found in directory: $DATA_DIR"
+            exit 1
+        fi
+        log_success "Found $parquet_count parquet files in data directory"
+        
+    else
+        log_error "Data path does not exist: $DATA_DIR"
         exit 1
     fi
-    
-    log_success "Found $parquet_count parquet files in data directory"
 }
 
 show_configuration() {
@@ -333,30 +303,31 @@ run_indexing() {
     # Increase file descriptor limit for multi-process
     ulimit -n 65536
     
+
     # Base Python command with multi-process parameters
-    base_cmd="python3 /capstor/scratch/cscs/inesaltemir/scripts/indexing/index_detokenized_with_id.py \
+    base_cmd="python3 /capstor/scratch/cscs/inesaltemir/scripts/indexing/index_detokenized_v2.py \
         --data-dir \"$DATA_DIR\" \
-        --batch-size \"$BATCH_SIZE\" \
+        --batch-size $BATCH_SIZE \
         --chunk-size 50000 \
-        --es-host \"$ES_HOST\" \
-        --es-port \"$ES_PORT\" \
-        --index-name \"$INDEX_NAME\" \
-        --log-level \"$LOG_LEVEL\" \
-        --max-chunk-bytes \"$MAX_CHUNK_BYTES\" \
-        --thread-count \"$THREAD_COUNT\" \
-        --queue-size \"$QUEUE_SIZE\" \
-        --num-workers \"$NUM_WORKERS\""
-    
+        --es-host $ES_HOST \
+        --es-port $ES_PORT \
+        --index-name $INDEX_NAME \
+        --log-level $LOG_LEVEL \
+        --max-chunk-bytes $MAX_CHUNK_BYTES \
+        --thread-count $THREAD_COUNT \
+        --queue-size $QUEUE_SIZE \
+        --num-workers $NUM_WORKERS"
+
     # Add file range arguments if specified
     if [[ -n "$FILE_RANGE_START" && -n "$FILE_RANGE_END" ]]; then
-        base_cmd+=" --file-range-start \"$FILE_RANGE_START\" --file-range-end \"$FILE_RANGE_END\""
+        base_cmd+=" --file-range-start $FILE_RANGE_START --file-range-end $FILE_RANGE_END"
         log_info "Using file range: $FILE_RANGE_START to $FILE_RANGE_END"
     else
         log_info "Processing all files (no file range specified)"
     fi
-    
+
     log_info "Multi-process mode: $NUM_WORKERS workers will parse files in parallel"
-    
+
     # Execute the command
     eval "$base_cmd" 2>&1
 
