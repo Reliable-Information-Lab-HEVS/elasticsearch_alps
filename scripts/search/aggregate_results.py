@@ -205,8 +205,3 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
-
-# python3 /capstor/scratch/cscs/inesaltemir/scripts/search/aggregate_results.py --base-dir /capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/ --output /capstor/scratch/cscs/inesaltemir/scripts/search/aggregated_results.json
-
-# srun -A a145 --environment=es-python --partition=normal --pty bash
-# python3 /capstor/scratch/cscs/inesaltemir/scripts/search/aggregate_results.py --base-dir /capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS/20251007_151219
