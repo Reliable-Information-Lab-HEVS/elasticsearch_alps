@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2025-10-08T00:35:39.080803",
+    "generated_at": "2025-10-08T08:32:27.852556",
     "job_range": "927557-927649",
     "total_jobs_analyzed": 93,
     "verification_enabled": true
@@ -19,7 +19,8 @@
     "global_avg_rate_docs_per_sec": 589.3631592850642,
     "total_docs_all_jobs": 866389617,
     "total_time_all_jobs_sec": 1470043.7300000002,
-    "avg_peak_memory_gb": 7.491827956989248
+    "avg_peak_memory_gb": 7.491827956989248,
+    "avg_index_to_raw_ratio": 0.00108655822598278
   },
   "per_job_statistics": {
     "avg_rate_docs_per_sec": 1736.7978494623653,
@@ -49,9 +50,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.06,
         "raw_data_size_gb": 27.98,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011538654842744819
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_001",
@@ -86,9 +87,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.84,
         "raw_data_size_gb": 31.53,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010481089438629876
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_002",
@@ -123,9 +124,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 28.57,
         "raw_data_size_gb": 26.77,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010422260225999252
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_003",
@@ -160,9 +161,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.61,
         "raw_data_size_gb": 26.84,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001222886200633383
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_004",
@@ -197,9 +198,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.65,
         "raw_data_size_gb": 29.56,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001111682277571042
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_005",
@@ -234,9 +235,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.31,
         "raw_data_size_gb": 27.32,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011549317121156662
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_006",
@@ -271,9 +272,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.34,
         "raw_data_size_gb": 27.32,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.00104876807284041
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_007",
@@ -308,9 +309,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.59,
         "raw_data_size_gb": 28.2,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010593279033687944
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_008",
@@ -345,9 +346,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.88,
         "raw_data_size_gb": 27.69,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010537987540628385
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_009",
@@ -382,9 +383,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.94,
         "raw_data_size_gb": 28.65,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010546193280977314
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_010",
@@ -419,9 +420,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.43,
         "raw_data_size_gb": 29.38,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010447024974472431
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_011",
@@ -456,9 +457,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.65,
         "raw_data_size_gb": 28.64,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.00107919703648743
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_012",
@@ -493,9 +494,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.63,
         "raw_data_size_gb": 24.74,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011695855648746968
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_013",
@@ -530,9 +531,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.55,
         "raw_data_size_gb": 27.52,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001084083734556686
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_014",
@@ -567,9 +568,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.97,
         "raw_data_size_gb": 27.21,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001147398130282984
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_015",
@@ -604,9 +605,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.83,
         "raw_data_size_gb": 27.94,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010775741544380814
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_016",
@@ -641,9 +642,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.83,
         "raw_data_size_gb": 29.95,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011356818656093489
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_017",
@@ -678,9 +679,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.29,
         "raw_data_size_gb": 27.33,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010823299716428833
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_018",
@@ -715,9 +716,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 28.93,
         "raw_data_size_gb": 26.97,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010475325593251761
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_019",
@@ -752,9 +753,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.5,
         "raw_data_size_gb": 30.58,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010378770846958796
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_020",
@@ -789,9 +790,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.77,
         "raw_data_size_gb": 29.4,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011217182185374152
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_021",
@@ -826,9 +827,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.05,
         "raw_data_size_gb": 29.4,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010645859906462584
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_022",
@@ -863,9 +864,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.23,
         "raw_data_size_gb": 27.77,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001027905000900252
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_023",
@@ -900,9 +901,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.5,
         "raw_data_size_gb": 27.49,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011545391506002183
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_024",
@@ -937,9 +938,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.03,
         "raw_data_size_gb": 26.88,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011273338681175595
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_025",
@@ -974,9 +975,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.43,
         "raw_data_size_gb": 28.38,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001150334192212826
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_026",
@@ -1011,9 +1012,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.18,
         "raw_data_size_gb": 27.75,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011324605855855855
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_027",
@@ -1048,9 +1049,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.37,
         "raw_data_size_gb": 27.82,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010660748786843997
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_028",
@@ -1085,9 +1086,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.01,
         "raw_data_size_gb": 26.31,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010767798603192704
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_029",
@@ -1122,9 +1123,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.52,
         "raw_data_size_gb": 29.46,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010448489477257298
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_030",
@@ -1159,9 +1160,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 28.0,
         "raw_data_size_gb": 26.76,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010218142750373692
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_031",
@@ -1196,9 +1197,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.12,
         "raw_data_size_gb": 30.97,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010443574426864707
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_032",
@@ -1233,9 +1234,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 37.79,
         "raw_data_size_gb": 29.29,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0012599623378286105
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_033",
@@ -1270,9 +1271,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.23,
         "raw_data_size_gb": 27.57,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010707828935437068
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_034",
@@ -1307,9 +1308,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.74,
         "raw_data_size_gb": 26.59,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011289782342986084
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_035",
@@ -1344,9 +1345,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.27,
         "raw_data_size_gb": 27.97,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010219515328923846
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_036",
@@ -1381,9 +1382,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.08,
         "raw_data_size_gb": 26.97,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010529639414163885
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_037",
@@ -1418,9 +1419,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.79,
         "raw_data_size_gb": 30.22,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010272972162475183
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_038",
@@ -1455,9 +1456,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.84,
         "raw_data_size_gb": 31.28,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010877058024296676
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_039",
@@ -1492,9 +1493,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.57,
         "raw_data_size_gb": 27.83,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001107800148221344
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_040",
@@ -1529,9 +1530,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.2,
         "raw_data_size_gb": 30.57,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010925233071638863
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_041",
@@ -1566,9 +1567,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.61,
         "raw_data_size_gb": 26.6,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010870682565789474
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_042",
@@ -1603,9 +1604,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.28,
         "raw_data_size_gb": 29.09,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011172224132004127
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_043",
@@ -1640,9 +1641,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 28.29,
         "raw_data_size_gb": 25.81,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001070397253971329
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_044",
@@ -1677,9 +1678,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.9,
         "raw_data_size_gb": 28.96,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010757024775552486
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_045",
@@ -1714,9 +1715,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.91,
         "raw_data_size_gb": 29.05,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011399392211703958
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_046",
@@ -1751,9 +1752,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.1,
         "raw_data_size_gb": 27.85,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010203938509874327
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_047",
@@ -1788,9 +1789,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.14,
         "raw_data_size_gb": 28.81,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010555416955918084
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_048",
@@ -1825,9 +1826,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.63,
         "raw_data_size_gb": 28.69,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001042597050365981
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_049",
@@ -1862,9 +1863,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 28.96,
         "raw_data_size_gb": 27.66,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010224602313810558
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_050",
@@ -1899,9 +1900,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.74,
         "raw_data_size_gb": 30.65,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010750152936378468
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_051",
@@ -1936,9 +1937,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.34,
         "raw_data_size_gb": 27.62,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011434479091238234
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_052",
@@ -1973,9 +1974,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.62,
         "raw_data_size_gb": 29.44,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010157046110733695
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_053",
@@ -2010,9 +2011,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.18,
         "raw_data_size_gb": 31.0,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010767389112903225
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_054",
@@ -2047,9 +2048,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.0,
         "raw_data_size_gb": 27.97,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011172685019663925
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_055",
@@ -2084,9 +2085,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.05,
         "raw_data_size_gb": 29.26,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001136430387047163
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_056",
@@ -2121,9 +2122,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.44,
         "raw_data_size_gb": 26.13,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011002678913126676
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_057",
@@ -2158,9 +2159,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.17,
         "raw_data_size_gb": 27.75,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010969172297297298
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_058",
@@ -2195,9 +2196,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.4,
         "raw_data_size_gb": 26.66,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010769293885971492
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_059",
@@ -2232,9 +2233,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 36.31,
         "raw_data_size_gb": 31.49,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001126039516513179
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_060",
@@ -2269,9 +2270,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 28.43,
         "raw_data_size_gb": 26.62,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010429628803531178
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_061",
@@ -2306,9 +2307,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.39,
         "raw_data_size_gb": 27.45,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010455800318761384
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_062",
@@ -2343,9 +2344,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.78,
         "raw_data_size_gb": 25.87,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001124160465790491
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_063",
@@ -2380,9 +2381,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 29.47,
         "raw_data_size_gb": 27.24,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010565086958516886
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_064",
@@ -2417,9 +2418,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.62,
         "raw_data_size_gb": 30.6,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010091145833333332
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_065",
@@ -2454,9 +2455,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 39.82,
         "raw_data_size_gb": 30.9,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001258469862459547
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_066",
@@ -2491,9 +2492,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.05,
         "raw_data_size_gb": 27.15,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011528113489871086
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_067",
@@ -2528,9 +2529,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.06,
         "raw_data_size_gb": 30.65,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001085211052202284
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_068",
@@ -2565,9 +2566,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.99,
         "raw_data_size_gb": 29.87,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011439545321392701
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_069",
@@ -2602,9 +2603,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.4,
         "raw_data_size_gb": 29.7,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001065340909090909
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_070",
@@ -2639,9 +2640,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.45,
         "raw_data_size_gb": 29.76,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010976483744959678
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_071",
@@ -2676,9 +2677,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 37.13,
         "raw_data_size_gb": 34.2,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010602270650584796
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_072",
@@ -2713,9 +2714,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.42,
         "raw_data_size_gb": 29.07,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010219136996904026
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_073",
@@ -2750,9 +2751,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.47,
         "raw_data_size_gb": 30.83,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001060186405287058
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_074",
@@ -2787,9 +2788,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.06,
         "raw_data_size_gb": 31.76,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001047283335957179
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_075",
@@ -2824,9 +2825,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.63,
         "raw_data_size_gb": 30.37,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010492339273954561
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_076",
@@ -2861,9 +2862,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.04,
         "raw_data_size_gb": 29.5,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001027542372881356
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_077",
@@ -2898,9 +2899,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.81,
         "raw_data_size_gb": 27.13,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011090265619240693
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_078",
@@ -2935,9 +2936,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.48,
         "raw_data_size_gb": 28.18,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010909221965933287
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_079",
@@ -2972,9 +2973,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.83,
         "raw_data_size_gb": 27.98,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010760336624374553
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_080",
@@ -3009,9 +3010,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 35.95,
         "raw_data_size_gb": 31.33,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011205688437599746
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_081",
@@ -3046,9 +3047,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.15,
         "raw_data_size_gb": 28.94,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010173932057705598
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_082",
@@ -3083,9 +3084,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 31.63,
         "raw_data_size_gb": 29.1,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010614663874570446
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_083",
@@ -3120,9 +3121,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 35.17,
         "raw_data_size_gb": 32.17,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010676314306807585
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_084",
@@ -3157,9 +3158,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.48,
         "raw_data_size_gb": 28.71,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010367685475444095
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_085",
@@ -3194,9 +3195,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.95,
         "raw_data_size_gb": 28.5,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011975740131578948
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_086",
@@ -3231,9 +3232,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 34.41,
         "raw_data_size_gb": 27.66,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0012148776437093274
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_087",
@@ -3268,9 +3269,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 32.89,
         "raw_data_size_gb": 29.36,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010939761793256131
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_088",
@@ -3305,9 +3306,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 33.89,
         "raw_data_size_gb": 29.42,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0011249389233514615
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_089",
@@ -3342,9 +3343,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 28.57,
         "raw_data_size_gb": 27.56,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010123508935050798
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_090",
@@ -3379,9 +3380,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 27.99,
         "raw_data_size_gb": 26.91,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.001015755643812709
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_091",
@@ -3416,9 +3417,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.8,
         "raw_data_size_gb": 28.05,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010723039215686275
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_092",
@@ -3453,9 +3454,9 @@
         "failed_docs": 0
       },
       "storage_metrics": {
-        "index_size_mb": null,
+        "index_size_mb": 30.46,
         "raw_data_size_gb": 28.19,
-        "index_to_raw_ratio": null
+        "index_to_raw_ratio": 0.0010552002039730401
       },
       "configuration": {
         "index_name": "swissai-fineweb-2-quality_33-filterrobots-merge_euro-high_part_093",
