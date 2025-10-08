@@ -9,12 +9,17 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```batch_detokenize.py```: Script to batch process Megatron datasets. \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```detokenize.sh```: Megatron dataset detokenization script for SLURM. \
 &nbsp;&nbsp;&nbsp;&nbsp;|--- *index* \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```generate_code.py```: The actual script to generate the code, based on the provided configuration file. \
-&nbsp;&nbsp;&nbsp;&nbsp;|--- *stainless* \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```configs.py```: Configuration file for generating code with LLMs for the stainless framework. \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```parse_code.py```: Script to parse the output of LLMs and extract the code for stainless. \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```generate_code.py```: The actual script to generate the code for stainless, based on the provided configuration file. \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```evaluate.py```: Script to automatically run the generated code using stainless. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```index.py```: Indexer script for Elasticsearch with multi-process support. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```index_with_id.py```: Script with added content-based SHA256 document IDs for deduplication. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```index.sh```: Script to run indexing for Slurm. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```index_with_id.sh```: Script to run indexing with id for Slurm. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```indexing_job_status.py```: Script to automatically evaluate the indexing jobs, detect failures and output statistics. \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- *merge* \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```merge.py```: Remote reindex merge script for Elasticsearch. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```merge.sh```: Slurm script to run merge operation. \
+&nbsp;&nbsp;&nbsp;&nbsp;|--- *search* \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```search.py```: Script to perform various search query types across multiple CSV files. \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```search.sh```: . \
 -- **results** \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```Indexing_performance```: Results for the indexing operation on the Apertus pre-training data. \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--- ```Search```: Results for the search queries upon constructed indexes. \
@@ -34,7 +39,7 @@ The container_image folder contains the Dockerfile for the Container Image. Exac
     podman build -t image:tag
 3. enroot import -x mount -o <image_name.sqsh> podman://image:tag
 4. Create .toml file in home directory /.edf path. 
-    '''
+    ```python
     image = "/container_image/<image_name.sqsh>"
     workdir = "/capstor/scratch/cscs/<username>"
     writable = true
@@ -46,7 +51,7 @@ The container_image folder contains the Dockerfile for the Container Image. Exac
     ]
     [annotations.com.hooks.ssh]
     enabled = "true"
-    '''
+    ```
     Mount every directory you wish to be able to work from with this container.
         
 5. Open the container with: srun -A a-<account_number> --environment=<image_name> --pty bash

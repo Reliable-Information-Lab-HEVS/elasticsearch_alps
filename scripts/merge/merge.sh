@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --job-name=cluster-merge-indexes
 #SBATCH --partition=normal
-#SBATCH --account=a-a145
-#SBATCH --time=11:30:00
+#SBATCH --account=a145
+#SBATCH --time=08:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=400G
+#SBATCH --mem=256G
 
-#SBATCH --output=/capstor/scratch/cscs/inesaltemir/remote_INDEXING_swissai_fineweb_2_quality_33_filterrobots/deu/output/indexing_%j.out
-#SBATCH --error=/capstor/scratch/cscs/inesaltemir/remote_INDEXING_swissai_fineweb_2_quality_33_filterrobots/deu/err/indexing_%j.err
+#SBATCH --output=/capstor/scratch/cscs/inesaltemir/MERGE_logs/brouillon/output/merge_%j.out
+#SBATCH --error=/capstor/scratch/cscs/inesaltemir/MERGE_logs/brouillon/err/merge_%j.err
 #SBATCH --environment=es-python
 
 # Cluster-Level Index Merge - Avoids metadata corruption by using live clusters
@@ -19,18 +19,15 @@
 set -e
 
 # Configuration - Override these via environment variables
-# UPDATED: More specific pattern to exclude target directories and only match numbered source dirs
-# SOURCE_DATA_DIRS="${SOURCE_DATA_DIRS:-/iopsstor/scratch/cscs/inesaltemir/es-data-*-swissai-fineweb-*-fineweb_fra_brouillon[12]}"
-# TARGET_INDEX="${TARGET_INDEX:-fineweb_fra_brouillon_merged}"
-# SOURCE_INDEX_PATTERNS="${SOURCE_INDEX_PATTERNS:-fineweb_fra_brouillon1 fineweb_fra_brouillon2}"
-
-SOURCE_DATA_DIRS="${SOURCE_DATA_DIRS:-/iopsstor/scratch/cscs/inesaltemir/es-data-*-swissai-fineweb-*-deu_part[1-8]}"
-TARGET_INDEX="${TARGET_INDEX:-fineweb_deu_merged}"
-SOURCE_INDEX_PATTERNS="${SOURCE_INDEX_PATTERNS:-fineweb_deu_part1 fineweb_deu_part2 fineweb_deu_part3 fineweb_deu_part4 fineweb_deu_part5 fineweb_deu_part6 fineweb_deu_part7 fineweb_deu_part8}"
-# SOURCE_INDEX_PATTERNS="${SOURCE_INDEX_PATTERNS:-fineweb_fra_part1 fineweb_fra_part2 fineweb_fra_part3 fineweb_fra_part4 fineweb_fra_part5 fineweb_fra_part6 fineweb_fra_part7 fineweb_fra_part8}"
+# CRITICAL: SOURCE_DATA_DIRS should be a space-separated list of directories
+# passed from the job generator via environment variables
+SOURCE_DATA_DIRS="${SOURCE_DATA_DIRS:-}"
+TARGET_INDEX="${TARGET_INDEX:-}"
+SOURCE_INDEX_PATTERNS="${SOURCE_INDEX_PATTERNS:-}"
 
 MERGE_CLUSTER_PORT="${MERGE_CLUSTER_PORT:-9200}"
 BATCH_SIZE="${BATCH_SIZE:-10000}"
+
 
 # Colors for output
 RED='\033[0;31m'
@@ -67,16 +64,14 @@ configure_proxy_bypass() {
 
 # Enhanced curl function with explicit proxy bypass
 safe_curl() {
-    local url="$1"
-    shift
-    curl --noproxy "127.0.0.1,localhost" --connect-timeout 10 --max-time 30 "$@" "$url"
+    curl --noproxy "127.0.0.1,localhost" --connect-timeout 10 --max-time 30 "$@"
 }
 
 # Test Elasticsearch connectivity with proxy bypass
 test_elasticsearch_connection() {
     local host="$1"
     local port="$2"
-    local max_retries=30  # Increased retries
+    local max_retries=45  # Increased retries
     local retry_count=0
     
     log_info "Testing Elasticsearch connection to $host:$port"
@@ -115,7 +110,7 @@ test_elasticsearch_connection() {
 show_configuration() {
     log_info "=== Configuration ==="
     echo "Job ID: ${SLURM_JOB_ID:-'Not in SLURM'}"
-    echo "Source Data Pattern: $SOURCE_DATA_DIRS"
+    echo "Source Data Directories: $SOURCE_DATA_DIRS"
     echo "Source Index Patterns: $SOURCE_INDEX_PATTERNS"
     echo "Target Index: $TARGET_INDEX"
     echo "Target Port: $MERGE_CLUSTER_PORT"
@@ -127,21 +122,26 @@ show_configuration() {
 start_source_clusters() {
     log_info "=== Starting Individual Source Clusters ==="
     
-    # Find all matching data directories with improved pattern
-    local source_dirs=($(find /iopsstor/scratch/cscs/inesaltemir -maxdepth 1 -name "es-data-*-swissai-fineweb-*-deu_part[1-8]" -type d 2>/dev/null))
+    # FIXED: Use SOURCE_DATA_DIRS from environment variable instead of glob pattern
+    # Convert space-separated string to array
+    read -ra source_dirs <<< "$SOURCE_DATA_DIRS"
 
     if [ ${#source_dirs[@]} -eq 0 ]; then
-        log_error "No source data directories found matching pattern: es-data-*-swissai-fineweb-*-deu_part[1-8]"
-        log_info "Searched in: /iopsstor/scratch/cscs/inesaltemir"
-        log_info "Looking for directories like: es-data-XXXXX-swissai-fineweb-*-deu_part1 through deu_part8"
-        
-        # DEBUG: Show what directories actually exist
-        log_info "Available directories starting with 'es-data-':"
-        find /iopsstor/scratch/cscs/inesaltemir -maxdepth 1 -name "es-data-*" -type d 2>/dev/null | head -10 || log_warn "No es-data directories found"
+        log_error "No source data directories provided in SOURCE_DATA_DIRS"
+        log_info "SOURCE_DATA_DIRS value: $SOURCE_DATA_DIRS"
         return 1
     fi
 
-    log_info "Found ${#source_dirs[@]} source data directories"
+    log_info "Found ${#source_dirs[@]} source data directories from environment"
+    
+    # Validate all directories exist
+    for data_dir in "${source_dirs[@]}"; do
+        if [ ! -d "$data_dir" ]; then
+            log_error "Source directory does not exist: $data_dir"
+            return 1
+        fi
+        log_info "  ✓ Validated: $(basename "$data_dir")"
+    done
     
     # Configure Java environment
     export ES_JAVA_HOME="/usr/share/elasticsearch/jdk"
@@ -224,6 +224,7 @@ start_target_cluster() {
     local heap_size="30g"  # DO NOT SURPASS 31GB
     
     log_info "Starting target cluster on port $MERGE_CLUSTER_PORT"
+    log_info "Target data directory: $target_data_dir"
     
     # Start target cluster optimized for write operations with reindex whitelist
     ES_JAVA_OPTS="-Xms${heap_size} -Xmx${heap_size}" \
@@ -262,45 +263,31 @@ discover_and_merge_indexes() {
     
     local cluster_pids_file="/tmp/source_clusters_${SLURM_JOB_ID}.txt"
     if [ ! -f "$cluster_pids_file" ]; then
-        log_error "Source cluster info not found"
+        log_error "Cluster info file not found"
         return 1
     fi
     
-    local cluster_pids=($(cat "$cluster_pids_file"))
+    read -ra cluster_infos < "$cluster_pids_file"
+    
     local source_configs=()
     local total_expected_docs=0
     
-    # ENHANCED index discovery with validation
-    for cluster_info in "${cluster_pids[@]}"; do
-        local pid=$(echo "$cluster_info" | cut -d: -f1)
+    log_info "Scanning ${#cluster_infos[@]} source clusters for indexes..."
+    
+    # Discover indexes from each source cluster
+    for cluster_info in "${cluster_infos[@]}"; do
         local port=$(echo "$cluster_info" | cut -d: -f2)
         local data_dir=$(echo "$cluster_info" | cut -d: -f3)
         
-        log_info "Validating cluster on port $port..."
+        log_info "Querying cluster on port $port ($(basename "$data_dir"))"
         
-        # VERIFY cluster is still healthy
-        if ! test_elasticsearch_connection "127.0.0.1" "$port"; then
-            log_error "Source cluster on port $port is not healthy"
-            return 1
-        fi
+        # Get all indexes from this cluster with document counts
+        local indexes_response=$(safe_curl -s "http://127.0.0.1:$port/_cat/indices?v&h=index,docs.count")
         
-        # Get indexes with validation
-        local indexes_response
-        if ! indexes_response=$(safe_curl -s "http://127.0.0.1:$port/_cat/indices?h=index,docs.count" 2>&1); then
-            log_error "Failed to get indexes from port $port: $indexes_response"
-            return 1
-        fi
-        
-        # Validate response format
-        if echo "$indexes_response" | grep -q "<!DOCTYPE\|<html\|<head\|<body"; then
-            log_error "Received HTML error page from port $port"
-            log_error "Response: $(echo "$indexes_response" | head -3)"
-            return 1
-        fi
-        
-        # Process indexes with document counts
-        while read -r line; do
-            if [ -n "$line" ] && [[ ! "$line" =~ ^\. ]]; then  # Skip system indexes
+        # Parse indexes matching SOURCE_INDEX_PATTERNS
+        while IFS= read -r line; do
+            # Skip header and empty lines
+            if [[ ! "$line" =~ ^index ]] && [[ ! "$line" =~ ^$ ]] && [[ ! "$line" =~ ^\. ]]; then  # Skip system indexes
                 local index_name=$(echo "$line" | awk '{print $1}')
                 local doc_count=$(echo "$line" | awk '{print $2}' | grep -o '[0-9]*' || echo "0")
                 
@@ -373,140 +360,75 @@ discover_and_merge_indexes() {
             return 1
         fi
         
-        log_success "Merge verification passed:"
-        log_info "  - Target index exists: ✓"
-        log_info "  - Document count: $final_count"
-        log_info "  - Expected documents: $total_expected_docs"
+        local percentage=$((final_count * 100 / total_expected_docs))
+        log_success "Final index count: $final_count / $total_expected_docs documents ($percentage%)"
         
-        if [ "$final_count" -lt $((total_expected_docs * 95 / 100)) ]; then
-            log_warn "Document count is significantly lower than expected"
+        if [ $percentage -lt 95 ]; then
+            log_warn "Warning: Less than 95% of documents were merged"
         fi
         
         return 0
     else
-        log_error "Python merge script failed"
+        log_error "Merge failed!"
         return 1
     fi
 }
 
-# Cleanup function - called on script exit
+# Cleanup function
 cleanup() {
-    log_info "=== Cleaning up ==="
-    
-    # Restore original proxy settings
-    if [ -n "$ORIGINAL_HTTP_PROXY" ]; then
-        export http_proxy="$ORIGINAL_HTTP_PROXY"
-    fi
-    if [ -n "$ORIGINAL_HTTPS_PROXY" ]; then
-        export https_proxy="$ORIGINAL_HTTPS_PROXY"
-    fi
-    if [ -n "$ORIGINAL_NO_PROXY" ]; then
-        export no_proxy="$ORIGINAL_NO_PROXY"
-    fi
+    local exit_code=$?
+    log_info "=== Cleanup ==="
     
     # Stop target cluster
-    if [ ! -z "$TARGET_ES_PID" ] && kill -0 $TARGET_ES_PID 2>/dev/null; then
-        log_info "Stopping target cluster (PID: $TARGET_ES_PID)..."
-        kill $TARGET_ES_PID
-        wait $TARGET_ES_PID 2>/dev/null || true
-        log_info "Target cluster stopped"
+    if [ ! -z "$TARGET_ES_PID" ]; then
+        log_info "Stopping target cluster (PID $TARGET_ES_PID)"
+        kill $TARGET_ES_PID 2>/dev/null || true
+        sleep 5
+        kill -9 $TARGET_ES_PID 2>/dev/null || true
     fi
     
-    # Stop all source clusters
+    # Stop source clusters
     local cluster_pids_file="/tmp/source_clusters_${SLURM_JOB_ID}.txt"
     if [ -f "$cluster_pids_file" ]; then
-        local cluster_pids=($(cat "$cluster_pids_file"))
-        for cluster_info in "${cluster_pids[@]}"; do
+        while IFS= read -r cluster_info; do
             local pid=$(echo "$cluster_info" | cut -d: -f1)
-            if kill -0 $pid 2>/dev/null; then
-                log_info "Stopping source cluster PID $pid..."
-                kill $pid
-                wait $pid 2>/dev/null || true
-            fi
-        done
-        log_info "All source clusters stopped"
+            log_info "Stopping source cluster (PID $pid)"
+            kill $pid 2>/dev/null || true
+            sleep 2
+            kill -9 $pid 2>/dev/null || true
+        done < "$cluster_pids_file"
+        rm -f "$cluster_pids_file"
     fi
     
-    # Show final results if accessible
-    log_info "=== Final Results ==="
-    if safe_curl -s "http://127.0.0.1:$MERGE_CLUSTER_PORT/_cat/indices?v" 2>/dev/null; then
-        echo "Final target cluster indexes:"
-        safe_curl -s "http://127.0.0.1:$MERGE_CLUSTER_PORT/_cat/indices?v"
-    else
-        log_info "Target cluster no longer accessible for final status"
-    fi
-    
-    # Clean up temporary files
-    rm -f /tmp/source_clusters_${SLURM_JOB_ID}.txt
-    
-    log_info "Cleanup completed"
+    log_info "Cleanup complete"
+    exit $exit_code
 }
 
-# Main execution function
+trap cleanup EXIT INT TERM
+
+# Main execution
 main() {
-    log_info "=== Cluster-Level Index Merge Started ==="
-    log_info "Job ID: ${SLURM_JOB_ID}"
-    log_info "Timestamp: $(date)"
+    log_info "=== Starting Elasticsearch Index Merge ==="
     
-    # CRITICAL: Configure proxy bypass FIRST
     configure_proxy_bypass
-    
     show_configuration
     
-    # Set cleanup trap to run on script exit
-    trap cleanup EXIT
-    
-    # Enhanced startup validation
-    # Step 1: Start source clusters (one per data directory)
-    log_info "=== STEP 1: Starting Source Clusters ==="
     if ! start_source_clusters; then
         log_error "Failed to start source clusters"
         exit 1
     fi
     
-    # Step 2: Start target cluster for merged data
-    log_info "=== STEP 2: Starting Target Cluster ==="
     if ! start_target_cluster; then
         log_error "Failed to start target cluster"
         exit 1
     fi
     
-    # CRITICAL: Wait for all clusters to be stable
-    log_info "Waiting for all clusters to stabilize..."
-    sleep 60
-    
-    # Validate all clusters before merge
-    if ! test_elasticsearch_connection "127.0.0.1" "$MERGE_CLUSTER_PORT"; then
-        log_error "Target cluster failed stability check"
-        exit 1
-    fi
-    
-    # Step 3: Discover indexes and execute merge
-    log_info "=== STEP 3: Discovering and Merging Indexes ==="
     if ! discover_and_merge_indexes; then
-        log_error "Merge process failed"
+        log_error "Merge operation failed"
         exit 1
     fi
     
-    # FINAL verification before declaring success
-    log_info "=== Final System Verification ==="
-    local final_health=$(safe_curl -s "http://127.0.0.1:$MERGE_CLUSTER_PORT/_cluster/health")
-    local final_indices=$(safe_curl -s "http://127.0.0.1:$MERGE_CLUSTER_PORT/_cat/indices?v")
-    
-    log_info "Cluster health: $final_health"
-    log_info "Final indices:"
-    echo "$final_indices"
-    
-    # Check if our target index is in the list
-    if echo "$final_indices" | grep -q "$TARGET_INDEX"; then
-        log_success "=== MERGE COMPLETED AND VERIFIED ==="
-        log_info "Target index '$TARGET_INDEX' is available on port $MERGE_CLUSTER_PORT"
-        exit 0
-    else
-        log_error "=== MERGE FAILED - TARGET INDEX NOT FOUND ==="
-        exit 1
-    fi
+    log_success "=== Merge completed successfully ==="
 }
 
-# Execute main function with all arguments
-main "$@"
+main
