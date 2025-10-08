@@ -58,6 +58,7 @@ set -e
 # 1. 2 jobs, 15k-8-16: 927024-927025
 # 2. 2 jobs, 10k-16-32: 927098-927099
 # 3. 2 jobs, 20k-8-16: 927100-927101
+# none of these jobs rendered a deduplicated index
 
 # Data and indexing parameters
 # DATA_DIR="${DATA_DIR:-/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-2-quality_33-filterrobots-merge_euro-mid}"

@@ -25,6 +25,13 @@ RUN python3 -m pip install --upgrade pip && \
     urllib3 \
     && rm -rf ~/.cache/pip
 
+RUN python3 -m pip install \
+    transformers \
+    torch \
+    tqdm \
+    datasets \ 
+    && rm -rf ~/.cache/pip
+
 # Ensure curl is executable
 RUN chmod +x /usr/bin/curl
 
