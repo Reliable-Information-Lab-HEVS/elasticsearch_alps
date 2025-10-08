@@ -1,6 +1,6 @@
-# ElasticSearch Deployment on Clariden ALPS CSCS Cluster
+# Apertus Pre-Training data indexing
 
-# Welcome
+An ElasticSearch Deployment on Clariden ALPS CSCS Cluster
 
 ## Repository structure :books:
 -- **scripts** \
