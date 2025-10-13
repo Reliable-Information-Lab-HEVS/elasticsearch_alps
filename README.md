@@ -1,6 +1,7 @@
 # Apertus Pre-Training data indexing
 
-An ElasticSearch Deployment on Clariden ALPS CSCS Cluster
+An ElasticSearch Deployment on Clariden ALPS CSCS Cluster. 
+This is the supporting code for the paper "Getting Your Indices in a Row: Full-Text Search for LLM Training Data for Real World" by Ines Altemir Marinas, Anastasiia Kucherenko, Alexander Sternfeld, Andrei Kucharavy, available at http://arxiv.org/abs/2510.09471. 
 
 ## Repository structure :books:
 -- **scripts** \
@@ -62,8 +63,7 @@ The container_image folder contains the Dockerfile for the Container Image. Exac
 
 Explain code, how to run it, basic parameters to set (remove your specific names and paths)
 
-## Search (provide examples?)
-
+## Search 
 We explain the different types of search queries implemented in this Elasticsearch search queries pipeline. Each query type serves different search scenarios and has specific use cases, limitations, and performance characteristics.
 
 ### Query Types Overview
