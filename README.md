@@ -61,7 +61,7 @@ The container_image folder contains the Dockerfile for the Container Image. Exac
 
 ## Index
 
-Explain code, how to run it, basic parameters to set (remove your specific names and paths)
+The main code part running the indexing of the data. 
 
 ## Search 
 We explain the different types of search queries implemented in this Elasticsearch search queries pipeline. Each query type serves different search scenarios and has specific use cases, limitations, and performance characteristics.
