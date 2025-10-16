@@ -35,13 +35,14 @@ This is the supporting code for the paper "Getting Your Indices in a Row: Full-T
 
 ## Container Creation
 The container_image folder contains the Dockerfile for the Container Image. Exact instructions on how to proceed are:
-1. There is a created Dockerfile with desired packages, in `container_image/` folder 
+0. Clone the repository, typically in `/capstor/scratch/cscs/<username>/`. 
+1. There is a created `Dockerfile` with desired packages, in `container_image/` folder of the repository.
 2. Ensure you're in the directory containing the `Dockerfile` and run:
-    `podman build -t image:tag .`
-3. `enroot import -x mount -o <image_name.sqsh> podman://image:tag`
-4. Create `.toml` file in home directory `/.edf` path. 
+    `podman build -t image:tag .`. It might ask you which image to use, in that case you should select `elastic/elasticsearch:7.17.28`. You can also directly specify it by replacing the `image:tag`.
+3. `enroot import -x mount -o <image_name.sqsh> podman://image:tag`. `<image_name.sqsh>` can be replaced with any name, just make sure the file is being created after you run that command. If this commands does not work, you can run `podman images` to get a list of the images detected, and use their image and tag for this command. 
+4. Create `<env_name>.toml` file in `~/.edf/` directory. 
     ```python
-    image = "/container_image/<image_name.sqsh>"
+    image = "./container_image/<image_name.sqsh>"
     workdir = "/capstor/scratch/cscs/<username>"
     writable = true
     mounts = [
@@ -53,9 +54,9 @@ The container_image folder contains the Dockerfile for the Container Image. Exac
     [annotations.com.hooks.ssh]
     enabled = "true"
     ```
-    Mount every directory you wish to be able to work from with this container.
+    Mount every directory you wish to be able to work from with this container. Make sure to put the correct path for the image (relative to where you will execute the `srun` in the next step) and ensure that the directories `es-data` and `es-logs` exist before performing the next operation.  
         
-5. Open the container with: `srun -A a-<account_number> --environment=<image_name> --pty bash`
+5. Open the container with: `srun -A a-<account_number> --environment=<env_name> --pty bash`, where `<env_name>` is the name you gave to the `.toml` file above.
 
 # Scripts
 
