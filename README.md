@@ -35,6 +35,7 @@ This is the supporting code for the paper "Getting Your Indices in a Row: Full-T
 
 ## Container Creation
 The container_image folder contains the Dockerfile for the Container Image. Exact instructions on how to proceed are:
+
 0. Clone the repository, typically in `/capstor/scratch/cscs/<username>/`. 
 1. There is a created `Dockerfile` with desired packages, in `container_image/` folder of the repository.
 2. Ensure you're in the directory containing the `Dockerfile` and run:
