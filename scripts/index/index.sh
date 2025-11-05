@@ -8,8 +8,6 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=256G
 
-#SBATCH --output=/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/swissai-fineweb-2-quality_33-filterrobots-merge_euro-mid/output/indexing_%j.out
-#SBATCH --error=/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/swissai-fineweb-2-quality_33-filterrobots-merge_euro-mid/err/indexing_%j.err
 #SBATCH --environment=es-python
 
 # FineWeb Dataset Indexing Script with Multi-Process Support
@@ -108,9 +106,9 @@ start_elasticsearch() {
     log_info "Using heap settings: $CUSTOM_HEAP"
     log_info "Workers will use remaining memory (~8GB per worker for $NUM_WORKERS workers)"
     
-    
-    local job_data_dir="/iopsstor/scratch/cscs/inesaltemir/es-data-septemberv1-${INDEX_NAME}-${SLURM_JOB_ID}"
-    local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-logs-septemberv1-${INDEX_NAME}-${SLURM_JOB_ID}"
+    CURRENT_USER="${SLURM_JOB_USER:-$USER}"
+    local job_data_dir="/iopsstor/scratch/cscs/${CURRENT_USER}/es-data${INDEX_NAME}-${SLURM_JOB_ID}"
+    local job_logs_dir="/iopsstor/scratch/cscs/${CURRENT_USER}/es-logs${INDEX_NAME}-${SLURM_JOB_ID}"
    
 
     mkdir -p "$job_data_dir"
@@ -140,7 +138,7 @@ start_elasticsearch() {
         -E logger.root=INFO \
         -E http.max_content_length=200mb \
         -E thread_pool.write.queue_size=2000 \
-        -E thread_pool.write.size=32 &
+        -E thread_pool.write.size=1 &
 
     ES_PID=$!
     log_info "Elasticsearch started with PID: $ES_PID"
@@ -303,9 +301,10 @@ run_indexing() {
     # Increase file descriptor limit for multi-process
     ulimit -n 65536
     
+    CURRENT_USER="${SLURM_JOB_USER:-$USER}"
 
     # Base Python command with multi-process parameters
-    base_cmd="python3 /capstor/scratch/cscs/inesaltemir/scripts/indexing/index_detokenized_v2.py \
+    base_cmd="python3 /capstor/scratch/cscs/\"$CURRENT_USER\"/apertus-pretraining-data-indexing/scripts/index/index.py \
         --data-dir \"$DATA_DIR\" \
         --batch-size $BATCH_SIZE \
         --chunk-size 50000 \
