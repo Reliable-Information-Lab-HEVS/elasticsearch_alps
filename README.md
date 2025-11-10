@@ -138,4 +138,9 @@ execute_fuzzy_query = True
 execute_bool_must_query = False  
 ```
 
+**Notes**
+When coding on windows and doing scp, use this to remove Windows CLRF tokens:
+```bash
+sed -i 's/\r$//' /path/to/index.sh
+```
 
