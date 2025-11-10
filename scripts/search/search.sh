@@ -30,16 +30,16 @@ ES_HOST="${ES_HOST:-127.0.0.1}"
 ES_PORT="${ES_PORT:-9200}"
 
 DATASET="${DATASET:-pure_text}"
-
-PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/inesaltemir/es-data-target-september_brouillon1-923479}"
+CURRENT_USER="${SLURM_JOB_USER:-$USER}"
+PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/${CURRENT_USER}/es-data-target_brouillon}"
 
 
 # MULTI-CSV SUPPORT: CSV_FILES is now a space-separated list
-CSV_FILES="${CSV_FILES:-/capstor/scratch/cscs/inesaltemir/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv}"
+CSV_FILES="${CSV_FILES:-/capstor/scratch/cscs/${CURRENT_USER}/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv}"
 
 INDEX_NAME="${INDEX_NAME:-september_brouillon1}" 
 
-OUTPUT_DIR_BASE="${OUTPUT_DIR_BASE:-/capstor/scratch/cscs/inesaltemir/SEARCH_RESULTS}"
+OUTPUT_DIR_BASE="${OUTPUT_DIR_BASE:-/capstor/scratch/cscs/${CURRENT_USER}/SEARCH_RESULTS}"
 
 ES_URL="http://${ES_HOST}:${ES_PORT}"
 
@@ -234,8 +234,8 @@ start_elasticsearch() {
     fi
     
     log_info "Using heap settings: $JAVA_OPTS"
-
-    local job_logs_dir="/iopsstor/scratch/cscs/inesaltemir/es-search-logs-${SLURM_JOB_ID:-$$}"
+    CURRENT_USER="${SLURM_JOB_USER:-$USER}"
+    local job_logs_dir="/iopsstor/scratch/cscs/${CURRENT_USER}/es-search-logs-${SLURM_JOB_ID:-$$}"
     mkdir -p "$job_logs_dir"
 
     local job_data_dir="$PATH_DATA"
