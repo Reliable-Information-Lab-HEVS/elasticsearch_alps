@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=256G
 
-#SBATCH --environment=es-python
+#SBATCH --environment=elasticsearch
 
 # FineWeb Dataset Indexing Script with Multi-Process Support
 set -e
@@ -304,7 +304,7 @@ run_indexing() {
     CURRENT_USER="${SLURM_JOB_USER:-$USER}"
 
     # Base Python command with multi-process parameters
-    base_cmd="python3 /capstor/scratch/cscs/\"$CURRENT_USER\"/apertus-pretraining-data-indexing/scripts/index/index.py \
+    base_cmd="python3 /capstor/scratch/cscs/\"$CURRENT_USER\"/apertus-pretraining-data-indexing/scripts/index/index_with_metadata.py \
         --data-dir \"$DATA_DIR\" \
         --batch-size $BATCH_SIZE \
         --chunk-size 50000 \
@@ -315,7 +315,8 @@ run_indexing() {
         --max-chunk-bytes $MAX_CHUNK_BYTES \
         --thread-count $THREAD_COUNT \
         --queue-size $QUEUE_SIZE \
-        --num-workers $NUM_WORKERS"
+        --num-workers $NUM_WORKERS \
+	--metadata-fields text"
 
     # Add file range arguments if specified
     if [[ -n "$FILE_RANGE_START" && -n "$FILE_RANGE_END" ]]; then

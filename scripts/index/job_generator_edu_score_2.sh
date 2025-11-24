@@ -2,18 +2,17 @@
 # Generate SLURM job submission commands for Elasticsearch indexing with file range splitting
 
 # Configuration
-DATA_DIR_PATTERN="${DATA_DIR_PATTERN:-/capstor/scratch/cscs/inesaltemir/detokenized_output/swissai-fineweb-edu-score-2-filterrobots-merge_part_*}"
-TOTAL_JOBS="${TOTAL_JOBS:-35}"
-# SCRIPT_PATH="/capstor/scratch/cscs/inesaltemir/scripts/indexing/index_detokenized_v2.sh"
-SCRIPT_PATH="/capstor/scratch/cscs/inesaltemir/scripts/indexing/index_detokenized_with_id.sh"
+DATA_DIR_PATTERN="${DATA_DIR_PATTERN:-/iopsstor/scratch/cscs/arthur/megamath-web/megamath-web/data/output}"
+TOTAL_JOBS="${TOTAL_JOBS:-5}"
+SCRIPT_PATH="/capstor/scratch/cscs/arthur/apertus-pretraining-data-indexing/scripts/index/index.sh"
 
 # Extract index name from data directory pattern (last component before wildcard)
 # Example: /path/to/dataset_part_* -> dataset
-INDEX_BASE_NAME="${INDEX_BASE_NAME:-swissai-fineweb-edu-score-2-filterrobots-merge}"
+INDEX_BASE_NAME="${INDEX_BASE_NAME:=megamath-web-pro}"
 
 # Output directories for logs
-OUTPUT_DIR="${OUTPUT_DIR:-/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/${INDEX_BASE_NAME}/output}"
-ERROR_DIR="${ERROR_DIR:-/capstor/scratch/cscs/inesaltemir/INDEXING_TOKENIZED/${INDEX_BASE_NAME}/err}"
+OUTPUT_DIR="${OUTPUT_DIR:-/iopsstor/scratch/cscs/arthur/${INDEX_BASE_NAME}/output}"
+ERROR_DIR="${ERROR_DIR:-/iopsstor/scratch/cscs/arthur/${INDEX_BASE_NAME}/err}"
 
 # Performance parameters
 # batch_size: 5k is too small (too much http overhead, too many small bulk requests)
