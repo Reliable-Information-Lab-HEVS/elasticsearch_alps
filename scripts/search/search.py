@@ -650,6 +650,15 @@ class ElasticsearchQueryBenchmark:
         except Exception as e:
             print(f"Error processing CSV file: {e}")
             sys.exit(1)
+    def process_string(self, text: str):
+        """Process a single raw input string instead of a CSV file."""
+        text = text.strip()
+        if not text:
+            print("Empty text input")
+            return
+        
+        print(f"Processing single text input: '{text[:50]}{'...' if len(text) > 50 else ''}'")
+        self.run_all_queries(text)
     
     def save_detailed_results(self, filename: str = 'search_results_detailed.json'):
         """Save detailed results to JSON file"""
@@ -790,7 +799,7 @@ def main():
     parser = argparse.ArgumentParser(description="Elasticsearch Search Queries Pipeline - Multi-CSV Support")
         
     # Required arguments
-    parser.add_argument("--csv-files", required=True, nargs='+',
+    parser.add_argument("--csv-files", required=False, nargs='+',
                        help="One or more CSV files containing search queries (one query per line)")
     parser.add_argument("--index-name", required=True,
                        help="Elasticsearch index name to search")
@@ -798,6 +807,9 @@ def main():
                        help="Elasticsearch URL (e.g., http://localhost:9200)")
     parser.add_argument("--output-dir-base", required=True,
                        help="Base directory to save result files (subdirs will be created per CSV)")
+    parser.add_argument("--input-string", type=str,
+                    help="Single text string to query instead of CSV")
+
     
     # Optional configuration
     parser.add_argument("--config", type=str,
@@ -807,6 +819,11 @@ def main():
                        help="Dataset type: 'fineweb' or 'sft' or 'pure_text' (default: fineweb)")
 
     args = parser.parse_args()
+
+    if not args.csv_files and not args.input_string:
+        print("ERROR: You must provide either --csv-files or --input-string")
+        sys.exit(1)
+
     
     # Parse configuration
     config = {}
@@ -837,6 +854,45 @@ def main():
     
     # Process each CSV file separately
     overall_start_time = time.time()
+
+    # If input-string is provided, run single-string mode and exit
+    if args.input_string:
+        print("\n" + "=" * 80)
+        print("PROCESSING DIRECT INPUT STRING")
+        print("=" * 80)
+
+        benchmark = ElasticsearchQueryBenchmark(args.es_url, args.index_name, args.dataset, config)
+
+        # Test ES connection
+        try:
+            response, _ = benchmark._make_request('GET', '')
+            print(f"Connected to Elasticsearch: {response.get('tagline', 'Unknown version')}")
+        except Exception as e:
+            print(f"Failed to connect to Elasticsearch: {e}")
+            sys.exit(1)
+
+        # Run search
+        benchmark.process_string(args.input_string)
+
+        # Save results normally
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        job_id = os.environ.get('SLURM_JOB_ID', 'local')
+
+        detailed_filename = os.path.join(args.output_dir_base, f"search_results_detailed_{job_id}_{timestamp}.json")
+        summary_filename   = os.path.join(args.output_dir_base, f"search_results_summary_{job_id}_{timestamp}.json")
+        fulltext_filename  = os.path.join(args.output_dir_base, f"search_results_fulltext_{job_id}_{timestamp}.json")
+
+        benchmark.save_detailed_results(detailed_filename)
+        benchmark.generate_summary_stats(summary_filename)
+        benchmark.save_full_text_results(fulltext_filename)
+
+        print("\nCompleted processing of direct input string.")
+        print(f"Results saved to {args.output_dir_base}")
+        overall_end_time = time.time()
+        total_time = overall_end_time - overall_start_time
+        print(f"Total execution time: {total_time:.2f} seconds")
+        sys.exit(0)
+
     
     for csv_idx, csv_file in enumerate(args.csv_files, 1):
         print(f"\n{'=' * 80}")
