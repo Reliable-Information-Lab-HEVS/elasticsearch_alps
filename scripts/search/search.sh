@@ -32,7 +32,7 @@ ES_PORT="${ES_PORT:-9200}"
 DATASET="${DATASET:-pure_text}"
 CURRENT_USER="${SLURM_JOB_USER:-$USER}"
 PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/${CURRENT_USER}/es-data-target_brouillon}"
-
+INPUT_STRING="${INPUT_STRING:-}"
 
 # MULTI-CSV SUPPORT: CSV_FILES is now a space-separated list
 CSV_FILES="${CSV_FILES:-/capstor/scratch/cscs/${CURRENT_USER}/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv}"
@@ -149,32 +149,26 @@ if [ -z "$PATH_DATA" ]; then
 fi
 
 
-if [ -z "$CSV_FILES" ]; then
-
-    log_error "CSV_FILES is required"
-
+if [ -z "$CSV_FILES" ] && [ -z "$INPUT_STRING" ]; then
+    log_error "Either CSV_FILES or INPUT_STRING must be provided"
     exit 1
-
 fi
+
 
 
 # Validate CSV files exist
 
 CSV_COUNT=0
+if [ -n "$CSV_FILES" ]; then
+    for csv in $CSV_FILES; do
+        if [ ! -f "$csv" ]; then
+            log_error "CSV file '$csv' not found"
+            exit 1
+        fi
+        CSV_COUNT=$((CSV_COUNT + 1))
+    done
+fi
 
-for csv in $CSV_FILES; do
-
-    if [ ! -f "$csv" ]; then
-
-        log_error "CSV file '$csv' not found"
-
-        exit 1
-
-    fi
-
-    CSV_COUNT=$((CSV_COUNT + 1))
-
-done
 
 if [ ! -d "$PATH_DATA" ]; then
     log_error "Data path '$PATH_DATA' not found"
@@ -575,6 +569,32 @@ main() {
     log_info "Each CSV will have its own output subdirectory"
     log_info "========================================================================="
     log_info ""
+
+
+   if [ -n "$INPUT_STRING" ]; then
+    log_info "Running search on direct text input..."
+    if python3 search.py \
+        --input-string "$INPUT_STRING" \
+        --index-name "$INDEX_NAME" \
+        --es-url "$ES_URL" \
+        --output-dir-base "$OUTPUT_DIR_BASE" \
+        --dataset "$DATASET" \
+        --config "$CONFIG_JSON"; then
+
+        log_success ""
+        log_success "Search pipeline completed successfully (input string mode)!"
+        log_info "Output files saved to: $OUTPUT_DIR_BASE"
+
+        log_info ""
+        log_info "Query configuration used:"
+        echo "$CONFIG_JSON" | python3 -m json.tool 2>/dev/null || echo "$CONFIG_JSON"
+	exit 0
+
+    else
+        log_error "Search pipeline failed (input string mode)!"
+        exit 1
+    fi
+   fi
 
    # Convert CSV_FILES to array for Python
     CSV_FILES_ARRAY=""
