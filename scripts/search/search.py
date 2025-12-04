@@ -837,11 +837,15 @@ def main():
             sys.exit(1)
 
     print("=" * 80)
-    print("Elasticsearch Multi-CSV Search Pipeline Starting...")
+    print("Elasticsearch Search Pipeline Starting...")
     print("=" * 80)
-    print(f"CSV Files ({len(args.csv_files)}):")
-    for csv_file in args.csv_files:
-        print(f"  - {csv_file}")
+    # Only print CSV file info if CSV_FILES were provided
+    if args.csv_files:
+        print(f"CSV Files ({len(args.csv_files)}):")
+        for csv_file in args.csv_files:
+            print(f"  - {csv_file}")
+    else:
+        print("CSV Files: None (using input string mode)")
     print(f"Index: {args.index_name}")
     print(f"ES URL: {args.es_url}")
     print(f"Output Base Directory: {args.output_dir_base}")

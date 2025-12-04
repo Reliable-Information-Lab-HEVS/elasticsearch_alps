@@ -35,7 +35,7 @@ PATH_DATA="${PATH_DATA:-/iopsstor/scratch/cscs/${CURRENT_USER}/es-data-target_br
 INPUT_STRING="${INPUT_STRING:-}"
 
 # MULTI-CSV SUPPORT: CSV_FILES is now a space-separated list
-CSV_FILES="${CSV_FILES:-/capstor/scratch/cscs/${CURRENT_USER}/scripts/search_queries/verbatim_check/fw-edu-score-2_single_index-920282.csv}"
+CSV_FILES="${CSV_FILES:-}"
 
 INDEX_NAME="${INDEX_NAME:-september_brouillon1}" 
 
