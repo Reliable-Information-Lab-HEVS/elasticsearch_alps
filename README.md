@@ -1,8 +1,5 @@
 # Apertus Pre-Training data indexing
 
-An ElasticSearch Deployment on Clariden ALPS CSCS Cluster. 
-This is the supporting code for the paper "Getting Your Indices in a Row: Full-Text Search for LLM Training Data for Real World" by Ines Altemir Marinas, Anastasiia Kucherenko, Alexander Sternfeld, Andrei Kucharavy, available at http://arxiv.org/abs/2510.09471. 
-
 ## Repository structure :books:
 -- **scripts** \
 &nbsp;&nbsp;&nbsp;&nbsp;|--- *detokenize* \
