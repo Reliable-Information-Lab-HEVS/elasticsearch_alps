@@ -13,5 +13,3 @@ Our main objective is to explore the presence and distribution of potentially ha
 * **Obscene Words**: A list of profane and offensive terms. Available at: https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words
 
 * **Chemical Dataset**: List of dangerous chemicals selected from "A Laboratory History Of Chemical Warfare Agents" by Jared Ledgard (2006).
-
-* **Misinformation Keywords**: A ChatGPT-generated list of keywords associated with common misinformation topics.
