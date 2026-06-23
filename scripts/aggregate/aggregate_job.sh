@@ -31,6 +31,8 @@ set -euo pipefail
 DATASET_DIR="${DATASET_DIR:-}"
 DATASET_NAME="${DATASET_NAME:-}"
 MODE="${MODE:-aggregate}"
+BATCH_START="${BATCH_START:-}"
+BATCH_END="${BATCH_END:-}"
 LAYOUT="${LAYOUT:-per-crawl}"
 ONLY_SUBDIR="${ONLY_SUBDIR:-}"
 LANGUAGE="${LANGUAGE:-}"
@@ -127,8 +129,10 @@ cmd=(
     --output-partitions "$OUTPUT_PARTITIONS"
 )
 
-[[ -n "$ONLY_SUBDIR" ]] && cmd+=(--only-subdir "$ONLY_SUBDIR")
-[[ -n "$LANGUAGE"    ]] && cmd+=(--language "$LANGUAGE")
+[[ -n "$ONLY_SUBDIR"  ]] && cmd+=(--only-subdir "$ONLY_SUBDIR")
+[[ -n "$LANGUAGE"     ]] && cmd+=(--language "$LANGUAGE")
+[[ -n "$BATCH_START"  ]] && cmd+=(--batch-start "$BATCH_START")
+[[ -n "$BATCH_END"    ]] && cmd+=(--batch-end "$BATCH_END")
 
 echo "[INFO] Running: ${cmd[*]}"
 "${cmd[@]}" 2>&1

@@ -218,6 +218,10 @@ def main():
                         default="aggregate",
                         help="aggregate: raw parquet → dedup+sources; "
                              "merge: combine per-crawl aggregated outputs globally")
+    parser.add_argument("--batch-start", type=int, default=None,
+                        help="(merge mode) 0-based index of first crawl dir to process (inclusive)")
+    parser.add_argument("--batch-end", type=int, default=None,
+                        help="(merge mode) 0-based index of last crawl dir to process (exclusive)")
     parser.add_argument("--dataset-dir", required=True,
                         help="Root directory containing per-crawl or per-language subdirs "
                              "(aggregate mode), or directory of per-crawl agg outputs (merge mode)")
@@ -250,26 +254,35 @@ def main():
     # ---- Merge mode: read per-crawl aggregated parquet and global-dedup ----
     if args.mode == "merge":
         # dataset_dir contains per-crawl subdirs, each with aggregated parquet
-        crawl_dirs = sorted(d for d in dataset_dir.iterdir() if d.is_dir())
-        if not crawl_dirs:
+        all_crawl_dirs = sorted(d for d in dataset_dir.iterdir() if d.is_dir())
+        if not all_crawl_dirs:
             print(f"[ERROR] No subdirectories found in {dataset_dir}", file=sys.stderr)
             sys.exit(1)
-        input_glob = str(dataset_dir / "*" / "*.parquet")
+        # Optional batch slice
+        start = args.batch_start if args.batch_start is not None else 0
+        end   = args.batch_end   if args.batch_end   is not None else len(all_crawl_dirs)
+        crawl_dirs = all_crawl_dirs[start:end]
+        if not crawl_dirs:
+            print(f"[ERROR] No crawl dirs in slice [{start}:{end}]", file=sys.stderr)
+            sys.exit(1)
+        # Build explicit glob from selected dirs (not wildcard, to respect batch slice)
+        input_paths = [str(d / "*.parquet") for d in crawl_dirs]
         print(f"[INFO] Mode:         merge")
         print(f"[INFO] Dataset dir:  {dataset_dir}")
-        print(f"[INFO] Crawl dirs:   {len(crawl_dirs)}")
-        print(f"[INFO] Input glob:   {input_glob}")
+        print(f"[INFO] Crawl dirs:   {len(crawl_dirs)} of {len(all_crawl_dirs)} (slice [{start}:{end}])")
+        print(f"[INFO] First crawl:  {crawl_dirs[0].name}")
+        print(f"[INFO] Last crawl:   {crawl_dirs[-1].name}")
         print(f"[INFO] Output dir:   {output_dir}")
         output_dir.mkdir(parents=True, exist_ok=True)
 
         spark = build_spark(
-            app_name=f"merge-{dataset_dir.name}",
+            app_name=f"merge-{dataset_dir.name}-{start}-{end}",
             driver_memory=args.driver_memory,
             shuffle_partitions=args.shuffle_partitions,
         )
         print(f"[INFO] Spark UI: {spark.sparkContext.uiWebUrl}")
         print(f"[INFO] Reading per-crawl aggregated parquets ...")
-        df = spark.read.option("mergeSchema", "true").parquet(input_glob)
+        df = spark.read.option("mergeSchema", "true").parquet(*input_paths)
         print(f"[INFO] Schema: {df.columns}")
         merged_df = merge(df)
         print(f"[INFO] Writing globally merged output ({args.output_partitions} partitions) ...")

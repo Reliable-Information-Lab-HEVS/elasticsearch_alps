@@ -68,15 +68,37 @@ def create_index(es: Elasticsearch, index_name: str, size_gb: float,
             "refresh_interval": "30s",
             "index.translog.durability": "async",
             "index.translog.flush_threshold_size": "2gb",
+            "index": {"codec": "best_compression"},
+            "analysis": {
+                "analyzer": {
+                    "web_content_analyzer": {
+                        "type": "custom",
+                        "char_filter": ["html_strip"],
+                        "tokenizer": "standard",
+                        "filter": ["lowercase", "asciifolding"],
+                    }
+                }
+            },
         },
         "mappings": {
+            "dynamic": "false",
             "properties": {
-                "text":         {"type": "text",    "index": False, "store": False},
-                "language":     {"type": "keyword", "index": False, "store": False},
+                # Full-text search field — properly indexed with analyzer
+                "text": {
+                    "type": "text",
+                    "analyzer": "web_content_analyzer",
+                    "index_options": "positions",
+                    "norms": True,
+                    "store": False,
+                },
+                # Filterable keyword fields
+                "language":     {"type": "keyword"},
                 "source_count": {"type": "integer"},
+                # Earliest date across all sources — enables date range filtering
+                "date":         {"type": "date", "format": "strict_date_optional_time||epoch_millis"},
                 # sources stored but not individually indexed — retrieve only
-                "sources":      {"type": "object",  "enabled": False},
-            }
+                "sources":      {"type": "object", "enabled": False},
+            },
         },
     }
 
@@ -125,6 +147,7 @@ def _parse_file(file_path: Path, index_name: str, doc_queue: multiprocessing.Que
                         "text":         rows["text"][i],
                         "language":     rows["language"][i],
                         "source_count": rows["source_count"][i],
+                        "date":         min((s["date"] for s in sources if s.get("date")), default=None),
                         "sources":      sources,
                     },
                 }
@@ -186,7 +209,8 @@ def es_consumer(doc_queue: multiprocessing.Queue, es: Elasticsearch,
 # Validation
 # ============================================================
 
-def validate(es: Elasticsearch, index_name: str, expected: int, stats: Dict) -> bool:
+def validate(es: Elasticsearch, index_name: str, expected: int, stats: Dict,
+             append_mode: bool = False) -> bool:
     logger = logging.getLogger(__name__)
 
     try:
@@ -198,23 +222,39 @@ def validate(es: Elasticsearch, index_name: str, expected: int, stats: Dict) -> 
 
     logger.info("=" * 70)
     logger.info("=== VALIDATION ===")
-    logger.info(f"Unique docs in aggregated parquet: {expected:>15,}")
-    logger.info(f"Reported indexed:                  {stats['indexed']:>15,}")
+    logger.info(f"Unique docs in this batch:         {expected:>15,}")
+    logger.info(f"Reported indexed this run:         {stats['indexed']:>15,}")
     logger.info(f"Reported failed:                   {stats['failed']:>15,}")
-    logger.info(f"ES index actual count:             {es_count:>15,}")
+    logger.info(f"ES index total count:              {es_count:>15,}")
+    if append_mode:
+        logger.info("(append mode — ES total includes prior batches)")
     logger.info("-" * 70)
 
     ok = True
-    if es_count == expected:
-        logger.info("✓ ES count matches exactly")
-    elif es_count < expected:
-        logger.warning(f"ES count {es_count:,} < expected {expected:,} — "
-                       f"{expected - es_count:,} docs missing (possible failures)")
-        if stats["failed"] == 0:
+
+    if append_mode:
+        # In append mode prior batches are already in ES; only check that:
+        #   1. We indexed roughly what we expected (within failure tolerance)
+        #   2. ES total is at least as large as this batch
+        if stats["indexed"] < expected * 0.99 and stats["failed"] == 0:
+            logger.warning(f"Indexed {stats['indexed']:,} but expected ~{expected:,} with 0 failures")
             ok = False
+        if es_count < expected:
+            logger.warning(f"ES count {es_count:,} < this batch {expected:,} — something went wrong")
+            ok = False
+        else:
+            logger.info(f"✓ ES total {es_count:,} >= this batch {expected:,}")
     else:
-        logger.error(f"ES count {es_count:,} > expected {expected:,} — duplication bug!")
-        ok = False
+        if es_count == expected:
+            logger.info("✓ ES count matches exactly")
+        elif es_count < expected:
+            logger.warning(f"ES count {es_count:,} < expected {expected:,} — "
+                           f"{expected - es_count:,} docs missing (possible failures)")
+            if stats["failed"] == 0:
+                ok = False
+        else:
+            logger.error(f"ES count {es_count:,} > expected {expected:,} — duplication bug!")
+            ok = False
 
     if stats["failed"] > 0:
         fail_rate = stats["failed"] / max(expected, 1)
@@ -247,11 +287,17 @@ def main():
     parser.add_argument("--keep-existing-index", action="store_true",
                         help="Skip index deletion if it already exists")
 
+    # File-range splitting for multi-job chaining
+    parser.add_argument("--file-range-start", type=int, default=None,
+                        help="First file index (0-based, inclusive) to process in this job")
+    parser.add_argument("--file-range-end", type=int, default=None,
+                        help="Last file index (0-based, inclusive) to process in this job")
+
     # Performance
     parser.add_argument("--num-workers",      type=int, default=8)
     parser.add_argument("--chunk-size",       type=int, default=5000)
     parser.add_argument("--batch-size",       type=int, default=12500)
-    parser.add_argument("--max-chunk-bytes",  type=int, default=150,  help="MB")
+    parser.add_argument("--max-chunk-bytes",  type=int, default=50,   help="MB")
     parser.add_argument("--thread-count",     type=int, default=4)
     parser.add_argument("--queue-size",       type=int, default=8)
 
@@ -273,12 +319,20 @@ def main():
         logger.error(f"data-dir not found: {data_dir}")
         sys.exit(1)
 
-    files = sorted(data_dir.glob("*.parquet"))
-    if not files:
+    all_files = sorted(data_dir.glob("*.parquet"))
+    if not all_files:
         # Aggregated output might be in sub-partitions
-        files = sorted(data_dir.glob("**/*.parquet"))
-    if not files:
+        all_files = sorted(data_dir.glob("**/*.parquet"))
+    if not all_files:
         logger.error(f"No parquet files found in {data_dir}")
+        sys.exit(1)
+
+    # Apply file-range slicing for multi-job chaining
+    start_idx = args.file_range_start if args.file_range_start is not None else 0
+    end_idx   = args.file_range_end   if args.file_range_end   is not None else len(all_files) - 1
+    files = all_files[start_idx : end_idx + 1]
+    if not files:
+        logger.error(f"No files in range [{start_idx}, {end_idx}] (total: {len(all_files)})")
         sys.exit(1)
 
     total_bytes = sum(f.stat().st_size for f in files)
@@ -289,17 +343,27 @@ def main():
         pq.ParquetFile(str(f)).metadata.num_rows for f in files
     )
 
+    range_str = f" [{start_idx}–{end_idx}]" if (args.file_range_start is not None or args.file_range_end is not None) else ""
     logger.info("=" * 70)
     logger.info("=== Phase 2: Indexing Aggregated Data ===")
     logger.info(f"Data dir:     {data_dir}")
-    logger.info(f"Files:        {len(files)}, {total_gb:.2f} GB")
+    logger.info(f"All files:    {len(all_files)}")
+    logger.info(f"This batch:   {len(files)} files{range_str}, {total_gb:.2f} GB")
     logger.info(f"Unique docs:  {ground_truth:,}")
     logger.info(f"Index:        {args.index_name}")
+    logger.info(f"Keep index:   {args.keep_existing_index}")
     logger.info(f"Workers:      {args.num_workers}")
     logger.info("=" * 70)
 
     # ---- Connect to ES ----
-    es = Elasticsearch([{"host": args.es_host, "port": args.es_port}])
+    # Use a long timeout: bulk requests with 150 MB of text can take >10s on a
+    # loaded ES node. retry_on_timeout is safe because we use SHA256 as _id.
+    es = Elasticsearch(
+        [{"host": args.es_host, "port": args.es_port}],
+        timeout=300,
+        retry_on_timeout=True,
+        max_retries=3,
+    )
     try:
         es.info()
         logger.info(f"Connected to Elasticsearch at {args.es_host}:{args.es_port}")
@@ -378,7 +442,8 @@ def main():
         logger.info(f"Rate:    {stats['indexed'] / duration:.0f} docs/sec")
 
     # ---- Validate ----
-    ok = validate(es, args.index_name, ground_truth, stats)
+    ok = validate(es, args.index_name, ground_truth, stats,
+                  append_mode=args.keep_existing_index)
 
     if ok:
         logger.info("=== Indexing Job Completed Successfully ===")
