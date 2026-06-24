@@ -3,14 +3,19 @@
 Phase 2: Index aggregated parquet output into Elasticsearch.
 
 Reads the fixed schema produced by spark_aggregate.py:
-  sha256        string  -- pre-computed SHA256, used as ES _id
+  sha256        string   -- pre-computed SHA256, used as ES _id
   text          string
-  language      string
+  language      string   -- top-level for fast keyword filtering
+  date          string   -- earliest crawl date across all sources
   source_count  integer
-  sources       array of {id, url, date, file_path, folder_path}
+  sources       array of {dataset, id, language, date, url, language_score, folder_path}
 
 No deduplication is performed here — that was fully handled in Phase 1.
 Each row becomes exactly one ES document.
+
+language and date are arrays at the top level (unique values across all sources),
+enabling fast ES keyword/date range filtering. All other per-source detail lives
+in sources[] which is stored but not indexed.
 
 Usage
 -----
@@ -83,7 +88,7 @@ def create_index(es: Elasticsearch, index_name: str, size_gb: float,
         "mappings": {
             "dynamic": "false",
             "properties": {
-                # Full-text search field — properly indexed with analyzer
+                # Full-text search
                 "text": {
                     "type": "text",
                     "analyzer": "web_content_analyzer",
@@ -91,13 +96,13 @@ def create_index(es: Elasticsearch, index_name: str, size_gb: float,
                     "norms": True,
                     "store": False,
                 },
-                # Filterable keyword fields
-                "language":     {"type": "keyword"},
-                "source_count": {"type": "integer"},
-                # Earliest date across all sources — enables date range filtering
-                "date":         {"type": "date", "format": "strict_date_optional_time||epoch_millis"},
-                # sources stored but not individually indexed — retrieve only
-                "sources":      {"type": "object", "enabled": False},
+                # Core filterable fields
+                "language":      {"type": "keyword"},           # array of unique languages
+                "date":          {"type": "date", "format": "strict_date_optional_time||epoch_millis"},  # array of unique dates
+                "source_count":  {"type": "integer"},
+                "datasets":      {"type": "keyword"},           # array of dataset names
+                # Full provenance stored but not indexed — use for retrieval only
+                "sources":       {"type": "object", "enabled": False},
             },
         },
     }
@@ -110,12 +115,24 @@ def create_index(es: Elasticsearch, index_name: str, size_gb: float,
 # Document parsing worker
 # ============================================================
 
-def _parse_file(file_path: Path, index_name: str, doc_queue: multiprocessing.Queue,
-                chunk_size: int) -> int:
+def _coerce_list(v):
+    """Ensure v is a list: wrap scalars, pass lists through, return [] for None."""
+    if v is None:
+        return []
+    if isinstance(v, list):
+        return [x for x in v if x is not None]
+    return [v]
+
+
+def _parse_file(file_path: Path, index_name: str, op_type: str,
+                doc_queue: multiprocessing.Queue, chunk_size: int) -> int:
     """Read one aggregated parquet file and push docs to queue. Returns doc count."""
     count = 0
     try:
         pf = pq.ParquetFile(str(file_path))
+        schema_names = pf.schema_arrow.names
+        has_date = "date" in schema_names
+
         for batch in pf.iter_batches(batch_size=chunk_size):
             rows = batch.to_pydict()
             n = len(rows["sha256"])
@@ -125,29 +142,46 @@ def _parse_file(file_path: Path, index_name: str, doc_queue: multiprocessing.Que
                 if sha256 is None:
                     continue
                 sources_raw = rows["sources"][i]
-                # pyarrow returns list of dicts (or list of Row objects)
                 if sources_raw is not None:
                     sources = [
                         {
-                            "id":          s.get("id"),
-                            "url":         s.get("url"),
-                            "date":        s.get("date"),
-                            "file_path":   s.get("file_path"),
-                            "folder_path": s.get("folder_path"),
+                            "dataset":        s.get("dataset"),
+                            "id":             s.get("id"),
+                            "language":       s.get("language"),
+                            "date":           s.get("date"),
+                            "url":            s.get("url"),
+                            "language_score": s.get("language_score"),
+                            "folder_path":    s.get("folder_path"),
                         }
                         for s in sources_raw
                     ]
                 else:
                     sources = []
 
+                # language may be a string (per-language agg output) or a list (merged output)
+                language = _coerce_list(rows["language"][i])
+                # date column may be absent (FW2 per-language agg has no top-level date);
+                # fall back to unique dates collected from sources[]
+                if has_date:
+                    date = _coerce_list(rows["date"][i])
+                else:
+                    seen = []
+                    for s in sources:
+                        d = s.get("date")
+                        if d and d not in seen:
+                            seen.append(d)
+                    date = seen
+
                 doc = {
-                    "_id":    sha256,
-                    "_index": index_name,
+                    "_id":      sha256,
+                    "_index":   index_name,
+                    "_op_type": op_type,
                     "_source": {
                         "text":         rows["text"][i],
-                        "language":     rows["language"][i],
+                        "language":     language,
+                        "date":         date,
                         "source_count": rows["source_count"][i],
-                        "date":         min((s["date"] for s in sources if s.get("date")), default=None),
+                        "datasets":     sorted({s["dataset"] for s in sources if s.get("dataset")}),
                         "sources":      sources,
                     },
                 }
@@ -163,11 +197,12 @@ def _parse_file(file_path: Path, index_name: str, doc_queue: multiprocessing.Que
     return count
 
 
-def parse_worker(file_list: List[Path], index_name: str, doc_queue: multiprocessing.Queue,
+def parse_worker(file_list: List[Path], index_name: str, op_type: str,
+                 doc_queue: multiprocessing.Queue,
                  chunk_size: int, result_queue: multiprocessing.Queue) -> None:
     total = 0
     for fp in file_list:
-        total += _parse_file(fp, index_name, doc_queue, chunk_size)
+        total += _parse_file(fp, index_name, op_type, doc_queue, chunk_size)
     result_queue.put(total)
 
 
@@ -201,8 +236,14 @@ def es_consumer(doc_queue: multiprocessing.Queue, es: Elasticsearch,
         if ok:
             stats["indexed"] += 1
         else:
-            stats["failed"] += 1
-            logger.warning(f"Failed doc: {info}")
+            action_info = info.get("create", info.get("index", info))
+            err = action_info.get("error", {})
+            if err.get("type") == "version_conflict_engine_exception":
+                # op_type=create, document already exists — expected when appending
+                stats["skipped"] += 1
+            else:
+                stats["failed"] += 1
+                logger.warning(f"Failed doc: {info}")
 
 
 # ============================================================
@@ -224,6 +265,7 @@ def validate(es: Elasticsearch, index_name: str, expected: int, stats: Dict,
     logger.info("=== VALIDATION ===")
     logger.info(f"Unique docs in this batch:         {expected:>15,}")
     logger.info(f"Reported indexed this run:         {stats['indexed']:>15,}")
+    logger.info(f"Reported skipped (dup SHA256):     {stats.get('skipped', 0):>15,}")
     logger.info(f"Reported failed:                   {stats['failed']:>15,}")
     logger.info(f"ES index total count:              {es_count:>15,}")
     if append_mode:
@@ -285,7 +327,11 @@ def main():
     parser.add_argument("--es-host", default="localhost")
     parser.add_argument("--es-port", type=int, default=9200)
     parser.add_argument("--keep-existing-index", action="store_true",
-                        help="Skip index deletion if it already exists")
+                        help="Skip index deletion if it already exists (append mode)")
+    parser.add_argument("--op-type", default="index", choices=["index", "create"],
+                        help="ES op_type: 'index' (upsert) or 'create' (skip if _id exists). "
+                             "Use 'create' when appending a dataset to an existing index so "
+                             "duplicate SHA256s from a prior dataset are silently skipped.")
 
     # File-range splitting for multi-job chaining
     parser.add_argument("--file-range-start", type=int, default=None,
@@ -393,7 +439,7 @@ def main():
             continue
         p = ctx.Process(
             target=parse_worker,
-            args=(wfiles, args.index_name, doc_queue,
+            args=(wfiles, args.index_name, args.op_type, doc_queue,
                   args.chunk_size, result_queue),
             daemon=True,
         )
@@ -401,7 +447,7 @@ def main():
         workers.append(p)
 
     # ---- ES consumer in main thread ----
-    stats = {"indexed": 0, "failed": 0}
+    stats = {"indexed": 0, "failed": 0, "skipped": 0}
     stop_event = threading.Event()
 
     total_start = time.time()
@@ -435,11 +481,12 @@ def main():
 
     logger.info("=" * 70)
     logger.info(f"Indexing complete in {duration:.1f}s")
-    logger.info(f"Parsed:  {parsed_total:,}")
-    logger.info(f"Indexed: {stats['indexed']:,}")
-    logger.info(f"Failed:  {stats['failed']:,}")
+    logger.info(f"Parsed:   {parsed_total:,}")
+    logger.info(f"Indexed:  {stats['indexed']:,}")
+    logger.info(f"Skipped:  {stats['skipped']:,}  (already in index, op_type=create)")
+    logger.info(f"Failed:   {stats['failed']:,}")
     if duration > 0:
-        logger.info(f"Rate:    {stats['indexed'] / duration:.0f} docs/sec")
+        logger.info(f"Rate:     {stats['indexed'] / duration:.0f} docs/sec")
 
     # ---- Validate ----
     ok = validate(es, args.index_name, ground_truth, stats,

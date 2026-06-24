@@ -2,47 +2,82 @@
 """
 Phase 1: Spark-based global deduplication and source aggregation.
 
-Reads all parquet files from a FineWeb-style dataset, deduplicates
-globally by SHA256(text), and collapses all per-occurrence metadata
-into a sources array.
+Reads all parquet files from a dataset, deduplicates globally by SHA256(text),
+and collapses all per-occurrence metadata into a sources array.
 
-Output parquet schema (fixed, read by index_aggregated.py):
-  sha256:        string   -- SHA256(text), becomes ES _id
+Output parquet schema (fixed; read by index_aggregated.py and the ES indexer):
+  sha256:        string          -- SHA256(text), becomes ES _id
   text:          string
-  language:      string   -- top-level; assumed same across occurrences
-  source_count:  integer  -- number of occurrences before dedup
-  sources:       array of struct {id, url, date, file_path, folder_path}
+  language:      array<string>   -- unique languages across all sources
+  date:          array<string>   -- unique crawl dates across all sources
+  source_count:  integer         -- total occurrences before dedup
+  sources:       array of struct {
+                   dataset,        -- e.g. "fineweb-1", "fineweb-edu", "dclm"
+                   id,             -- original document id
+                   language,       -- per-source language
+                   date,           -- per-source crawl date
+                   url,            -- per-source URL
+                   language_score, -- fasttext language confidence
+                   folder_path,    -- parent directory of source file (for retrieval)
+                 }
 
-Handles two dataset layouts:
-  per-crawl    FineWeb 1: <dataset_dir>/CC-MAIN-XXXX-XX/*.parquet
-  per-language FineWeb 2: <dataset_dir>/<lang_code>/*.parquet
+Handles dataset layouts:
+  per-crawl    FineWeb 1/edu: <dataset_dir>/CC-MAIN-XXXX-XX/*.parquet
+  per-language FineWeb 2:     <dataset_dir>/<lang_code>/*.parquet
+  flat         DCLM, others:  <dataset_dir>/*.parquet  (no subdirs)
 
 Usage examples
 --------------
-# FineWeb 1 - all crawls at once (large, needs big node)
+# Aggregate FW-edu one crawl at a time (95 crawls → submit as SLURM array)
 spark-submit spark_aggregate.py \\
-    --dataset-dir .../fineweb-1_3_0-quality_33-filterrobots/data/output \\
-    --output-dir /iopsstor/scratch/cscs/$USER/fineweb-1_3_0-quality_33-filterrobots-aggregated \\
-    --layout per-crawl
+    --mode aggregate --dataset fineweb-edu \\
+    --dataset-dir .../fineweb-edu-score-2-filterrobots/data/output \\
+    --layout per-crawl --only-subdir CC-MAIN-2020-05 \\
+    --output-dir $SCRATCH/fw-edu-per-crawl/CC-MAIN-2020-05
 
-# FineWeb 2 - one language at a time
+# Merge per-crawl outputs into single deduped dataset
 spark-submit spark_aggregate.py \\
+    --mode merge --dataset fineweb-edu \\
+    --dataset-dir $SCRATCH/fw-edu-per-crawl \\
+    --output-dir $SCRATCH/fw-edu-merged
+
+# Aggregate DCLM (flat layout, all parquets in one directory)
+spark-submit spark_aggregate.py \\
+    --mode aggregate --dataset dclm \\
+    --dataset-dir .../dclm-edu-filterrobots_fine/data/output \\
+    --layout flat \\
+    --output-dir $SCRATCH/dclm-aggregated
+
+# Cross-dataset global dedup: FW1 (already merged) + FW-edu + DCLM
+# Format: path:dataset_name  (path must contain *.parquet files directly)
+spark-submit spark_aggregate.py \\
+    --mode global-merge \\
+    --output-dir $SCRATCH/fw-english-merged \\
+    --shuffle-partitions 8000 --output-partitions 500 \\
+    --input-datasets \\
+        $SCRATCH/fw1-merged:fineweb-1 \\
+        $SCRATCH/fw-edu-merged:fineweb-edu \\
+        $SCRATCH/dclm-aggregated:dclm
+
+# FineWeb 2 - one language at a time (unchanged workflow)
+spark-submit spark_aggregate.py \\
+    --mode aggregate --dataset fineweb-2 \\
     --dataset-dir .../fineweb-2_0_1-quality_33-filterrobots/data/output \\
-    --output-dir /iopsstor/scratch/cscs/$USER/fineweb-2_0_1-quality_33-filterrobots-aggregated/fin_Latn \\
-    --layout per-language \\
-    --only-subdir fin_Latn
+    --layout per-language --only-subdir fin_Latn \\
+    --output-dir $SCRATCH/fw2-aggregated/fin_Latn
 """
 
 import argparse
 import os
 import sys
 from pathlib import Path
+from typing import List, Optional, Tuple
 
-from typing import Optional
-
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql import functions as F
-from pyspark.sql.types import MapType, StringType, StructType
+from pyspark.sql.types import (
+    DoubleType, IntegerType, MapType, StringType, StructType
+)
 
 
 # ============================================================
@@ -50,7 +85,6 @@ from pyspark.sql.types import MapType, StringType, StructType
 # ============================================================
 
 def build_spark(app_name: str, driver_memory: str, shuffle_partitions: int) -> SparkSession:
-    # Use SPARK_LOCAL_DIR env var if set (should point to large scratch), else /tmp
     local_dir = os.environ.get("SPARK_LOCAL_DIR", "/tmp")
     return (
         SparkSession.builder
@@ -64,9 +98,7 @@ def build_spark(app_name: str, driver_memory: str, shuffle_partitions: int) -> S
         .config("spark.sql.adaptive.coalescePartitions.enabled", "true")
         .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
         .config("spark.sql.parquet.mergeSchema", "true")
-        # Avoid NPE in parquet codec on single-partition writes (small datasets)
         .config("spark.sql.parquet.compression.codec", "gzip")
-        # Avoid OOM on large collect_list
         .config("spark.sql.objectHashAggregate.sortBased.fallbackThreshold", "128")
         .getOrCreate()
     )
@@ -77,79 +109,70 @@ def build_spark(app_name: str, driver_memory: str, shuffle_partitions: int) -> S
 # ============================================================
 
 def _sha256(col):
-    """SHA-256 of a text column using Spark's built-in sha2 (runs in JVM, no Python UDF overhead)."""
     return F.sha2(col.cast("binary"), 256)
 
 
-def _col_or_null(cols: set, *candidates) -> "Column":
-    """Return the first existing column from candidates, or NULL."""
-    for c in candidates:
-        if c in cols:
-            return F.col(c).cast(StringType())
-    return F.lit(None).cast(StringType())
-
-
-def _from_metadata(df, field: str, metadata_type: str) -> "Column":
-    """Extract a field from the metadata column, handling struct vs map."""
-    if metadata_type == "struct":
-        # Check if the sub-field actually exists in the struct
-        subfields = {f.name for f in df.schema["metadata"].dataType.fields}
-        if field in subfields:
-            return F.col(f"metadata.{field}").cast(StringType())
-    elif metadata_type == "map":
-        return F.col("metadata")[field].cast(StringType())
-    return F.lit(None).cast(StringType())
-
-
-def normalize(df, language_override: Optional[str] = None):
+def normalize(df, language_override: Optional[str] = None) -> DataFrame:
     """
-    Flatten any parquet schema to:
-      text, doc_id, url, date, language, file_path, folder_path
+    Flatten any supported parquet schema to the canonical intermediate form:
+      text, doc_id, url, date, language, file_path, folder_path,
+      cc_dump, language_score, pii_count, edu_score, edu_int_score,
+      quality_score, toxic_score, token_count, fasttext_score
+
+    Fields not present in a given dataset are null.
     """
     cols = set(df.columns)
 
-    # Detect metadata column type (struct or map)
+    # Inspect metadata column type
     metadata_type = None
+    meta_subfields: set = set()
     if "metadata" in cols:
         dtype = df.schema["metadata"].dataType
         if isinstance(dtype, StructType):
             metadata_type = "struct"
+            meta_subfields = {f.name for f in dtype.fields}
         elif isinstance(dtype, MapType):
             metadata_type = "map"
 
-    def get(top_candidates, metadata_field, fallback_candidates=()):
-        # 1. Try top-level columns
-        for c in top_candidates:
-            if c in cols:
-                return F.col(c).cast(StringType())
-        # 2. Try metadata sub-field
-        if metadata_type and metadata_field:
-            v = _from_metadata(df, metadata_field, metadata_type)
-            if v is not None:
-                return v
-        # 3. Fallback top-level
-        for c in fallback_candidates:
-            if c in cols:
-                return F.col(c).cast(StringType())
-        return F.lit(None).cast(StringType())
+    def meta(*fields):
+        """
+        Try metadata sub-fields in order; return first available, else null.
+        For struct metadata: skips fields not in the schema.
+        For map metadata: tries each key (null if absent).
+        """
+        exprs = []
+        for field in fields:
+            if metadata_type == "struct":
+                if field in meta_subfields:
+                    exprs.append(F.col(f"metadata.{field}"))
+            elif metadata_type == "map":
+                exprs.append(F.col("metadata")[field])
+        if not exprs:
+            return F.lit(None)
+        return F.coalesce(*exprs) if len(exprs) > 1 else exprs[0]
+
+    def top_or_meta(top_col, *meta_fields):
+        """Use top-level column if present, otherwise fall back to metadata."""
+        if top_col in cols:
+            return F.col(top_col)
+        return meta(*meta_fields)
 
     select_exprs = [
         F.col("text"),
         F.input_file_name().alias("file_path"),
-        get(["id"],                "id").alias("doc_id"),
-        get(["url"],               "url").alias("url"),
-        get(["date"],              "date",
-            fallback_candidates=["date_download", "crawl_timestamp"]).alias("date"),
-        get(["language", "lang"],  "language").alias("language"),
+        top_or_meta("id",       "id")               .cast(StringType()) .alias("doc_id"),
+        top_or_meta("url",      "url")              .cast(StringType()) .alias("url"),
+        top_or_meta("date",     "date", "date_download",
+                    "crawl_timestamp")              .cast(StringType()) .alias("date"),
+        top_or_meta("language", "language")         .cast(StringType()) .alias("language"),
+        meta("language_score")                      .cast(DoubleType()) .alias("language_score"),
     ]
 
     df = df.select(select_exprs)
 
-    # Override language if caller knows it (e.g. from directory name)
     if language_override:
         df = df.withColumn("language", F.lit(language_override))
 
-    # Derive folder_path from file_path
     df = df.withColumn(
         "folder_path",
         F.regexp_extract(F.col("file_path"), r"^(.*)/[^/]+$", 1),
@@ -162,47 +185,198 @@ def normalize(df, language_override: Optional[str] = None):
 # Aggregation
 # ============================================================
 
-def aggregate(df):
-    """Group by SHA256(text), collect all source occurrences."""
+def aggregate(df: DataFrame, dataset_name: str) -> DataFrame:
+    """
+    Deduplicate by SHA256(text), building the sources array.
+    Produces the canonical output schema.
+    """
     df = df.withColumn("sha256", _sha256(F.col("text")))
 
     df = df.withColumn("source", F.struct(
-        F.col("doc_id").alias("id"),
-        F.col("url"),
+        F.lit(dataset_name)       .alias("dataset"),
+        F.col("doc_id")           .alias("id"),
+        F.col("language"),
         F.col("date"),
-        F.col("file_path"),
+        F.col("url"),
+        F.col("language_score"),
         F.col("folder_path"),
     ))
 
     result = (
         df.groupBy("sha256")
         .agg(
-            F.first("text").alias("text"),
-            F.first("language").alias("language"),
-            F.count("*").cast("integer").alias("source_count"),
-            F.collect_list("source").alias("sources"),
+            F.first("text")                                    .alias("text"),
+            F.collect_set("language")                          .alias("language"),   # unique values
+            F.collect_set("date")                              .alias("date"),       # unique values
+            F.count("*").cast(IntegerType())                   .alias("source_count"),
+            F.collect_list("source")                           .alias("sources"),
         )
     )
 
     return result
 
 
-def merge(df):
+def reduce_merge(dfs: List[DataFrame]) -> DataFrame:
     """
-    Merge mode: input is already-aggregated parquet (per-crawl outputs).
-    Schema: sha256, text, language, source_count, sources (array of structs).
-    Combines per-crawl outputs into a global dedup with merged sources arrays.
+    Hierarchical reduce-merge: union multiple already-aggregated DataFrames and
+    deduplicate by sha256.  Does NOT re-stamp sources[].dataset — sources arrays
+    already carry correct dataset names from the original aggregate step.
+    Used for every round of the hierarchical global merge.
     """
+    normalized = []
+    for df in dfs:
+        df = _normalize_sources_schema(df)
+        df = _ensure_array_columns(df)
+        normalized.append(df)
+
+    combined = normalized[0]
+    for df in normalized[1:]:
+        combined = combined.unionByName(df, allowMissingColumns=True)
+
+    return (
+        combined.groupBy("sha256")
+        .agg(
+            F.first("text")                                            .alias("text"),
+            F.array_distinct(F.flatten(F.collect_list("language")))   .alias("language"),
+            F.array_distinct(F.flatten(F.collect_list("date")))       .alias("date"),
+            F.sum("source_count").cast(IntegerType())                 .alias("source_count"),
+            F.flatten(F.collect_list("sources"))                      .alias("sources"),
+        )
+    )
+
+
+def merge(df: DataFrame, dataset_name: str) -> DataFrame:
+    """
+    Within-dataset merge: combine per-crawl aggregated outputs for one dataset.
+    Stamps dataset_name into each source entry (handles outputs written before
+    the dataset field was introduced).
+    """
+    df = _stamp_dataset(df, dataset_name)
+    df = _ensure_array_columns(df)
+
     result = (
         df.groupBy("sha256")
         .agg(
-            F.first("text").alias("text"),
-            F.first("language").alias("language"),
-            F.sum("source_count").cast("integer").alias("source_count"),
-            F.flatten(F.collect_list("sources")).alias("sources"),
+            F.first("text")                                            .alias("text"),
+            F.array_distinct(F.flatten(F.collect_list("language")))   .alias("language"),
+            F.array_distinct(F.flatten(F.collect_list("date")))       .alias("date"),
+            F.sum("source_count").cast(IntegerType())                 .alias("source_count"),
+            F.flatten(F.collect_list("sources"))                      .alias("sources"),
         )
     )
     return result
+
+
+def global_merge(dfs_with_names: List[Tuple[DataFrame, str]]) -> DataFrame:
+    """
+    Cross-dataset merge: deduplicate across multiple already-aggregated datasets.
+    Each input DataFrame is stamped with its dataset name, missing columns are
+    filled with null, then all are unioned and grouped by sha256.
+
+    Documents present in more than one dataset will have multiple entries in
+    their sources array, one per occurrence, with the dataset field identifying
+    the origin.
+    """
+    stamped = []
+    for df, name in dfs_with_names:
+        df = _stamp_dataset(df, name)
+        df = _normalize_sources_schema(df)
+        df = _ensure_array_columns(df)
+        stamped.append(df)
+
+    combined = stamped[0]
+    for df in stamped[1:]:
+        combined = combined.unionByName(df, allowMissingColumns=True)
+
+    result = (
+        combined.groupBy("sha256")
+        .agg(
+            F.first("text")                                            .alias("text"),
+            F.array_distinct(F.flatten(F.collect_list("language")))   .alias("language"),
+            F.array_distinct(F.flatten(F.collect_list("date")))       .alias("date"),
+            F.sum("source_count").cast(IntegerType())                 .alias("source_count"),
+            F.flatten(F.collect_list("sources"))                      .alias("sources"),
+        )
+    )
+    return result
+
+
+# ============================================================
+# Helpers
+# ============================================================
+
+def _stamp_dataset(df: DataFrame, dataset_name: str) -> DataFrame:
+    """
+    Set sources[*].dataset = dataset_name for every element in the sources array.
+    Handles both old outputs (no dataset field) and new ones (already set).
+    Requires Spark 3.1+ for withField on nested structs.
+    """
+    return df.withColumn(
+        "sources",
+        F.transform(
+            F.col("sources"),
+            lambda s: s.withField("dataset", F.lit(dataset_name)),
+        ),
+    )
+
+
+_CANONICAL_SOURCE_FIELDS = [
+    ("dataset",        StringType()),
+    ("id",             StringType()),
+    ("language",       StringType()),
+    ("date",           StringType()),
+    ("url",            StringType()),
+    ("language_score", DoubleType()),
+    ("folder_path",    StringType()),
+]
+
+
+def _normalize_sources_schema(df: DataFrame) -> DataFrame:
+    """
+    Project sources[*] to the canonical field set, adding null columns for any
+    fields absent in the current struct (e.g. FW1's old output lacks language,
+    language_score, and url inside source entries).
+    Required so unionByName works cleanly across datasets with different source schemas.
+    """
+    from pyspark.sql.types import ArrayType
+    sources_type = df.schema["sources"].dataType
+    if not isinstance(sources_type, ArrayType):
+        return df
+    existing = {f.name for f in sources_type.elementType.fields}
+
+    return df.withColumn(
+        "sources",
+        F.transform(
+            F.col("sources"),
+            lambda s: F.struct(*[
+                s[name].cast(dtype).alias(name) if name in existing
+                else F.lit(None).cast(dtype).alias(name)
+                for name, dtype in _CANONICAL_SOURCE_FIELDS
+            ]),
+        ),
+    )
+
+
+def _ensure_array_columns(df: DataFrame) -> DataFrame:
+    """
+    Ensure language and date are array columns. Old aggregated outputs (pre-schema
+    update, e.g. the already-merged FW1) have them as scalar strings; coerce to
+    single-element arrays so merge/global-merge aggs work uniformly.
+    Also ensures a top-level url column exists.
+    """
+    from pyspark.sql.types import ArrayType
+
+    schema = df.schema
+
+    for col_name in ("language", "date"):
+        if col_name in df.columns:
+            if not isinstance(schema[col_name].dataType, ArrayType):
+                df = df.withColumn(col_name, F.array(F.col(col_name)))
+        else:
+            # Derive from sources array field
+            df = df.withColumn(col_name, F.array_distinct(F.col(f"sources.{col_name}")))
+
+    return df
 
 
 # ============================================================
@@ -214,83 +388,111 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=__doc__,
     )
-    parser.add_argument("--mode", choices=["aggregate", "merge"],
-                        default="aggregate",
-                        help="aggregate: raw parquet → dedup+sources; "
-                             "merge: combine per-crawl aggregated outputs globally")
-    parser.add_argument("--batch-start", type=int, default=None,
-                        help="(merge mode) 0-based index of first crawl dir to process (inclusive)")
-    parser.add_argument("--batch-end", type=int, default=None,
-                        help="(merge mode) 0-based index of last crawl dir to process (exclusive)")
-    parser.add_argument("--dataset-dir", required=True,
-                        help="Root directory containing per-crawl or per-language subdirs "
-                             "(aggregate mode), or directory of per-crawl agg outputs (merge mode)")
-    parser.add_argument("--output-dir", required=True,
-                        help="Where to write aggregated parquet (scratch path)")
-    parser.add_argument("--layout", choices=["per-crawl", "per-language"],
-                        default="per-crawl",
-                        help="Directory layout of the dataset (aggregate mode only)")
+    parser.add_argument(
+        "--mode",
+        choices=["aggregate", "merge", "global-merge", "reduce-merge"],
+        default="aggregate",
+        help=(
+            "aggregate: raw parquet → per-dataset dedup+sources; "
+            "merge: combine per-crawl aggregated outputs for one dataset; "
+            "global-merge: cross-dataset dedup from multiple aggregated dirs"
+        ),
+    )
+    parser.add_argument(
+        "--dataset", default=None,
+        help="Dataset name stamped into each source entry "
+             "(required for aggregate and merge; for global-merge use --input-datasets)",
+    )
+    # aggregate / merge
+    parser.add_argument("--dataset-dir", default=None,
+                        help="Root directory (aggregate / merge modes)")
+    parser.add_argument(
+        "--layout",
+        choices=["per-crawl", "per-language", "flat"],
+        default="per-crawl",
+        help=(
+            "Directory layout for aggregate mode. "
+            "per-crawl: subdirs named CC-MAIN-XXXX-XX/; "
+            "per-language: subdirs named by language code; "
+            "flat: all parquets directly in dataset-dir"
+        ),
+    )
     parser.add_argument("--only-subdir", default=None,
-                        help="Process only this single subdirectory (crawl ID or lang code). "
-                             "Useful for testing or per-language FineWeb 2 jobs.")
+                        help="Process only this single subdirectory (crawl or lang code)")
     parser.add_argument("--language", default=None,
-                        help="Override the language field for all documents. "
-                             "Use when language is not stored in the parquet (e.g. FineWeb 1).")
-    parser.add_argument("--driver-memory", default="200g",
-                        help="Spark driver (= executor in local mode) memory")
-    parser.add_argument("--shuffle-partitions", type=int, default=4000,
-                        help="spark.sql.shuffle.partitions (default 4000)")
-    parser.add_argument("--output-partitions", type=int, default=200,
-                        help="Number of output parquet files")
+                        help="Override the language field for all documents")
+    parser.add_argument("--batch-start", type=int, default=None,
+                        help="(merge) 0-based index of first crawl dir (inclusive)")
+    parser.add_argument("--batch-end", type=int, default=None,
+                        help="(merge) 0-based index of last crawl dir (exclusive)")
+    # global-merge
+    parser.add_argument(
+        "--input-datasets", nargs="+", default=None,
+        help="(global-merge) 'path:dataset_name' pairs. path must contain *.parquet files.",
+    )
+    # reduce-merge
+    parser.add_argument(
+        "--input-dirs", nargs="+", default=None,
+        help="(reduce-merge) directories whose *.parquet files are merged together.",
+    )
+    parser.add_argument(
+        "--input-manifest", default=None,
+        help="(reduce-merge) text file with one parquet path per line.",
+    )
+    # common
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--driver-memory", default="200g")
+    parser.add_argument("--shuffle-partitions", type=int, default=4000)
+    parser.add_argument("--output-partitions", type=int, default=200)
     args = parser.parse_args()
 
-    dataset_dir = Path(args.dataset_dir)
     output_dir = Path(args.output_dir)
 
-    if not dataset_dir.is_dir():
-        print(f"[ERROR] dataset-dir not found: {dataset_dir}", file=sys.stderr)
-        sys.exit(1)
+    # ------------------------------------------------------------------
+    # Global-merge mode
+    # ------------------------------------------------------------------
+    if args.mode == "global-merge":
+        if not args.input_datasets:
+            print("[ERROR] --input-datasets required for global-merge mode", file=sys.stderr)
+            sys.exit(1)
 
-    # ---- Merge mode: read per-crawl aggregated parquet and global-dedup ----
-    if args.mode == "merge":
-        # dataset_dir contains per-crawl subdirs, each with aggregated parquet
-        all_crawl_dirs = sorted(d for d in dataset_dir.iterdir() if d.is_dir())
-        if not all_crawl_dirs:
-            print(f"[ERROR] No subdirectories found in {dataset_dir}", file=sys.stderr)
-            sys.exit(1)
-        # Optional batch slice
-        start = args.batch_start if args.batch_start is not None else 0
-        end   = args.batch_end   if args.batch_end   is not None else len(all_crawl_dirs)
-        crawl_dirs = all_crawl_dirs[start:end]
-        if not crawl_dirs:
-            print(f"[ERROR] No crawl dirs in slice [{start}:{end}]", file=sys.stderr)
-            sys.exit(1)
-        # Build explicit glob from selected dirs (not wildcard, to respect batch slice)
-        input_paths = [str(d / "*.parquet") for d in crawl_dirs]
-        print(f"[INFO] Mode:         merge")
-        print(f"[INFO] Dataset dir:  {dataset_dir}")
-        print(f"[INFO] Crawl dirs:   {len(crawl_dirs)} of {len(all_crawl_dirs)} (slice [{start}:{end}])")
-        print(f"[INFO] First crawl:  {crawl_dirs[0].name}")
-        print(f"[INFO] Last crawl:   {crawl_dirs[-1].name}")
+        specs: List[Tuple[str, str]] = []
+        for spec in args.input_datasets:
+            if ":" not in spec:
+                print(f"[ERROR] --input-datasets must be 'path:dataset_name', got: {spec}",
+                      file=sys.stderr)
+                sys.exit(1)
+            path, ds_name = spec.rsplit(":", 1)
+            specs.append((path, ds_name))
+
+        print(f"[INFO] Mode:         global-merge")
         print(f"[INFO] Output dir:   {output_dir}")
+        for path, name in specs:
+            print(f"[INFO] Input:        {path}  (dataset={name})")
+
         output_dir.mkdir(parents=True, exist_ok=True)
 
         spark = build_spark(
-            app_name=f"merge-{dataset_dir.name}-{start}-{end}",
+            app_name="global-merge-" + "-".join(n for _, n in specs),
             driver_memory=args.driver_memory,
             shuffle_partitions=args.shuffle_partitions,
         )
         print(f"[INFO] Spark UI: {spark.sparkContext.uiWebUrl}")
-        print(f"[INFO] Reading per-crawl aggregated parquets ...")
-        df = spark.read.option("mergeSchema", "true").parquet(*input_paths)
-        print(f"[INFO] Schema: {df.columns}")
-        merged_df = merge(df)
+
+        dfs_with_names = []
+        for path, ds_name in specs:
+            pq_path = str(Path(path) / "*.parquet")
+            df = spark.read.option("mergeSchema", "true").parquet(pq_path)
+            print(f"[INFO] Loaded {ds_name}: schema={df.columns}")
+            dfs_with_names.append((df, ds_name))
+
+        merged_df = global_merge(dfs_with_names)
+
         print(f"[INFO] Writing globally merged output ({args.output_partitions} partitions) ...")
         (
             merged_df
             .repartition(args.output_partitions)
-            .write
-            .mode("overwrite")
+            .write.mode("overwrite")
             .parquet(str(output_dir))
         )
         out_count = spark.read.parquet(str(output_dir)).count()
@@ -299,42 +501,173 @@ def main():
         print("[INFO] Done.")
         return
 
-    # ---- Aggregate mode (default): raw parquet → dedup + sources ----
+    # ------------------------------------------------------------------
+    # Reduce-merge mode (hierarchical global dedup, no dataset re-stamping)
+    # ------------------------------------------------------------------
+    if args.mode == "reduce-merge":
+        if not args.input_dirs and not args.input_manifest:
+            print("[ERROR] --input-dirs or --input-manifest required for reduce-merge",
+                  file=sys.stderr)
+            sys.exit(1)
 
-    # Determine glob pattern for input files
-    if args.only_subdir:
+        input_paths: List[str] = []
+        if args.input_manifest:
+            manifest = Path(args.input_manifest)
+            if not manifest.exists():
+                print(f"[ERROR] Manifest not found: {manifest}", file=sys.stderr)
+                sys.exit(1)
+            input_paths = [p.strip() for p in manifest.read_text().splitlines() if p.strip()]
+            print(f"[INFO] Mode:          reduce-merge (manifest: {manifest}, {len(input_paths)} files)")
+        else:
+            for d in args.input_dirs:
+                files = sorted(Path(d).glob("*.parquet"))
+                if not files:
+                    print(f"[WARN] No parquet files in {d}", file=sys.stderr)
+                input_paths.extend(str(f) for f in files)
+            print(f"[INFO] Mode:          reduce-merge (dirs: {args.input_dirs}, {len(input_paths)} files)")
+
+        if not input_paths:
+            print("[ERROR] No parquet files found", file=sys.stderr)
+            sys.exit(1)
+
+        print(f"[INFO] Output dir:    {output_dir}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        spark = build_spark(
+            app_name="reduce-merge",
+            driver_memory=args.driver_memory,
+            shuffle_partitions=args.shuffle_partitions,
+        )
+        print(f"[INFO] Spark UI: {spark.sparkContext.uiWebUrl}")
+
+        # Group files by parent directory so each read call sees a uniform schema.
+        # This is required when mixing sources with different schemas (e.g. FW1 has
+        # scalar language/date strings while FW-edu/DCLM have array types).
+        from collections import defaultdict
+        by_dir = defaultdict(list)
+        for p in input_paths:
+            by_dir[str(Path(p).parent)].append(p)
+
+        dfs = []
+        for parent_dir, paths in sorted(by_dir.items()):
+            print(f"[INFO] Reading {len(paths)} files from {parent_dir}")
+            df = spark.read.option("mergeSchema", "true").parquet(*paths)
+            df = _normalize_sources_schema(df)
+            df = _ensure_array_columns(df)
+            dfs.append(df)
+
+        merged_df = reduce_merge(dfs)
+
+        print(f"[INFO] Writing reduced output ({args.output_partitions} partitions) ...")
+        (
+            merged_df
+            .repartition(args.output_partitions)
+            .write.mode("overwrite")
+            .parquet(str(output_dir))
+        )
+        out_count = spark.read.parquet(str(output_dir)).count()
+        print(f"[INFO] ✓ Unique documents written: {out_count:,}")
+        spark.stop()
+        print("[INFO] Done.")
+        return
+
+    # ------------------------------------------------------------------
+    # Merge mode (within one dataset, across crawl batches)
+    # ------------------------------------------------------------------
+    if args.mode == "merge":
+        if not args.dataset:
+            print("[ERROR] --dataset required for merge mode", file=sys.stderr)
+            sys.exit(1)
+        if not args.dataset_dir:
+            print("[ERROR] --dataset-dir required for merge mode", file=sys.stderr)
+            sys.exit(1)
+
+        dataset_dir = Path(args.dataset_dir)
+        all_crawl_dirs = sorted(d for d in dataset_dir.iterdir() if d.is_dir())
+        if not all_crawl_dirs:
+            print(f"[ERROR] No subdirectories found in {dataset_dir}", file=sys.stderr)
+            sys.exit(1)
+
+        start = args.batch_start if args.batch_start is not None else 0
+        end   = args.batch_end   if args.batch_end   is not None else len(all_crawl_dirs)
+        crawl_dirs = all_crawl_dirs[start:end]
+        if not crawl_dirs:
+            print(f"[ERROR] No crawl dirs in slice [{start}:{end}]", file=sys.stderr)
+            sys.exit(1)
+
+        input_paths = [str(d / "*.parquet") for d in crawl_dirs]
+
+        print(f"[INFO] Mode:         merge  (dataset={args.dataset})")
+        print(f"[INFO] Dataset dir:  {dataset_dir}")
+        print(f"[INFO] Crawl dirs:   {len(crawl_dirs)} of {len(all_crawl_dirs)} [{start}:{end}]")
+        print(f"[INFO] Output dir:   {output_dir}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        spark = build_spark(
+            app_name=f"merge-{args.dataset}-{start}-{end}",
+            driver_memory=args.driver_memory,
+            shuffle_partitions=args.shuffle_partitions,
+        )
+        print(f"[INFO] Spark UI: {spark.sparkContext.uiWebUrl}")
+        df = spark.read.option("mergeSchema", "true").parquet(*input_paths)
+        merged_df = merge(df, dataset_name=args.dataset)
+
+        print(f"[INFO] Writing merged output ({args.output_partitions} partitions) ...")
+        (
+            merged_df
+            .repartition(args.output_partitions)
+            .write.mode("overwrite")
+            .parquet(str(output_dir))
+        )
+        out_count = spark.read.parquet(str(output_dir)).count()
+        print(f"[INFO] ✓ Unique documents written: {out_count:,}")
+        spark.stop()
+        print("[INFO] Done.")
+        return
+
+    # ------------------------------------------------------------------
+    # Aggregate mode (raw parquet → per-dataset dedup)
+    # ------------------------------------------------------------------
+    if not args.dataset:
+        print("[ERROR] --dataset required for aggregate mode", file=sys.stderr)
+        sys.exit(1)
+    if not args.dataset_dir:
+        print("[ERROR] --dataset-dir required for aggregate mode", file=sys.stderr)
+        sys.exit(1)
+
+    dataset_dir = Path(args.dataset_dir)
+
+    if args.layout == "flat":
+        input_glob = str(dataset_dir / "*.parquet")
+        subdir_desc = "(flat)"
+    elif args.only_subdir:
         subdir = dataset_dir / args.only_subdir
         if not subdir.is_dir():
             print(f"[ERROR] Subdir not found: {subdir}", file=sys.stderr)
             sys.exit(1)
         input_glob = str(subdir / "*.parquet")
-        n_subdirs = 1
+        subdir_desc = args.only_subdir
     else:
         subdirs = sorted(d for d in dataset_dir.iterdir() if d.is_dir())
-        n_subdirs = len(subdirs)
+        if not subdirs:
+            print(f"[ERROR] No subdirectories found in {dataset_dir}", file=sys.stderr)
+            sys.exit(1)
         input_glob = str(dataset_dir / "*" / "*.parquet")
+        subdir_desc = f"{len(subdirs)} subdirs"
 
-    if n_subdirs == 0:
-        print(f"[ERROR] No subdirectories found in {dataset_dir}", file=sys.stderr)
-        sys.exit(1)
-
-    print(f"[INFO] Mode:         aggregate")
-    print(f"[INFO] Dataset dir:  {dataset_dir}")
-    print(f"[INFO] Subdirs:      {'1 (' + args.only_subdir + ')' if args.only_subdir else n_subdirs}")
+    print(f"[INFO] Mode:         aggregate  (dataset={args.dataset})")
+    print(f"[INFO] Layout:       {args.layout}  ({subdir_desc})")
     print(f"[INFO] Input glob:   {input_glob}")
     print(f"[INFO] Output dir:   {output_dir}")
     print(f"[INFO] Language:     {args.language or '(from parquet)'}")
-
     output_dir.mkdir(parents=True, exist_ok=True)
 
     spark = build_spark(
-        app_name=f"aggregate-{dataset_dir.parent.parent.name}",
+        app_name=f"aggregate-{args.dataset}",
         driver_memory=args.driver_memory,
         shuffle_partitions=args.shuffle_partitions,
     )
-
     print(f"[INFO] Spark UI: {spark.sparkContext.uiWebUrl}")
-    print(f"[INFO] Reading parquets ...")
 
     df = (
         spark.read
@@ -342,25 +675,21 @@ def main():
         .option("recursiveFileLookup", "false")
         .parquet(input_glob)
     )
-
-    print(f"[INFO] Schema: {df.columns}")
+    print(f"[INFO] Input schema: {df.columns}")
 
     df = normalize(df, language_override=args.language)
-    agg_df = aggregate(df)
+    agg_df = aggregate(df, dataset_name=args.dataset)
 
     print(f"[INFO] Writing aggregated output ({args.output_partitions} partitions) ...")
     (
         agg_df
         .repartition(args.output_partitions)
-        .write
-        .mode("overwrite")
+        .write.mode("overwrite")
         .parquet(str(output_dir))
     )
 
-    # Quick count to confirm output
     out_count = spark.read.parquet(str(output_dir)).count()
     print(f"[INFO] ✓ Unique documents written: {out_count:,}")
-
     spark.stop()
     print("[INFO] Done.")
 

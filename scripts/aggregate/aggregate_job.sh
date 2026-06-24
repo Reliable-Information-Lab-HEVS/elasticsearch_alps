@@ -13,14 +13,16 @@
 #
 # Required env vars:
 #   DATASET_DIR   - root dir with per-crawl or per-language subdirs
-#   DATASET_NAME  - used for output path naming
+#   DATASET_NAME  - used for output path naming and --dataset flag
 #
 # Optional env vars:
-#   MODE          - aggregate (default) | merge (global dedup of per-crawl outputs)
+#   MODE          - aggregate (default) | merge
 #   OUTPUT_DIR    - aggregated parquet output (default: iopsstor scratch)
-#   LAYOUT        - per-crawl | per-language (default: per-crawl)
-#   ONLY_SUBDIR   - process a single subdir (for testing or per-language jobs)
-#   LANGUAGE      - override language field (e.g. "eng" for FineWeb 1)
+#   LAYOUT        - per-crawl | per-language | flat (default: per-crawl)
+#   ONLY_SUBDIR   - process a single subdir (for per-crawl array jobs)
+#   BATCH_START   - (merge mode) first crawl dir index (0-based, inclusive)
+#   BATCH_END     - (merge mode) last crawl dir index (0-based, exclusive)
+#   LANGUAGE      - override language field
 #   DRIVER_MEMORY - Spark driver memory (default: 200g)
 #   SHUFFLE_PARTITIONS - spark shuffle partitions (default: 4000)
 #   OUTPUT_PARTITIONS  - output parquet file count (default: 200)
@@ -120,19 +122,20 @@ echo "[INFO] SPARK_LOCAL_DIR: $SPARK_LOCAL_DIR"
 # ---- Build command ----
 cmd=(
     python3 "$SPARK_SCRIPT"
-    --mode "$MODE"
+    --mode        "$MODE"
+    --dataset     "$DATASET_NAME"
     --dataset-dir "$DATASET_DIR"
-    --output-dir "$OUTPUT_DIR"
-    --layout "$LAYOUT"
-    --driver-memory "$DRIVER_MEMORY"
+    --output-dir  "$OUTPUT_DIR"
+    --layout      "$LAYOUT"
+    --driver-memory      "$DRIVER_MEMORY"
     --shuffle-partitions "$SHUFFLE_PARTITIONS"
-    --output-partitions "$OUTPUT_PARTITIONS"
+    --output-partitions  "$OUTPUT_PARTITIONS"
 )
 
-[[ -n "$ONLY_SUBDIR"  ]] && cmd+=(--only-subdir "$ONLY_SUBDIR")
-[[ -n "$LANGUAGE"     ]] && cmd+=(--language "$LANGUAGE")
-[[ -n "$BATCH_START"  ]] && cmd+=(--batch-start "$BATCH_START")
-[[ -n "$BATCH_END"    ]] && cmd+=(--batch-end "$BATCH_END")
+[[ -n "$ONLY_SUBDIR" ]] && cmd+=(--only-subdir "$ONLY_SUBDIR")
+[[ -n "$LANGUAGE"    ]] && cmd+=(--language     "$LANGUAGE")
+[[ -n "$BATCH_START" ]] && cmd+=(--batch-start  "$BATCH_START")
+[[ -n "$BATCH_END"   ]] && cmd+=(--batch-end    "$BATCH_END")
 
 echo "[INFO] Running: ${cmd[*]}"
 "${cmd[@]}" 2>&1
